@@ -1,4 +1,4 @@
-# AstroCamp Batch 17th, Group Adora
+# TechEcho
 
 ## 安裝步驟
 
