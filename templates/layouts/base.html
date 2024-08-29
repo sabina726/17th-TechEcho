@@ -21,7 +21,7 @@
                 <li class="relative">
                     <a href="#" @click="submenuOpen = !submenuOpen" class="transition duration-300 ease-in-out hover:text-green-3">討論</a>
                     <ul x-show="submenuOpen" @click.away="submenuOpen = false" class="absolute left-0 z-20 mt-8 shadow-lg text-green-3 w-60 bg-vanilla-5" style="display: none;">
-                        <li><a href="#" class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">發問</a></li>
+                        <li><a href="#" class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">發問題</a></li>
                         <li><a href="#" class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">看問題</a></li>
                     </ul>
                 </li>
@@ -38,8 +38,15 @@
             <li @click="submenuOpen = !submenuOpen">
                 <a href="#" class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">討論</a>
                 <ul x-show="submenuOpen" class="mt-2 ml-4">
-                    <li><a href="#" class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">發問</a></li>
+                    <li><a href="#" class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">發問題</a></li>
                     <li><a href="#" class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">看問題</a></li>
+                </ul>
+            </li>
+            <li @click="expertOpen = !expertOpen">
+                <a href="#" class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">專家</a>
+                <ul x-show="expertOpen" class="mt-2 ml-4">
+                    <li><a href="#" class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">當專家</a></li>
+                    <li><a href="#" class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">問專家</a></li>
                 </ul>
             </li>
             <li><a href="#" class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">教學</a></li>
@@ -52,12 +59,13 @@
         {% endblock  %}
     </div>
 
-    <footer class="fixed bottom-0 left-0 w-full p-4 text-center text-white bg-blue-1">
-        <p>
-            <a href="#" class="transition duration-300 ease-in-out hover:text-green-3">📞 &ensp;聯絡我們</a> |
-            <a href="#" class="transition duration-300 ease-in-out hover:text-green-3">🔐 &ensp;隱私政策</a> |
-            <a href="#" class="transition duration-300 ease-in-out hover:text-green-3">📝 &ensp;服務條款</a>
-        </p>
-    </footer>
+    <div class="flex flex-col">
+        <footer class="w-full p-4 text-center text-white bg-blue-1">
+                <a href="#" class="transition duration-300 ease-in-out hover:text-green-3">📞 &ensp;聯絡我們</a> |
+                <a href="#" class="transition duration-300 ease-in-out hover:text-green-3">🔐 &ensp;隱私政策</a> |
+                <a href="#" class="transition duration-300 ease-in-out hover:text-green-3">📝 &ensp;服務條款</a>
+        </footer>
+    </div>
+
 </body>
 </html>
