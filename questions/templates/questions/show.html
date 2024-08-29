@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
-    <div class="shadow border-2 p-2 m-3">
+    <div>
         <h1 class="text-lg">標題：{{question.title}}</h1>
         <div class="flex gap-2">
             <span>初始日期：{{question.created_at}}</span>
@@ -11,11 +11,13 @@
 
         <h3 class="mb-2">問題內容：</h3>
         <div class="p-2 border-2">
-            <article>
-                {{question.details}}
-            </article>
-            <article>
-                {{question.expectations}}
+            <article class="text-wrap break-all">
+                <p>
+                    問題描述： {{question.details|linebreaksbr}}
+                </p>
+                <p> 
+                    期待目標： {{question.expectations|linebreaksbr}}
+                </p>
             </article>
         </div>
 
