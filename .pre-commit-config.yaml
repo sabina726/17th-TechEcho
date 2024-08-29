@@ -28,3 +28,4 @@ repos:
     rev: v4.4.0
     hooks:
       - id: check-merge-conflict
+        name: 解衝突是否完成
