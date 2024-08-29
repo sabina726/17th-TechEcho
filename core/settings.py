@@ -48,12 +48,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "home",
 ]
 
 if is_dev():
     INSTALLED_APPS += [
         "django_extensions",
-        "debug_toolbar",
     ]
 
 MIDDLEWARE = [
@@ -65,11 +65,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
-if is_dev():
-    MIDDLEWARE += [
-        "debug_toolbar.middleware.DebugToolbarMiddleware",
-    ]
 
 ROOT_URLCONF = "core.urls"
 
@@ -150,8 +145,3 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# 特許可使用django_debug_toolbar的ip
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
