@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "home",
     "questions",
+    "taggit",
 ]
 
 if is_dev():
@@ -146,3 +147,6 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# for Taggit, allows tags to be case insensitive
+TAGGIT_CASE_INSENSITIVE = True
