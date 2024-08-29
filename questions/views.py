@@ -53,13 +53,21 @@ def show(request, id):
             request, "questions/edit.html", {"form": form, "question": question}
         )
 
-    return render(request, "questions/show.html", {"question": question})
+    return render(
+        request,
+        "questions/show.html",
+        {"question": question, "tags": question.tags.all()},
+    )
 
 
 def edit(request, id):
     question = get_object_or_404(Question, pk=id)
     form = QuestionForm(instance=question)
-    return render(request, "questions/edit.html", {"form": form, "question": question})
+    return render(
+        request,
+        "questions/edit.html",
+        {"form": form, "question": question, "tags": question.tags.all()},
+    )
 
 
 def delete(request, id):
