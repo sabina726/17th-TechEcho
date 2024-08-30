@@ -15,7 +15,8 @@ class Question(models.Model):
     )
 
     votes_count = models.IntegerField(default=0)
-    answers_count = models.IntegerField(default=0)
+    answers_count = models.PositiveIntegerField(default=0)
+    follows_count = models.PositiveIntegerField(default=0)
 
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now_add=True)
@@ -26,7 +27,7 @@ class Question(models.Model):
     downvote = models.ManyToManyField(User, related_name="downvotes")
     follow = models.ManyToManyField(User, related_name="follows")
 
-    tags = TaggableManager()
+    labels = TaggableManager()
 
     def __str__(self):
         return self.title

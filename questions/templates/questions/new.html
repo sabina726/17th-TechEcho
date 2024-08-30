@@ -1,5 +1,9 @@
 {% extends 'layouts/base.html' %}
 
+{% comment %}
+    textarea, textarea-bordered
+{% endcomment %}
+
 {% block content %}
     <form action="{% url "questions:index" %}" method="POST">
         {% csrf_token %}
@@ -12,7 +16,7 @@
             </div>
         {% endfor %}
 
-        {% include "questions/_tags.html" %}
+        {% include "questions/_labels.html" %}
 
         <button class="btn">完成此新增</button>
         <a href="{% url "questions:index" %}" class="btn">回到問題列表</a>

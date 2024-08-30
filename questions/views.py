@@ -12,20 +12,24 @@ from .models import Question
 def index(request):
     if request.method == "POST":
         form = QuestionForm(request.POST)
-        tags = request.POST.get("tags")
+        labels = request.POST.get("labels")
 
-        # we require at least one tag
-        if tags and form.is_valid():
+        # we require at least one label
+        if labels and form.is_valid():
             instance = form.save()
-            tags = [tag["value"] for tag in json.loads(tags)]
-            instance.tags.set(tags)
+            labels = [label["value"] for label in json.loads(labels)]
+
+            instance.labels.set(labels)
             instance.save()
             messages.success(request, "成功提問")
             return redirect("questions:index")
 
         messages.error(request, "輸入資料錯誤，請再嘗試")
         return render(request, "questions/new.html", {"form": form})
-    questions = Question.objects.order_by("-votes_count")
+
+    # requires validation
+    order_by = request.GET.get("order_by")
+    questions = Question.objects.order_by(order_by or "-id")
     return render(request, "questions/index.html", {"questions": questions})
 
 
@@ -38,17 +42,19 @@ def show(request, id):
     question = get_object_or_404(Question, pk=id)
     if request.method == "POST":
         form = QuestionForm(request.POST, instance=question)
-        tags = request.POST.get("tags")
-        # we require at least one tag
-        if tags and form.is_valid():
+        labels = request.POST.get("labels")
+        # we require at least one label
+        if labels and form.is_valid():
             instance = form.save(commit=False)
-            tags = [tag["value"] for tag in json.loads(tags)]
-            instance.tags.set(tags)
+            labels = [label["value"] for label in json.loads(labels)]
+            instance.labels.set(labels)
+            instance.save()
             form.save_m2m()
-            messages.success(request, "成功編輯")
+
+            messages.success(request, "編輯成功")
             return redirect("questions:show", id=id)
 
-        messages.error(request, "edit fail, retry")
+        messages.error(request, "編輯失敗")
         return render(
             request, "questions/edit.html", {"form": form, "question": question}
         )
@@ -56,7 +62,7 @@ def show(request, id):
     return render(
         request,
         "questions/show.html",
-        {"question": question, "tags": question.tags.all()},
+        {"question": question, "labels": question.labels.all()},
     )
 
 
@@ -66,7 +72,7 @@ def edit(request, id):
     return render(
         request,
         "questions/edit.html",
-        {"form": form, "question": question, "tags": question.tags.all()},
+        {"form": form, "question": question, "labels": question.labels.all()},
     )
 
 
@@ -77,17 +83,39 @@ def delete(request, id):
         return redirect("questions:index")
 
 
-def upvotes(request, id):
+def votes(request, id):
     if request.method == "POST":
         question = get_object_or_404(Question, pk=id)
-        question.votes_count += 1
-        question.save()
+        votes_change = request.POST.get("votes_change")
+        # only predefined change in value is allowed
+        if votes_change in ("1", "-1"):
+            question.votes_count += int(votes_change)
+            question.save()
+
         return redirect("questions:show", id=id)
 
 
-def downvotes(request, id):
-    if request.method == "POST":
-        question = get_object_or_404(Question, pk=id)
-        question.votes_count -= 1
-        question.save()
-        return redirect("questions:show", id=id)
+# def bookmark(request, id):
+#     if request.method == "POST":
+#         resume = get_object_or_404(Resume, pk=id)
+
+#         if resume.bookmarked_by(request.user):
+#             resume.bookmark.remove(request.user)
+#             return render(
+#                 request,
+#                 "resumes/_bookmark.html",
+#                 {
+#                     "resume": resume,
+#                     "bookmarked": False,
+#                 },
+#             )
+#         else:
+#             resume.bookmark.add(request.user)
+#             return render(
+#                 request,
+#                 "resumes/_bookmark.html",
+#                 {
+#                     "resume": resume,
+#                     "bookmarked": True,
+#                 },
+#             )

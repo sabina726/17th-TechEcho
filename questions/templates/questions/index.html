@@ -1,11 +1,22 @@
 {% extends 'layouts/base.html' %}
 
-{% load question_tags %}
+{% load question_labels %}
 
 {% block content %}
     <div>
         <h1 class="text-2xl">問題列表</h1>
         <a href="{% url "questions:new" %}" class="btn">問一個新的問題</a>
+
+        <div class="flex gap-2 p-2">
+            <p>選擇排序依據：</p>
+            <form action="{% url "questions:index" %}">
+                <button class="link" name="order_by" value="-votes_count">讚數</button>
+            </form>
+            <form action="{% url "questions:index" %}">
+                <button class="link" name="order_by" value="-follows_count">追蹤數</button>
+            </form>
+        </div>
+
         <ul>
             {% for question in questions %}
                 <li class="border-2 shadow p-2 mb-1 text-wrap break-all">
@@ -15,8 +26,8 @@
 
                     <div>
                         <span>標籤：</span>
-                        {% for tag in question|question_tags %}
-                            <span>{{tag}} </span>
+                        {% for label in question|question_labels %}
+                            <span>{{label}} </span>
                         {% endfor %}
                     </div>
                     <p>內文: {{question.details|striptags|truncatechars:20}}</p>
@@ -24,7 +35,6 @@
                     {% comment %} upvotes {% endcomment %}
                     {% comment %} answers(count) {% endcomment %}
                     {% comment %} views {% endcomment %}
-                    {% comment %} tags {% endcomment %}
                 </li>
             {% endfor %}
         </ul>

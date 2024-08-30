@@ -148,5 +148,5 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# for Taggit, allows tags to be case insensitive
+# for Taggit, allows labels to be case insensitive
 TAGGIT_CASE_INSENSITIVE = True

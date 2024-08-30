@@ -2,12 +2,18 @@
 
 {% block content %}
     <div>
-        <h1 class="text-2xl">標題：{{question.title}}</h1>
+        <div class="flex gap-2 items-center">
+            <h1 class="text-2xl">標題：{{question.title}}</h1>
+            {% comment %} need user function to follow or not {% endcomment %}
+            <p>
+                追蹤
+            </p>
+        </div>
 
         <div class="p-2 border-2">
             <p> 標籤：
-                {% for tag in tags %}
-                    <span>{{tag}} </span>
+                {% for label in labels %}
+                    <span>{{label}} </span>
                 {% endfor %}
             </p>
         </div>
@@ -27,34 +33,20 @@
             </article>
         </div>
 
-        {% comment %} tags {% endcomment %}
+        <form action="{% url "questions:votes" question.id %}" method="POST" class="p-2 flex gap-2">
+            {% csrf_token %}
 
-        <div class="p-2 flex gap-2">
-            <form action="{% url "questions:upvotes" question.id%}" method="POST">
-                {% csrf_token %}
-                <button>
-                    <i class="fa-solid fa-arrow-up" style="color: #ecd1c9;"></i>
-                </button>
-            </form>
+            <button name="votes_change" value="1">
+                <i class="fa-solid fa-arrow-up" style="color: #ecd1c9;"></i>
+            </button>
 
-            {% comment %}
-                change color when clicked
-                <i class="fa-solid fa-arrow-up" style="color: #e3582c;"></i>
-            {% endcomment %}
+            <p>{{question.votes_count}}</p>
 
-            {{question.votes_count}}
+            <button name="votes_change" value='-1'>
+                <i class="fa-solid fa-arrow-down" style="color: #ecd1c9;"></i>
+            </button>
+        </form>
 
-            <form action="{% url "questions:downvotes" question.id%}" method="POST">
-                {% csrf_token %}
-                <button>
-                    <i class="fa-solid fa-arrow-down" style="color: #ecd1c9;"></i>
-                </button>
-            </form>
-
-            {% comment %}
-                <i class="fa-solid fa-arrow-down" style="color: #e3582c;"></i>
-            {% endcomment %}
-        </div>
 
         <div class="flex gap-2">
             {% comment %} <button>share</button> {% endcomment %}

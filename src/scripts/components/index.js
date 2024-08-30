@@ -1,5 +1,5 @@
 import Alpine from "alpinejs"
-import "./tags.js"
+import "./labels.js"
 
 
 Alpine.start()

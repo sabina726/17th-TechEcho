@@ -10,7 +10,7 @@ class QuestionForm(ModelForm):
         fields = ["title", "details"]
         widgets = {
             "title": TextInput(attrs={"class": "input input-bordered"}),
-            "details": Textarea(attrs={"class": "input input-bordered"}),
+            "details": Textarea(attrs={"class": "textarea textarea-bordered"}),
         }
         labels = {
             "title": "問題",
