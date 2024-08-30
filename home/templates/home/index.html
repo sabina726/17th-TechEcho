@@ -1,10 +1,21 @@
 {% extends "layouts/base.html" %}
-
 {% block content %}
-<div class="flex items-center justify-center min-h-screen">
+
+{% include "layouts/navbar.html" %}
+<div class="outside">
+    <div class="box">
+    </div>
+    <div class="reverse-box">
+      TechEcho
+    </div>
+</div>
+
+<div class="flex items-center justify-center h-screen mt-auto">
     <div class="relative w-full max-w-xl px-2">
         <input type="text" class="w-full p-2 pr-10 border border-gray-300 h-14 rounded-3xl mt-28" placeholder="Search...">
-        <i class="absolute text-gray-500 bottom-5 right-5 fa-solid fa-magnifying-glass"></i>
+        <i class="absolute text-gray-500 bottom-11 right-5 fa-solid fa-magnifying-glass"></i>
+        <span class="tag-blue">JavaScript</span>
+        <span class="tag-red">Python</span>
     </div>
 </div>
 
