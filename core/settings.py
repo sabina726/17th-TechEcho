@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "home",
     "teacher",
+    "questions",
 ]
 
 if is_dev():

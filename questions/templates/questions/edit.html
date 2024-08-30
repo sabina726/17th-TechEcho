@@ -1,0 +1,12 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+    <form action="{% url "questions:show" question.id%}" method="POST">
+        {% csrf_token %}
+
+        {{form}}
+
+        <button class="btn">完成此編輯</button>
+    </form>
+    <a href="{% url "questions:show"  question.id%}" class="btn">放棄此編輯</a>
+{% endblock  %}
