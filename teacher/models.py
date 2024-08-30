@@ -11,5 +11,6 @@ class TeacherInfo(models.Model):
         validators=[MinLengthValidator(150), MaxLengthValidator(500)]
     )  # 簡單自傳，長度限制
     created_at = models.DateTimeField(default=timezone.now)  # 新增時間
+
     def __str__(self):
         return f"{self.user.username} - {self.expertise}"
