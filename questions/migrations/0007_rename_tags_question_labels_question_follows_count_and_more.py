@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('questions', '0006_remove_question_expectations'),
+        ("questions", "0006_remove_question_expectations"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='question',
-            old_name='tags',
-            new_name='labels',
+            model_name="question",
+            old_name="tags",
+            new_name="labels",
         ),
         migrations.AddField(
-            model_name='question',
-            name='follows_count',
+            model_name="question",
+            name="follows_count",
             field=models.PositiveIntegerField(default=0),
         ),
         migrations.AlterField(
-            model_name='question',
-            name='answers_count',
+            model_name="question",
+            name="answers_count",
             field=models.PositiveIntegerField(default=0),
         ),
     ]
