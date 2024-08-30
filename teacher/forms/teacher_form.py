@@ -13,7 +13,18 @@ class TeacherInfoForm(forms.ModelForm):
                     "rows": 5,
                     "cols": 40,
                     "placeholder": "自我介紹",
+                    "class": "custom-textarea",
                 }
             ),
-            "expertise": forms.TextInput(attrs={"placeholder": "填寫專業能力"}),
+            "expertise": forms.TextInput(
+                attrs={
+                    "placeholder": "Ex:JavaScript..Python..",
+                    "class": "custom-input",
+                }
+            ),
+        }
+        labels = {
+            "user": "使用者",
+            "expertise": "專業能力",
+            "introduce": "自我介紹",
         }
