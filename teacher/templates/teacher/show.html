@@ -1,4 +1,26 @@
+{% extends "layouts/base.html" %}
 {% block content %}
+<div class="p-6">
+    <h1 class="text-3xl font-bold mb-4">Teacher Ppersonal Data</h1>
 
+    <section>
+        <div>
+            <h2>{{ teacher.user.username }}</h2>
+            <p>{{ teacher.expertise }}</p>
+            <article>{{ teacher.introduce }}</article>
+        </div>
+    </section>
+
+    <div>
+        <a href="{% url 'teacher:edit' teacher.id %}">編輯老師資訊</a>
+    </div>
+
+    <div>
+        <a href="{% url 'teacher:delete' teacher.id %}">刪除資訊</a>
+    </div>
+
+
+    <a href="{% url 'teacher:index' %}" class="text-blue-500 hover:text-blue-700 underline">老師列表</a>
+</div>
 
 {% endblock %}

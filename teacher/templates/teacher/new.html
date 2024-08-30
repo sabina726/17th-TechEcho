@@ -1,4 +1,16 @@
+{% extends "layouts/base.html" %}
 {% block content %}
 
+<h1>Add Teacher</h1>
+
+<section>
+    <form action="{% url 'teacher:index' %}" method="POST" autocomplete="off">
+        {% csrf_token %}
+        {{ form }}
+        <button>新增資料</button>
+    </form>
+</section>
+
+<a href="{% url 'teacher:index' %}">老師列表</a>
 
 {% endblock %}

@@ -7,21 +7,35 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('teacher', '0001_initial'),
+        ("teacher", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Student',
+            name="Student",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('email', models.EmailField(max_length=254, validators=[django.core.validators.EmailValidator()])),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                (
+                    "email",
+                    models.EmailField(
+                        max_length=254,
+                        validators=[django.core.validators.EmailValidator()],
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='teacherinfo',
-            name='students',
-            field=models.ManyToManyField(related_name='teachers', to='teacher.student'),
+            model_name="teacherinfo",
+            name="students",
+            field=models.ManyToManyField(related_name="teachers", to="teacher.student"),
         ),
     ]
