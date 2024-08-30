@@ -25,7 +25,7 @@ def index(request):
 
         messages.error(request, "輸入資料錯誤，請再嘗試")
         return render(request, "questions/new.html", {"form": form})
-    questions = Question.objects.order_by("-id")
+    questions = Question.objects.order_by("-votes_count")
     return render(request, "questions/index.html", {"questions": questions})
 
 
