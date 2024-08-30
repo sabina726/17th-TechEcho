@@ -1,7 +1,7 @@
-{% extends "shared/search.html" %}
+{% extends "layouts/base.html" %}
 
 {% block content %}
-<h1>hello world</h1>
-<span class="tag-blue">JavaScript</span>
-<span class="tag-red">Python</span>
+
+{% include "layouts/search.html" %}
+
 {% endblock content %}
