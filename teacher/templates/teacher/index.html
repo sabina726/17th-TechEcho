@@ -11,12 +11,21 @@
             <div class="flex flex-col">
                 <h3 class="text-xl font-semibold text-gray-900">{{ teacher.user.username }}</h3>
                 <p class="text-gray-700 mt-1">{{ teacher.expertise }}</p>
+                {% if teacher.introduce|length > 50 %}
+                <p class="text-gray-600 mt-1">{{ teacher.introduce|slice:":50" }}...</p>
+                {% else %}
                 <p class="text-gray-600 mt-1">{{ teacher.introduce }}</p>
+                {% endif %}
             </div>
         </a>
         {% endfor %}
     </section>
 
-    <a href="{% url 'teacher:new' %}" class="text-blue-500 hover:text-blue-700 underline mt-6 inline-block">新增成為老師</a>
+    <div class="text-center">
+        <a href="{% url 'teacher:new' %}" class="btn btn-neutral text-gray-500 hover:text-gray-300 mt-6  px-4 py-2">
+            新增成為老師
+        </a>
+    </div>
+
 </div>
 {% endblock %}
