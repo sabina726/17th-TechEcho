@@ -6,15 +6,15 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('teacher', '0002_student_teacherinfo_students'),
+        ("teacher", "0002_student_teacherinfo_students"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='teacherinfo',
-            name='students',
+            model_name="teacherinfo",
+            name="students",
         ),
         migrations.DeleteModel(
-            name='Student',
+            name="Student",
         ),
     ]
