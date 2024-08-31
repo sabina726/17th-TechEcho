@@ -23,7 +23,7 @@ class Question(models.Model):
     deleted_at = models.DateTimeField(default=None, null=True)
 
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    models.s
+
     upvote = models.ManyToManyField(User, related_name="upvotes")
     downvote = models.ManyToManyField(User, related_name="downvotes")
     follow = models.ManyToManyField(User, related_name="follows")

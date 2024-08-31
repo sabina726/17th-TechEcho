@@ -12,8 +12,7 @@
         {% if question %}
             value="
                 {% for label in question|question_labels %}
-                    {{label
-                    }},
+                    {{label}},
                 {% endfor %}
             "
         {% endif %}
