@@ -61,4 +61,5 @@
             <a href="{% url "questions:index" %}" class="btn">回到首頁</a>
         </div>
     </div>
+    {% include "answers/index.html" with answers=answers form=form %}
 {% endblock  %}
