@@ -14,6 +14,63 @@ def index(request, id):
 @csrf_exempt
 def delete_answer(request, id):
     if request.method == "POST":
-        answer = get_object_or_404(Answer, id=id)
+        answer = get_object_or_404(Answer, pk=id)
         answer.delete()
         return redirect("questions:show", id=answer.question.id)
+
+@csrf_exempt
+def upvote_answer(request, id):
+    if request.method == "POST":
+        answer = get_object_or_404(Answer, pk=id)
+        answer.votes_count += 1
+        answer.save()
+        return redirect("questions:show", id=answer.question.id)
+
+@csrf_exempt
+def downvote_answer(request, id):
+    if request.method == "POST":
+        answer = get_object_or_404(Answer, pk=id)
+        answer.votes_count -= 1
+        answer.save()
+        return redirect("questions:show", id=answer.question.id)
+
+
+# def upvote_answer(request, id):
+#     if request.method == "POST":
+#         answer = get_object_or_404(Answer, id=id)
+#         user_vote = Vote.objects.filter(user=request.user, answer=answer).first()
+
+#         if user_vote:
+#             if user_vote.vote_type == "downvote":
+#                 answer.votes += 2  
+#                 user_vote.vote_type = "upvote"
+#                 user_vote.save()
+#             else:
+#                 return redirect("questions:show", id=answer.question.id)  
+#         else:
+#             answer.votes += 1
+#             Vote.objects.create(user=request.user, answer=answer, vote_type="upvote")
+
+#         answer.total_votes = answer.votes
+#         answer.save()
+#         return redirect("questions:show", id=id)
+
+# def downvote_answer(request, answer_id):
+#     if request.method == "POST":
+#         answer = get_object_or_404(Answer, id=answer_id)
+#         user_vote = Vote.objects.filter(user=request.user, answer=answer).first()
+
+#         if user_vote:
+#             if user_vote.vote_type == "upvote":
+#                 answer.votes -= 2  
+#                 user_vote.vote_type = "downvote"
+#                 user_vote.save()
+#             else:
+#                 return redirect("questions:show", id=answer.question.id)
+#         else:
+#             answer.votes -= 1
+#             Vote.objects.create(user=request.user, answer=answer, vote_type="downvote")
+
+#         answer.total_votes = answer.votes
+#         answer.save()
+#         return redirect("questions:show", id=id)

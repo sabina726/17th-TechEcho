@@ -18,7 +18,7 @@
     <div class="text-lg leading-relaxed mb-4">
         {{ answer.content|safe }}
     </div>
-    <div class="flex justify-between items-center">
+    {% comment %} <div class="flex justify-between items-center">
         <div x-data="{ count: 0 }" class="text-xl font-bold ">
             <button x-on:click="count++" class="p-2 border rounded-full text-gray-500 text-lg font-bold">
                 <i class="fa-solid fa-arrow-up"></i>
@@ -30,5 +30,24 @@
                 <i class="fa-solid fa-arrow-down"></i>
             </button>
         </div>
+    </div> {% endcomment %}
+
+    <div class="p-2 flex gap-2">
+        <form action="{% url 'answers:upvote_answer' answer.id %}" method="POST">
+            {% csrf_token %}
+            <button>
+                <i class="fa-solid fa-arrow-up text-gray-500 text-lg font-bold"></i> 
+            </button>
+        </form>
+
+        {{ answer.votes_count }}
+
+        <form action="{% url 'answers:downvote_answer' answer.id %}" method="POST">
+            {% csrf_token %}
+            <button>
+                <i class="fa-solid fa-arrow-down text-gray-500 text-lg font-bold"></i>
+            </button>
+        </form>
     </div>
+
 </section>
