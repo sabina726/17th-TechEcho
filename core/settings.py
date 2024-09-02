@@ -52,7 +52,10 @@ INSTALLED_APPS = [
     "questions",
     "answers",
     "ckeditor",
+    "teacher",
+    "users",
 ]
+
 
 if is_dev():
     INSTALLED_APPS += [
@@ -88,6 +91,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -155,7 +160,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# 特許可使用django_debug_toolbar的ip
-INTERNAL_IPS = [
-    "127.0.0.1",
+AUTHENTICATION_BACKENDS = [
+    "users.backends.EmailBackend",
+    "django.contrib.auth.backends.ModelBackend",
 ]

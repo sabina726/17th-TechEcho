@@ -1,11 +1,11 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import QuestionForm
-from .models import Question
-
 from answers.forms import AnswerForm
 from answers.models import Answer
+
+from .forms import QuestionForm
+from .models import Question
 
 # Create your views here.
 
@@ -43,7 +43,11 @@ def show(request, id):
         )
     answers = question.answer_set.order_by("-id")
     form = AnswerForm()
-    return render(request, "questions/show.html", {"question": question, "answers": answers, "form": form},)
+    return render(
+        request,
+        "questions/show.html",
+        {"question": question, "answers": answers, "form": form},
+    )
 
 
 def edit(request, id):
@@ -65,7 +69,7 @@ def upvotes(request, id):
         question.votes_count += 1
         question.save()
         return redirect("questions:show", id=id)
-       
+
 
 def downvotes(request, id):
     if request.method == "POST":
@@ -73,4 +77,3 @@ def downvotes(request, id):
         question.votes_count -= 1
         question.save()
         return redirect("questions:show", id=id)
-

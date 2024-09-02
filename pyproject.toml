@@ -9,9 +9,16 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "^3.12"
 django = "^5.1"
-psycopg2-binary = "^2.9.9"
+psycopg2-binary = {version = "^2.9.9", extras = ["mac"]}
+psycopg2 = {version = "^2.9.9", extras = ["windows"]}
+social-auth-app-django = "^5.4.2"
+social-auth-core = "^4.5.4"
 django-taggit = "^6.0.0"
 django-ckeditor = "^6.7.1"
+
+[tool.poetry.extras]
+mac = ["psycopg2-binary"]
+windows = ["psycopg2"]
 
 
 [tool.poetry.group.dev.dependencies]

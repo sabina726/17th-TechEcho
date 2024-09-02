@@ -8,10 +8,10 @@
             </div>
         </div>
         <div class="flex items-center">
-            <form action="{% url 'answers:delete_answer' answer.id%}" method="POST">  
+            <form action="{% url 'answers:delete_answer' answer.id%}" method="POST">
                 {% csrf_token %}
                 <button class="btn btn-sm bg-red-600 text-white">刪除</button>
-            </form> 
+            </form>
         </div>
     </div>
 
@@ -22,7 +22,7 @@
         <div x-data="{ count: 0 }" class="text-xl font-bold ">
             <button x-on:click="count++" class="p-2 border rounded-full text-gray-500 text-lg font-bold">
                 <i class="fa-solid fa-arrow-up"></i>
-            </button> 
+            </button>
 
             <span x-text="count" class="p-3"></span>
 
@@ -36,7 +36,7 @@
         <form action="{% url 'answers:upvote_answer' answer.id %}" method="POST">
             {% csrf_token %}
             <button>
-                <i class="fa-solid fa-arrow-up text-gray-500 text-lg font-bold"></i> 
+                <i class="fa-solid fa-arrow-up text-gray-500 text-lg font-bold"></i>
             </button>
         </form>
 

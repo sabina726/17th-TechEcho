@@ -1,15 +1,16 @@
-from django.shortcuts import render, redirect, get_object_or_404
-
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
-from questions.models import Question
 from answers.models import Answer
+from questions.models import Question
+
 
 def index(request, id):
     if request.method == "POST":
         question = get_object_or_404(Question, pk=id)
         answer = question.answer_set.create(content=request.POST["content"])
         return redirect("questions:show", id=id)
+
 
 @csrf_exempt
 def delete_answer(request, id):
@@ -18,6 +19,7 @@ def delete_answer(request, id):
         answer.delete()
         return redirect("questions:show", id=answer.question.id)
 
+
 @csrf_exempt
 def upvote_answer(request, id):
     if request.method == "POST":
@@ -25,6 +27,7 @@ def upvote_answer(request, id):
         answer.votes_count += 1
         answer.save()
         return redirect("questions:show", id=answer.question.id)
+
 
 @csrf_exempt
 def downvote_answer(request, id):
@@ -42,11 +45,11 @@ def downvote_answer(request, id):
 
 #         if user_vote:
 #             if user_vote.vote_type == "downvote":
-#                 answer.votes += 2  
+#                 answer.votes += 2
 #                 user_vote.vote_type = "upvote"
 #                 user_vote.save()
 #             else:
-#                 return redirect("questions:show", id=answer.question.id)  
+#                 return redirect("questions:show", id=answer.question.id)
 #         else:
 #             answer.votes += 1
 #             Vote.objects.create(user=request.user, answer=answer, vote_type="upvote")
@@ -62,7 +65,7 @@ def downvote_answer(request, id):
 
 #         if user_vote:
 #             if user_vote.vote_type == "upvote":
-#                 answer.votes -= 2  
+#                 answer.votes -= 2
 #                 user_vote.vote_type = "downvote"
 #                 user_vote.save()
 #             else:
