@@ -5,7 +5,7 @@
     <h1 class="text-4xl font-extrabold mb-8 text-gray-900">新增老師</h1>
 
     <section class="flex justify-center">
-        <form action="{% url 'teacher:index' %}" method="POST" autocomplete="off" class="space-y-6">
+        <form action="{% url 'teachers:index' %}" method="POST" autocomplete="off" class="space-y-6">
             {% csrf_token %}
             <div class="grid gap-4">
                 {{ form.as_p }}
@@ -15,7 +15,7 @@
         </form>
     </section>
 
-    <a href="{% url 'teacher:index' %}"
+    <a href="{% url 'teachers:index' %}"
         class="btn btn-neutral mt-8 text-gray-600 hover:text-gray-300 text-center">返回老師列表</a>
 </div>
 {% endblock %}

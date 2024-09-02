@@ -5,7 +5,7 @@
     <h1 class="text-3xl font-bold mb-6 text-gray-900">編輯資料</h1>
 
     <section>
-        <form action="{% url 'teacher:show' teacher.id %}" method="POST" autocomplete="off" class="space-y-4">
+        <form action="{% url 'teachers:show' teacher.id %}" method="POST" autocomplete="off" class="space-y-4">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit"
@@ -13,6 +13,6 @@
         </form>
     </section>
 
-    <a href="{% url 'teacher:index' %}" class="block mt-6 text-blue-500 hover:text-blue-700 underline">返回老師列表</a>
+    <a href="{% url 'teachers:index' %}" class="block mt-6 text-blue-500 hover:text-blue-700 underline">返回老師列表</a>
 </div>
 {% endblock %}

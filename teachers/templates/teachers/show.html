@@ -13,7 +13,7 @@
     </section>
 
     <div class="absolute bottom-4 right-4">
-        <form action="{% url 'teacher:delete' teacher.id %}" method="POST" onsubmit="return confirm('您確定要刪除這條資訊嗎？');">
+        <form action="{% url 'teachers:delete' teacher.id %}" method="POST" onsubmit="return confirm('您確定要刪除這條資訊嗎？');">
             {% csrf_token %}
             <button type="submit"
                 class="inline-block px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors">刪除資訊</button>
@@ -21,10 +21,10 @@
     </div>
 
     <div>
-        <a href="{% url 'teacher:edit' teacher.id %}"
+        <a href="{% url 'teachers:edit' teacher.id %}"
             class="absolute top-6 right-6 inline-block px-4 py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition-colors">編輯老師資訊</a>
     </div>
 
-    <a href="{% url 'teacher:index' %}" class="btn text-blue-500 hover:text-blue-700">老師列表</a>
+    <a href="{% url 'teachers:index' %}" class="btn text-blue-500 hover:text-blue-700">老師列表</a>
 </div>
 {% endblock %}

@@ -9,7 +9,7 @@ def index(request):
         form = TeacherInfoForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("teacher:index")
+            return redirect("teachers:index")
         return render(request, "teachers/new.html", {"form": form})
 
     teachers = TeacherInfo.objects.all()
@@ -27,7 +27,7 @@ def show(request, id):
         form = TeacherInfoForm(request.POST, instance=teacher)
         if form.is_valid():
             form.save()
-            return redirect("teacher:show", id)
+            return redirect("teachers:show", id)
         return render(request, "teachers/new.html", {"form": form})
 
     return render(request, "teachers/show.html", {"teacher": teacher})
@@ -42,4 +42,4 @@ def edit(request, id):
 def delete(request, id):
     teacher = get_object_or_404(TeacherInfo, id=id)
     teacher.delete()
-    return redirect("teacher:index")
+    return redirect("teachers:index")
