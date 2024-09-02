@@ -3,10 +3,12 @@ from django.core.validators import MinLengthValidator
 from django.db import models
 from taggit.managers import TaggableManager
 
+from lib.models import SoftDeleteModel
+
 # Create your models here.
 
 
-class Question(models.Model):
+class Question(SoftDeleteModel):
     title = models.CharField(max_length=50)
     details = models.TextField(
         validators=[
@@ -20,7 +22,6 @@ class Question(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(default=None, null=True)
 
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
