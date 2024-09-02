@@ -1,6 +1,6 @@
 from django import forms
 
-from teacher.models import TeacherInfo
+from teachers.models import TeacherInfo
 
 
 class TeacherInfoForm(forms.ModelForm):

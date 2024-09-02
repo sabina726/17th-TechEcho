@@ -10,15 +10,15 @@ def index(request):
         if form.is_valid():
             form.save()
             return redirect("teacher:index")
-        return render(request, "teacher/new.html", {"form": form})
+        return render(request, "teachers/new.html", {"form": form})
 
     teachers = TeacherInfo.objects.all()
-    return render(request, "teacher/index.html", {"teachers": teachers})
+    return render(request, "teachers/index.html", {"teachers": teachers})
 
 
 def new(request):
     form = TeacherInfoForm()
-    return render(request, "teacher/new.html", {"form": form})
+    return render(request, "teachers/new.html", {"form": form})
 
 
 def show(request, id):
@@ -28,15 +28,15 @@ def show(request, id):
         if form.is_valid():
             form.save()
             return redirect("teacher:show", id)
-        return render(request, "teacher/new.html", {"form": form})
+        return render(request, "teachers/new.html", {"form": form})
 
-    return render(request, "teacher/show.html", {"teacher": teacher})
+    return render(request, "teachers/show.html", {"teacher": teacher})
 
 
 def edit(request, id):
     teacher = get_object_or_404(TeacherInfo, id=id)
     form = TeacherInfoForm(instance=teacher)
-    return render(request, "teacher/edit.html", {"teacher": teacher, "form": form})
+    return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
 
 
 def delete(request, id):
