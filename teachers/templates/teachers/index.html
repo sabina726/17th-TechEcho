@@ -1,0 +1,31 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="p-6 max-w-4xl mx-auto relative">
+    <h1 class="text-4xl font-bold mb-6 text-gray-800">Teacher List</h1>
+
+    <section>
+        {% for teacher in teachers %}
+        <a href="{% url 'teachers:show' teacher.id %}"
+            class="block mb-4 p-4 bg-white shadow-md rounded-lg hover:bg-gray-100 transition-colors">
+            <div class="flex flex-col">
+                <h3 class="text-xl font-semibold text-gray-900">{{ teacher.user.username }}</h3>
+                <p class="text-gray-700 mt-1">{{ teacher.expertise }}</p>
+                {% if teacher.introduce|length > 50 %}
+                <p class="text-gray-600 mt-1">{{ teacher.introduce|slice:":50" }}...</p>
+                {% else %}
+                <p class="text-gray-600 mt-1">{{ teacher.introduce }}</p>
+                {% endif %}
+            </div>
+        </a>
+        {% endfor %}
+    </section>
+
+    <div class="absolute top-6 right-6">
+        <a href="{% url 'teachers:new' %}" class="btn btn-neutral text-gray-500 hover:text-gray-300 px-4 py-2">
+            新增成為老師
+        </a>
+    </div>
+
+</div>
+{% endblock %}

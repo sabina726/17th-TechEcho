@@ -3,6 +3,9 @@ import json
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 
+from answers.forms import AnswerForm
+from answers.models import Answer
+
 from .forms import QuestionForm
 from .models import Question
 
@@ -58,11 +61,12 @@ def show(request, id):
         return render(
             request, "questions/edit.html", {"form": form, "question": question}
         )
-
+    answers = question.answer_set.order_by("-id")
+    form = AnswerForm()
     return render(
         request,
         "questions/show.html",
-        {"question": question, "labels": question.labels.all()},
+        {"question": question, "answers": answers, "form": form, "labels": question.labels.all()},
     )
 
 
@@ -95,27 +99,5 @@ def votes(request, id):
         return redirect("questions:show", id=id)
 
 
-# def bookmark(request, id):
-#     if request.method == "POST":
-#         resume = get_object_or_404(Resume, pk=id)
-
-#         if resume.bookmarked_by(request.user):
-#             resume.bookmark.remove(request.user)
-#             return render(
-#                 request,
-#                 "resumes/_bookmark.html",
-#                 {
-#                     "resume": resume,
-#                     "bookmarked": False,
-#                 },
-#             )
-#         else:
-#             resume.bookmark.add(request.user)
-#             return render(
-#                 request,
-#                 "resumes/_bookmark.html",
-#                 {
-#                     "resume": resume,
-#                     "bookmarked": True,
-#                 },
-#             )
+def bookmark(request, id):
+    pass

@@ -17,6 +17,7 @@ class Question(SoftDeleteModel):
     )
 
     votes_count = models.IntegerField(default=0)
+
     answers_count = models.PositiveIntegerField(default=0)
     follows_count = models.PositiveIntegerField(default=0)
 
