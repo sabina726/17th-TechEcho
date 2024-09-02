@@ -49,10 +49,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "home",
+    "teachers",
     "questions",
     "answers",
     "ckeditor",
-    "teacher",
     "users",
     "search",
 ]
@@ -61,7 +61,6 @@ INSTALLED_APPS = [
 if is_dev():
     INSTALLED_APPS += [
         "django_extensions",
-        "debug_toolbar",
     ]
 
 MIDDLEWARE = [
@@ -74,10 +73,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-if is_dev():
-    MIDDLEWARE += [
-        "debug_toolbar.middleware.DebugToolbarMiddleware",
-    ]
 
 ROOT_URLCONF = "core.urls"
 
