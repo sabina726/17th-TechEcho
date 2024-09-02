@@ -12,31 +12,81 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('taggit', '0006_rename_taggeditem_content_type_object_id_taggit_tagg_content_8fc721_idx'),
+        (
+            "taggit",
+            "0006_rename_taggeditem_content_type_object_id_taggit_tagg_content_8fc721_idx",
+        ),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Question',
+            name="Question",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('deleted_at', models.DateTimeField(default=None, null=True)),
-                ('title', models.CharField(max_length=50)),
-                ('details', models.TextField(validators=[django.core.validators.MinLengthValidator(20, 'the field must contain at least 20 characters')])),
-                ('votes_count', models.IntegerField(default=0)),
-                ('answers_count', models.PositiveIntegerField(default=0)),
-                ('follows_count', models.PositiveIntegerField(default=0)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('downvote', models.ManyToManyField(related_name='downvotes', to=settings.AUTH_USER_MODEL)),
-                ('follow', models.ManyToManyField(related_name='follows', to=settings.AUTH_USER_MODEL)),
-                ('labels', taggit.managers.TaggableManager(help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags')),
-                ('upvote', models.ManyToManyField(related_name='upvotes', to=settings.AUTH_USER_MODEL)),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("deleted_at", models.DateTimeField(default=None, null=True)),
+                ("title", models.CharField(max_length=50)),
+                (
+                    "details",
+                    models.TextField(
+                        validators=[
+                            django.core.validators.MinLengthValidator(
+                                20, "the field must contain at least 20 characters"
+                            )
+                        ]
+                    ),
+                ),
+                ("votes_count", models.IntegerField(default=0)),
+                ("answers_count", models.PositiveIntegerField(default=0)),
+                ("follows_count", models.PositiveIntegerField(default=0)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "downvote",
+                    models.ManyToManyField(
+                        related_name="downvotes", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    "follow",
+                    models.ManyToManyField(
+                        related_name="follows", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    "labels",
+                    taggit.managers.TaggableManager(
+                        help_text="A comma-separated list of tags.",
+                        through="taggit.TaggedItem",
+                        to="taggit.Tag",
+                        verbose_name="Tags",
+                    ),
+                ),
+                (
+                    "upvote",
+                    models.ManyToManyField(
+                        related_name="upvotes", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

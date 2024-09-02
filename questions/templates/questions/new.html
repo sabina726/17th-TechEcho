@@ -5,7 +5,7 @@
 {% endcomment %}
 
 {% block content %}
-    <form action="{% url "questions:index" %}" method="POST">
+    <form class="p-6 max-w-4xl mx-auto relative" action="{% url "questions:index" %}" method="POST">
         {% csrf_token %}
 
         {% for field in form %}

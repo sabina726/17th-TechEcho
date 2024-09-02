@@ -52,7 +52,10 @@
 
 	<body class="flex flex-col min-h-screen">
 		{% include 'layouts/navbar.html' %}
-		<div class="flex-grow">{% block content %} {% endblock %}</div>
+		<div class="flex-grow">
+			{% block content %}
+			{% endblock %}
+		</div>
 		<footer class="w-full p-4 text-center text-white bg-blue-1">
 			<a href="#" class="transition duration-300 ease-in-out hover:text-green-3">📞 &ensp;聯絡我們</a>
 			|

@@ -3,7 +3,6 @@ import "./components"
 import 'htmx.org';
 import Alpine from 'alpinejs';
 import Tagify from '@yaireo/tagify';
-// import '@yaireo/tagify/dist/tagify.css';
 
 document.addEventListener('DOMContentLoaded', function () {
     console.log("DOM fully loaded and parsed");

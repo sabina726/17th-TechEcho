@@ -15,14 +15,27 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Answer',
+            name="Answer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content', ckeditor.fields.RichTextField()),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('deleted_at', models.DateTimeField(default=None, null=True)),
-                ('votes_count', models.IntegerField(default=0)),
-                ('downvote', models.ManyToManyField(related_name='downupvote_answer', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("content", ckeditor.fields.RichTextField()),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("deleted_at", models.DateTimeField(default=None, null=True)),
+                ("votes_count", models.IntegerField(default=0)),
+                (
+                    "downvote",
+                    models.ManyToManyField(
+                        related_name="downupvote_answer", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
         ),
     ]

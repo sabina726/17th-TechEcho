@@ -66,7 +66,12 @@ def show(request, id):
     return render(
         request,
         "questions/show.html",
-        {"question": question, "answers": answers, "form": form, "labels": question.labels.all()},
+        {
+            "question": question,
+            "answers": answers,
+            "form": form,
+            "labels": question.labels.all(),
+        },
     )
 
 
