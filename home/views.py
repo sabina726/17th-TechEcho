@@ -10,4 +10,4 @@ def nav(request):
 
 
 def pages(request):
-    return render(request, "home/pages.html")
+    return render(request, "home/pages.html", {"title": "登入", "content": "登入成功"})

@@ -4,7 +4,6 @@ import Tagify from '@yaireo/tagify';
 import '@yaireo/tagify/dist/tagify.css';
 
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("DOM fully loaded and parsed");
     var input = document.querySelector('#tags');
     if (input) {
         console.log("Input element found", input);
@@ -18,8 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 closeOnSelect: false
             }
         });
-    } else {
-        console.log("Input element not found");
     }
 });
 
