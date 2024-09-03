@@ -1,3 +1,6 @@
+var success = showSuccess;
+var error = showError
+
 function showSuccess(title, text) {
     Swal.fire({
         title: title,
@@ -13,5 +16,3 @@ function showError(title, text) {
         icon: "error"
     });
 }
-
-window.show = showSuccess; 
