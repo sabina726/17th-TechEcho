@@ -1,4 +1,4 @@
-var success = showSuccess;
+var success = showSuccess
 var error = showError
 
 function showSuccess(title, text) {
