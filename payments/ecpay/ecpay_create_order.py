@@ -7,7 +7,7 @@ from datetime import datetime
 from .ecpay_payment_sdk import ECPayPaymentSdk
 
 
-def main():
+def ecpay_api():
     order_params = {
         "MerchantTradeNo": datetime.now().strftime("NO%Y%m%d%H%M%S"),
         # "StoreID": "",
