@@ -1,0 +1,16 @@
+
+<div class="flex justify-center">
+    {% if pages.has_previous %}
+        <a class="link" href="?page=1">&laquo 第一頁</a>
+        <a class="link" href="?page={{pages.previous_page_number}}">上一頁</a>
+    {% endif %}
+    
+    <span>
+        目前在第{{pages.number}}頁，共{{pages.paginator.num_pages}}頁
+    </span>
+    
+    {% if pages.has_next %}
+        <a class="link" href="?page={{pages.next_page_number}}"> 下一頁</a>
+        <a class="link" href="?page={{pages.paginator.num_pages}}"> 最後一頁 &raquo</a>
+    {% endif %}
+</div>
