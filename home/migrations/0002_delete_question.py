@@ -5,12 +5,10 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("home", "0001_initial"),
-
     ]
 
     operations = [
         migrations.DeleteModel(
             name="Question",
-
         ),
     ]
