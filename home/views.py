@@ -1,14 +1,13 @@
-# home/views.py
 from django.shortcuts import render
 
 
-def index(req):
-    return render(req, "home/index.html")
+def index(request):
+    return render(request, "home/index.html")
 
 
-def nav(req):
-    return render(req, "home/nav.html")
+def nav(request):
+    return render(request, "home/nav.html")  # 開發用
 
 
-def pages(req):
-    return render(req, "home/pages.html")
+def pages(request):
+    return render(request, "home/pages.html", {"title": "登入", "content": "登入成功"})
