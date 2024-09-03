@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 
+from .models import User
+
 
 def register(request, id=None):
     if id:
@@ -21,11 +23,10 @@ def register(request, id=None):
             messages.error(request, "此用戶名已存在")
         else:
             user = User.objects.create_user(
-                username=username, password=password, email=email
+                username=username, password=password, email=email, name=username
             )
-            user.save()
             messages.success(request, "註冊成功")
-            return redirect("users:login", id=user.id)
+            return redirect("users:login")
 
     return render(request, "register.html", {"existing_user": existing_user})
 
@@ -39,25 +40,23 @@ def log_in(request, id=None):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
-        email = request.POST.get("email")
 
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-
-            if user.email == email:
-                login(request, user)
-                return redirect("pages")
-            else:
-                messages.error(request, "登入失敗：電子郵件地址不匹配")
+            login(request, user)
+            return redirect("pages")
         else:
             messages.error(request, "登入失敗：用戶名或密碼不正確")
 
     return render(request, "login.html", {"existing_user": existing_user})
 
 
-def log_out(req):
-    if req.method == "POST":
-        logout(req)
-        messages.success(req, "登出成功")
-        return redirect("layout:base")
+def profile(request, id):
+    return render(request, "users/profile.html")
+
+
+def log_out(request):
+    logout(request)
+    messages.success(request, "登出成功")
+    return redirect("index")
