@@ -1,5 +1,6 @@
 {% extends "layouts/base.html" %} {% block content %} {% csrf_token %}
-<script >
-    success("歡迎", "登入成功");
+<script>
+  success("歡迎", "登入成功");
 </script>
+<a href="{% url 'users:log_out' %}"> 登出 </a>
 {% endblock content %}
