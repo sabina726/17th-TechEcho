@@ -28,7 +28,7 @@ def show(request, id):
         if form.is_valid():
             form.save()
             return redirect("teachers:show", id)
-        return render(request, "teachers/new.html", {"form": form})
+        return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
 
     return render(request, "teachers/show.html", {"teacher": teacher})
 
