@@ -3,6 +3,8 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
 from django.utils import timezone
 
+from users.models import Users
+
 
 class TeacherInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -14,3 +16,12 @@ class TeacherInfo(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.expertise}"
+
+    def save(self, *args, **kwargs):
+
+        super().save(*args, **kwargs)
+
+        user_profile = Users.objects.filter(member=self.user).first()
+        if user_profile:
+            user_profile.is_teacher = True
+            user_profile.save()
