@@ -10,30 +10,40 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('answers', '0001_initial'),
-        ('questions', '0001_initial'),
+        ("answers", "0001_initial"),
+        ("questions", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='answer',
-            name='downvote',
-            field=models.ManyToManyField(related_name='downupvote_answer', to=settings.AUTH_USER_MODEL),
+            model_name="answer",
+            name="downvote",
+            field=models.ManyToManyField(
+                related_name="downupvote_answer", to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='answer',
-            name='question',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='questions.question'),
+            model_name="answer",
+            name="question",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="questions.question"
+            ),
         ),
         migrations.AddField(
-            model_name='answer',
-            name='upvote',
-            field=models.ManyToManyField(related_name='upvote_answer', to=settings.AUTH_USER_MODEL),
+            model_name="answer",
+            name="upvote",
+            field=models.ManyToManyField(
+                related_name="upvote_answer", to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='answer',
-            name='user',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL),
+            model_name="answer",
+            name="user",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

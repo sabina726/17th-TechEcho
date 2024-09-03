@@ -1,11 +1,11 @@
 import json
 
 from django.contrib import messages
-from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
 from answers.forms import AnswerForm
 from answers.models import Answer
+from lib.utils.pagination import paginate
 
 from .forms import QuestionForm
 from .models import Question
@@ -35,10 +35,8 @@ def index(request):
     order_by = request.GET.get("order_by")
     questions = Question.objects.order_by(order_by or "-id")
 
-    p = Paginator(questions, 6)
-    page_number = request.GET.get("page", 1)
-    current_questions = p.get_page(page_number)
-    return render(request, "questions/index.html", {"questions": current_questions})
+    questions = paginate(request, questions)
+    return render(request, "questions/index.html", {"questions": questions})
 
 
 def new(request):
@@ -109,5 +107,5 @@ def votes(request, id):
         return redirect("questions:show", id=id)
 
 
-def bookmark(request, id):
+def follows(request, id):
     pass
