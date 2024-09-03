@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.validators import MinLengthValidator
 from django.db import models
 
@@ -24,11 +24,15 @@ class Question(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now_add=True)
 
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL
+    )
 
-    upvote = models.ManyToManyField(User, related_name="upvotes")
-    downvote = models.ManyToManyField(User, related_name="downvotes")
-    follow = models.ManyToManyField(User, related_name="follows")
+    upvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="upvotes")
+    downvote = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="downvotes"
+    )
+    follow = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="follows")
 
     def __str__(self):
         return self.title
