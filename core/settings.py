@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 # 確認狀態為開發或部署。開發時專用的設定
 from lib.utils.env import is_dev
 
@@ -113,7 +115,8 @@ DATABASES = {
     }
 }
 
-LOGIN_URL = "users:login"
+# the endpoint for not logged in user
+LOGIN_URL = reverse_lazy("users:login")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

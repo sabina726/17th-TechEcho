@@ -1,6 +1,7 @@
 import json
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
 from answers.forms import AnswerForm
@@ -10,21 +11,25 @@ from lib.utils.pagination import paginate
 from .forms import QuestionForm
 from .models import Question
 
-# Create your views here.
-
 
 def index(request):
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.error(request, "請登入後再嘗試")
+            return redirect("users:login")
         form = QuestionForm(request.POST)
         labels = request.POST.get("labels")
 
         # we require at least one label
         if labels and form.is_valid():
+            # commit=False is not applicable here because instance.labels.set(labels) requires a pk
+            # and since our pk is defined by the ORM not by us, it will only exist once we save it to the DB
             instance = form.save()
             labels = [label["value"] for label in json.loads(labels)]
-
             instance.labels.set(labels)
+            instance.user = request.user
             instance.save()
+
             messages.success(request, "成功提問")
             return redirect("questions:index")
 
@@ -47,6 +52,10 @@ def new(request):
 def show(request, id):
     question = get_object_or_404(Question, pk=id)
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.error(request, "請登入後再嘗試")
+            return redirect("users:login")
+
         form = QuestionForm(request.POST, instance=question)
         labels = request.POST.get("labels")
         # we require at least one label
@@ -78,8 +87,9 @@ def show(request, id):
     )
 
 
+@login_required
 def edit(request, id):
-    question = get_object_or_404(Question, pk=id)
+    question = get_object_or_404(Question, pk=id, user=request.user)
     form = QuestionForm(instance=question)
     return render(
         request,
@@ -88,6 +98,7 @@ def edit(request, id):
     )
 
 
+@login_required
 def delete(request, id):
     if request.method == "POST":
         question = get_object_or_404(Question, pk=id)
@@ -95,6 +106,7 @@ def delete(request, id):
         return redirect("questions:index")
 
 
+@login_required
 def votes(request, id):
     if request.method == "POST":
         question = get_object_or_404(Question, pk=id)
@@ -107,5 +119,6 @@ def votes(request, id):
         return redirect("questions:show", id=id)
 
 
+@login_required
 def follows(request, id):
     pass
