@@ -8,8 +8,7 @@ from answers.forms import AnswerForm
 from answers.models import Answer
 from lib.utils.pagination import paginate
 from lib.utils.questions_sort_validator import is_valid
-from lib.utils.validate_labels import \
-    validate_labels  # only works with GET method
+from lib.utils.validate_labels import parse_labels
 
 from .forms import QuestionForm
 from .models import Question
@@ -22,13 +21,10 @@ def index(request):
             return redirect("users:login")
 
         form = QuestionForm(request.POST)
-        labels = validate_labels(request)
-        labels = request.POST.get("labels")
+        labels = parse_labels(request.POST)
 
         # we require at least one label
         if labels and form.is_valid():
-            labels = [label["value"] for label in json.loads(labels)]
-
             # commit=False is not applicable here because instance.labels.set(labels) requires a pk
             # and since our pk is defined by the ORM not by us, it will only exist once we save it to the DB
             instance = form.save()

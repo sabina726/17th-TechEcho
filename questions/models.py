@@ -3,7 +3,7 @@ from django.core.validators import MinLengthValidator
 from django.db import models
 from taggit.managers import TaggableManager
 
-from lib.models import SoftDeleteModel
+from lib.models.soft_delete import SoftDeleteModel
 
 # Create your models here.
 
