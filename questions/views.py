@@ -7,6 +7,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from answers.forms import AnswerForm
 from answers.models import Answer
 from lib.utils.pagination import paginate
+from lib.utils.questions_sort_validator import is_valid
+from lib.utils.validate_labels import \
+    validate_labels  # only works with GET method
 
 from .forms import QuestionForm
 from .models import Question
@@ -17,15 +20,18 @@ def index(request):
         if not request.user.is_authenticated:
             messages.error(request, "請登入後再嘗試")
             return redirect("users:login")
+
         form = QuestionForm(request.POST)
+        labels = validate_labels(request)
         labels = request.POST.get("labels")
 
         # we require at least one label
         if labels and form.is_valid():
+            labels = [label["value"] for label in json.loads(labels)]
+
             # commit=False is not applicable here because instance.labels.set(labels) requires a pk
             # and since our pk is defined by the ORM not by us, it will only exist once we save it to the DB
             instance = form.save()
-            labels = [label["value"] for label in json.loads(labels)]
             instance.labels.set(labels)
             instance.user = request.user
             instance.save()
@@ -38,7 +44,7 @@ def index(request):
 
     # requires validation
     order_by = request.GET.get("order_by")
-    questions = Question.objects.order_by(order_by or "-id")
+    questions = Question.objects.order_by(order_by if is_valid(order_by) else "-id")
 
     questions = paginate(request, questions)
     return render(request, "questions/index.html", {"questions": questions})
@@ -50,12 +56,12 @@ def new(request):
 
 
 def show(request, id):
-    question = get_object_or_404(Question, pk=id)
     if request.method == "POST":
         if not request.user.is_authenticated:
             messages.error(request, "請登入後再嘗試")
             return redirect("users:login")
 
+        question = get_object_or_404(Question, pk=id, user=request.user)
         form = QuestionForm(request.POST, instance=question)
         labels = request.POST.get("labels")
         # we require at least one label
@@ -73,6 +79,8 @@ def show(request, id):
         return render(
             request, "questions/edit.html", {"form": form, "question": question}
         )
+
+    question = get_object_or_404(Question, pk=id)
     answers = question.answer_set.order_by("-id")
     form = AnswerForm()
     return render(
@@ -101,7 +109,7 @@ def edit(request, id):
 @login_required
 def delete(request, id):
     if request.method == "POST":
-        question = get_object_or_404(Question, pk=id)
+        question = get_object_or_404(Question, pk=id, user=request.user)
         question.delete()
         return redirect("questions:index")
 

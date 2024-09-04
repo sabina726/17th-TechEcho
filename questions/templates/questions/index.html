@@ -14,6 +14,7 @@
             <form action="{% url "questions:index" %}">
                 <button class="link" name="order_by" value="-votes_count">讚數</button>
                 <button class="link" name="order_by" value="-follows_count">追蹤數</button>
+                <button class="link" name="order_by" value="-id">發表時間</button>
             </form>
         </div>
 
@@ -33,8 +34,8 @@
                     <p>內文: {{question.details|striptags|truncatechars:20}}</p>
                 </li>
             {% endfor %}
-
-            {% include "shared/pagination.html" with pages=questions only %}
         </ul>
+
+         {% include "shared/pagination.html" with pages=questions only %}
     </div>
 {% endblock  %}

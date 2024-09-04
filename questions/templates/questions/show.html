@@ -3,7 +3,7 @@
 {% block content %}
     <div class="p-6 max-w-4xl mx-auto relative mb-2">
         <div class="flex justify-between items-center mb-2">
-            <div class="flex gap-2 items-center">
+            <div class="flex gap-4 items-center">
                 <h1 class="text-2xl">問題：{{question.title}}</h1>
                 {% comment %} need user function to follow or not {% endcomment %}
                 <p class="link">
@@ -25,8 +25,8 @@
             <span>提問者：{{question.user}}</span>
             <span>｜初始日期：{{question.created_at}}</span>
             <span>｜最後修改日期：
-                {% if question.modified_at %}
-                    {{question.modified_at}}
+                {% if question.updated_at %}
+                    {{question.updated_at}}
                 {% else %}
                     {{question.created_at}}
                 {% endif %}
@@ -55,7 +55,7 @@
             </button>
         </form>
 
-        {% if user.is_authenticated%}
+        {% if user.is_authenticated and user == question.user %}
             <div class="flex gap-2">
                 {% comment %} <button>share</button> {% endcomment %}
                 <a href="{% url "questions:edit" question.id%}" class="btn">編輯此問題</a>
