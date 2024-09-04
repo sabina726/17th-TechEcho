@@ -1,12 +1,12 @@
 from django.shortcuts import render
 
 
+def nav(request):
+    return render(request, "home/nav.html")  # dev
+
+
 def index(request):
     return render(request, "home/index.html")
-
-
-def nav(request):
-    return render(request, "home/nav.html")  # 開發用
 
 
 def pages(request):
