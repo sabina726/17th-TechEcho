@@ -25,16 +25,37 @@ def payment_option(request):
 
 
 def ecpay(request):
-    return HttpResponse(ecpay_api())
+    user = request.user.username
+    print(f"{user}")
+    return HttpResponse(ecpay_api(user))
+
+
+@csrf_exempt
+def ecpay_return(request):
+    if request.method == "POST":
+        result = request.POST
+        user_id = request.POST.get("CustomField1")
+        process_date = request.POST.get("process_date")
+        amount = request.POST.get("amount")
+        RtnMsg = request.POST.get("RtnMsg")
+        print(f"{result}")
+        print(f"付款用戶名:{user_id}")
+        print(f"交易日期:{process_date}")
+        print(f"交易金額:{amount}")
+        print(f"交易結果:{RtnMsg}")
+        return HttpResponse("Payment confirmed!")
 
 
 @csrf_exempt
 def after_pay(request):
-    return render(request, "payments/after_pay.html")
+    user_id = request.user.username
+    print(f"{user_id}")
+    return render(request, "payments/after_pay.html", {"user_id": user_id})
 
 
 # LinePay
 def linepay_index(request):
+
     return render(request, "payments/linepay_index.html")
 
 

@@ -37,6 +37,7 @@ SECRET_KEY = os.getenv("APP_SECRET_KEY")
 DEBUG = is_dev()
 
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ["https://techecho.tonytests.com"]
 
 
 # Application definition

@@ -9,6 +9,7 @@ urlpatterns = [
     path("mentor", views.mentor, name="mentor"),
     path("payment_option", views.payment_option, name="payment_option"),
     path("ecpay", views.ecpay, name="ecpay"),
+    path("ecpay_return", views.ecpay_return, name="ecpay_return"),
     path("after_pay", views.after_pay, name="after_pay"),
     path(
         "linepay_index", views.linepay_index, name="linepay_index"
