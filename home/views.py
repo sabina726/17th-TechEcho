@@ -1,8 +1,5 @@
+from django.contrib import messages
 from django.shortcuts import render
-
-
-def nav(request):
-    return render(request, "home/nav.html")  # dev
 
 
 def index(request):
@@ -10,4 +7,5 @@ def index(request):
 
 
 def pages(request):
+    messages.success(request, "登入成功！")
     return render(request, "home/pages.html", {"title": "登入", "content": "登入成功"})
