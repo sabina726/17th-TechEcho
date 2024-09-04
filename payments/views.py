@@ -1,11 +1,14 @@
 import os
 import uuid
 
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import HttpResponse, redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from linepay import LinePayApi
+
+from users.models import User
 
 from .ecpay.ecpay_create_order import ecpay_api
 from .models import Payment
@@ -20,14 +23,30 @@ def mentor(request):
     return render(request, "payments/mentor.html")
 
 
+@login_required
 def payment_option(request):
+    username = request.user.username
+    payment_user = get_object_or_404(User, username=username)
+    print(f"{payment_user}")
+    if payment_user.is_student:
+        print(f"{payment_user} 已是付費學生")
+        return render(request, "payments/after_pay.html", {"user_id": username})
+    else:
+        print(f"{payment_user} 還不是付費學生")
     return render(request, "payments/payment_option.html")
 
 
+@login_required
 def ecpay(request):
-    user = request.user.username
-    print(f"{user}")
-    return HttpResponse(ecpay_api(user))
+    username = request.user.username
+    payment_user = get_object_or_404(User, username=username)
+    print(f"{payment_user}")
+    if payment_user.is_student:
+        print(f"{payment_user} 已是付費學生")
+        return render(request, "payments/after_pay.html", {"user_id": username})
+    else:
+        print(f"{payment_user} 還不是付費學生")
+        return HttpResponse(ecpay_api(username))
 
 
 @csrf_exempt
@@ -43,22 +62,27 @@ def ecpay_return(request):
         print(f"交易日期:{process_date}")
         print(f"交易金額:{amount}")
         print(f"交易結果:{RtnMsg}")
+
+        User.objects.filter(username=user_id).update(is_student="True")
         return HttpResponse("Payment confirmed!")
 
 
 @csrf_exempt
 def after_pay(request):
+    if request.method == "POST":
+        result2 = request.POST
+        user_id = request.POST.get("CustomField1")
+        print(f"{result2}")
+        return render(request, "payments/after_pay.html", {"user_id": user_id})
+
+
+@login_required
+def disable_premium(request):
     user_id = request.user.username
-    print(f"{user_id}")
-    return render(request, "payments/after_pay.html", {"user_id": user_id})
+    User.objects.filter(username=user_id).update(is_student="False")
 
 
 # LinePay
-def linepay_index(request):
-
-    return render(request, "payments/linepay_index.html")
-
-
 def linepay_create_payment(request):
     plan = request.GET.get("plan", "basic")
 
@@ -135,6 +159,9 @@ def linepay_create_payment(request):
 
 
 def linepay_confirm_payment(request):
+    user_id = request.user.username
+    print(f"{user_id}")
+    User.objects.filter(username=user_id).update(is_student="True")
     return HttpResponse("Payment confirmed!")
 
 

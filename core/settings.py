@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 # 確認狀態為開發或部署。開發時專用的設定
 from lib.utils.env import is_dev
 
@@ -163,5 +165,8 @@ AUTHENTICATION_BACKENDS = [
     "users.backends.EmailBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
+
+LOGIN_URL = reverse_lazy("users:login")
+
 
 AUTH_USER_MODEL = "users.User"

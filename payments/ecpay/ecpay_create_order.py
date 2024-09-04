@@ -24,7 +24,7 @@ def ecpay_api(user):
         # "ChooseSubPayment": "",
         "OrderResultURL": "https://techecho.tonytests.com/payments/after_pay",
         "NeedExtraPaidInfo": "Y",
-        "CustomField1": "tony",
+        "CustomField1": user,
         "CustomField2": "",
         "EncryptType": 1,
     }
