@@ -7,11 +7,15 @@ from django.shortcuts import get_object_or_404, redirect, render
 from answers.forms import AnswerForm
 from answers.models import Answer
 from lib.utils.pagination import paginate
-from lib.utils.questions_sort_validator import is_valid
-from lib.utils.validate_labels import parse_labels
 
 from .forms import QuestionForm
-from .models import Question
+from .models import Question, QuestionUserVotes
+from .utils.labels import parse_labels
+from .utils.question_user_votes import (
+    upvoted_or_downvoted_or_neither,
+    validate_votes_input,
+)
+from .utils.sort import is_valid
 
 
 def index(request):
@@ -77,6 +81,8 @@ def show(request, id):
         )
 
     question = get_object_or_404(Question, pk=id)
+    vote = upvoted_or_downvoted_or_neither(request, question)
+
     answers = question.answer_set.order_by("-id")
     form = AnswerForm()
     return render(
@@ -85,8 +91,9 @@ def show(request, id):
         {
             "question": question,
             "answers": answers,
+            "vote": vote,
             "form": form,
-            "labels": question.labels.all(),
+            "followed": question.followed_by(request.user),
         },
     )
 
@@ -114,15 +121,51 @@ def delete(request, id):
 def votes(request, id):
     if request.method == "POST":
         question = get_object_or_404(Question, pk=id)
-        votes_change = request.POST.get("votes_change")
-        # only predefined change in value is allowed
-        if votes_change in ("1", "-1"):
-            question.votes_count += int(votes_change)
-            question.save()
 
-        return redirect("questions:show", id=id)
+        if not question.has_voted(request.user):
+            record = QuestionUserVotes.objects.create(
+                question=question, user=request.user
+            )
+        else:
+            record = question.questionuservotes_set.get(user=request.user)
+
+        vote_change = request.POST.get("vote_change")
+        vote_status, actual_change = validate_votes_input(
+            record.vote_status, vote_change
+        )
+
+        record.vote_status = vote_status
+        record.save()
+
+        question.votes_count += actual_change
+        question.save()
+
+        return render(
+            request,
+            "questions/_votes.html",
+            {
+                "question": question,
+                "user": request.user,
+                "vote": record.vote_status,
+            },
+        )
 
 
 @login_required
 def follows(request, id):
-    pass
+    if request.method == "POST":
+        question = get_object_or_404(Question, pk=id)
+        if question.user == request.user:
+            messages.error(request, "發文者已自動追蹤自己的問題，不必額外追蹤")
+            return redirect("questions:show", id=id)
+
+        if question.followed_by(request.user):
+            question.followers.remove(request.user)
+        else:
+            question.followers.add(request.user)
+
+        return render(
+            request,
+            "questions/_follows.html",
+            {"question": question, "followed": question.followed_by(request.user)},
+        )
