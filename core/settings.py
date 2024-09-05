@@ -44,6 +44,7 @@ CSRF_TRUSTED_ORIGINS = ["https://techecho.tonytests.com"]
 
 INSTALLED_APPS = [
     "taggit",
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

@@ -6,17 +6,17 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0001_initial'),
+        ("chat", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='groupmessage',
-            options={'ordering': ['created_at']},
+            name="groupmessage",
+            options={"ordering": ["created_at"]},
         ),
         migrations.RenameField(
-            model_name='groupmessage',
-            old_name='created',
-            new_name='created_at',
+            model_name="groupmessage",
+            old_name="created",
+            new_name="created_at",
         ),
     ]

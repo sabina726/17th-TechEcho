@@ -149,7 +149,6 @@ def votes(request, id):
             "questions/partials/_votes.html",
             {
                 "question": question,
-                "user": request.user,
                 "vote": record.vote_status,
             },
         )

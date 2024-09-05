@@ -7,5 +7,5 @@ app_name = "chat"
 urlpatterns = [
     path("", views.index, name="index"),
     # should be an incomprehensible hash
-    path("<int:id>", views.room, name="room"),
+    path("<int:id>/", views.room, name="room"),
 ]

@@ -1,6 +1,4 @@
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from chat.models import ChatGroup
@@ -9,6 +7,7 @@ from .forms.form import ChatMessageForm
 
 
 # Create your views here.
+@login_required
 def index(request):
     if request.method == "POST":
         pass
@@ -22,7 +21,6 @@ def index(request):
 @login_required
 def room(request, id):
     chat_group = get_object_or_404(ChatGroup, pk=id)
-    # getting the first 30 messages
     chat_messages = chat_group.messages.all()[:30]
 
     if request.method == "POST":
@@ -42,6 +40,5 @@ def room(request, id):
             "chat_messages": chat_messages,
             "form": form,
             "room_id": id,
-            "user": request.user,
         },
     )
