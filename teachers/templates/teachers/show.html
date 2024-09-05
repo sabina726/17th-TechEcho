@@ -1,36 +1,62 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-<div class="p-6 max-w-3xl mx-auto bg-white shadow-md rounded-lg relative">
-    <h1 class="text-4xl font-bold mb-6 text-gray-900 text-center">Teacher Personal Data</h1>
+<h1 class="p-6 text-4xl font-bold mb-6 text-gray-900 text-center">專家檔案</h1>
 
+<div class="p-6 max-w-3xl mx-auto bg-white shadow-md rounded-lg relative">
     <section class="mb-6 max-w-screen-md mx-auto">
         <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
             <h2 class="text-2xl font-semibold text-gray-800 mb-2">
-                {% if teacher.name %}
-                {{ teacher.name }}
-                {% else %}
                 {{ teacher.nickname }}
-                {% endif %}
             </h2>
             <p class="text-lg text-gray-600 mb-2">{{ teacher.expertise }}</p>
             <article class="text-gray-700 break-words">{{ teacher.introduce }}</article>
         </div>
+
+        <div>
+            <p class="p-4">空閒時間: {{ teacher.schedule }}</p>
+        </div>
+
+        <section class="mt-6">
+            <h3 class="text-xl font-semibold text-gray-900">提過的問題</h3>
+            <ul class="mt-4">
+                {% for question in questions %}
+                <li class="mb-2">
+                    <a href="{% url 'questions:show' question.id %}" class="text-blue-500 hover:text-blue-700">
+                        {{ question.title }}
+                    </a>
+                </li>
+                {% empty %}
+                <li class="text-gray-500">無提問記錄</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section class="mt-6">
+            <h3 class="text-xl font-semibold text-gray-900">回答過的問題</h3>
+            <ul class="mt-4">
+                {% for question in answered_questions %}
+                <li class="mb-2">
+                    <a href="{% url 'questions:show' question.id %}" class="text-blue-500 hover:text-blue-700">
+                        {{ question.title }}
+                    </a>
+                </li>
+                {% empty %}
+                <li class="text-gray-500">無回答記錄</li>
+                {% endfor %}
+            </ul>
+        </section>
     </section>
 
-    <div class="flex justify-between items-center mb-4">
+    <div class="flex justify-between items-center mt-6">
         <a href="{% url 'teachers:edit' teacher.id %}"
-            class="px-4 py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition-colors">修改基本資訊</a>
-        <form action="{% url 'teachers:delete' teacher.id %}" method="POST" onsubmit="return confirm('您確定要刪除這條資訊嗎？');">
-            {% csrf_token %}
-            <button type="submit"
-                class="px-3 py-1.5 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors text-sm">刪除資訊</button>
-        </form>
+            class="px-4 py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition-colors">
+            修改基本資訊
+        </a>
+
+        <a href="{% url 'teachers:delete' teacher.id %}" class="btn btn-error">
+            刪除資訊
+        </a>
     </div>
 
-
-
-
-    <a href="{% url 'teachers:index' %}" class="btn text-blue-500 hover:text-blue-700 mt-4 ">老師列表</a>
-</div>
-{% endblock %}
+    {% endblock %}
