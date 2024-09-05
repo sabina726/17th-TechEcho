@@ -1,32 +1,19 @@
-{% comment %} text-red-500 text-red-300 {% endcomment %}
+{% comment %} for tailwind treeshaking: text-red-500 text-red-300 {% endcomment %}
 
-<div class="flex gap-2 mb-2 items-center" id="vote">
-    <button
-        name="vote_change" value="upvoted"
-        hx-post="{% url "questions:votes" question.id%}"
-        hx-swap="outerHTML"
-        hx-target="#vote"
-    >
-        {% if vote == "upvoted" %}
-            <i class="fa-solid fa-arrow-up text-red-500"></i>
-        {% else %}
-             <i class="fa-solid fa-arrow-up text-red-300"></i>
-        {% endif %}
+{% load questions %}
+<form
+    id="vote"
+    hx-post="{% url "questions:votes" question.id%}"
+    hx-swap="outerHTML"
+    class="flex gap-2 mb-2 items-center"
+>
+    <button name="vote_change" value="upvoted">
+        <i class="fa-solid fa-arrow-up text-red-{{vote|questions_votes:"upvoted"}}"></i>
     </button>
 
     <p>{{question.votes_count}}</p>
 
-    <button
-        name="vote_change"
-        value="downvoted"
-        hx-post="{% url "questions:votes" question.id%}"
-        hx-swap="outerHTML"
-        hx-target="#vote"
-    >
-        {% if vote == "downvoted" %}
-            <i class="fa-solid fa-arrow-down text-red-500"></i>
-        {% else %}
-             <i class="fa-solid fa-arrow-down text-red-300"></i>
-        {% endif %}
+    <button name="vote_change" value="downvoted">
+        <i class="fa-solid fa-arrow-down text-red-{{vote|questions_votes:"downvoted"}}"></i>
     </button>
-</div>
+</form>

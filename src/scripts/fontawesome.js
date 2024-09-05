@@ -9,7 +9,7 @@ library.add(farBookmark, fasBookmark, faMagnifyingGlass, faArrowUp, faArrowDown)
 
 dom.i2svg()
 
-Alpine.data("global_scope", () => ({
+Alpine.data("convert_to_svg", () => ({
     init() {
         this.$el.addEventListener('htmx:afterSwap', _  => {
             // Re-trigger FontAwesome to convert <i> tags into SVGs

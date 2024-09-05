@@ -40,7 +40,9 @@
             </p>
         </article>
 
-        {% include "questions/_votes.html" with question=question user=user vote=vote only %}
+        <div x-data="convert_to_svg">
+            {% include "questions/_votes.html" with question=question user=user vote=vote only %}
+        </div>
 
         {% if user.is_authenticated and user == question.user %}
             <div class="flex gap-2">
