@@ -17,6 +17,8 @@ def index(request):
         form = QuestionForm(request.POST)
         labels = request.POST.get("labels")
 
+        print(labels)
+
         # we require at least one label
         if labels and form.is_valid():
             instance = form.save()

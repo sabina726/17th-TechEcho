@@ -1,11 +1,8 @@
 import json
 
 from django.db.models import Q
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
-from django.template.loader import render_to_string
+from django.shortcuts import render
 
-from answers.models import Answer
 from questions.models import Question
 
 
@@ -19,36 +16,36 @@ def search_form_index(request):
 
 def search_view(request):
     query = request.GET.get("q", "")
-    results = []
+    allowed_terms = {"Python", "Ruby", "JavaScript"}
     search_terms = []
+
     if query:
         try:
             tags = json.loads(query)
-            if isinstance(tags, list):
-                search_terms = [
-                    tag["value"]
-                    for tag in tags
-                    if isinstance(tag, dict) and "value" in tag
-                ]
-            elif isinstance(tags, dict) and "value" in tags:
-                search_terms = [tags["value"]]
-            else:
-                search_terms = [query]
+            search_terms = [
+                tag.get("value", query)
+                for tag in (tags if isinstance(tags, list) else [tags])
+                if isinstance(tag, dict) and tag.get("value") in allowed_terms
+            ]
         except json.JSONDecodeError:
-            search_terms = [query]
+            if query in allowed_terms:
+                search_terms.append(query)
 
-        q_objects = Q()
-        for term in search_terms:
-            q_objects |= Q(title__icontains=term) | Q(details__icontains=term)
+        if search_terms:
+            q_objects = Q()
+            for term in search_terms:
+                q_objects |= Q(title__icontains=term) | Q(details__icontains=term)
 
-        results = Question.objects.filter(q_objects).distinct()
+            results = Question.objects.filter(q_objects).distinct()
+        else:
+            results = []
 
-    if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        html = render_to_string("search/search_results.html", {"results": results})
-        return JsonResponse({"html": html})
-    else:
-        return render(
-            request,
-            "search/search_form.html",
-            {"results": results, "query": ", ".join(search_terms)},
-        )
+    return render(
+        request,
+        "search/search_form.html",
+        {
+            "results": results,
+            "query": ", ".join(search_terms),
+            "search_terms": json.dumps(search_terms),
+        },
+    )
