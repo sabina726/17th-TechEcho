@@ -14,19 +14,8 @@ def index(request):
         return render(request, "teachers/new.html", {"form": form})
 
     teachers = TeacherInfo.objects.all()
-    teacher_data = [
-        {
-            "teacher": teacher,
-            "questions": teacher.get_questions()[:3],
-            "answers": teacher.get_answers()[:3],
-        }
-        for teacher in teachers
-    ]
 
-    context = {
-        "teacher_data": teacher_data,
-    }
-    return render(request, "teachers/index.html", context)
+    return render(request, "teachers/index.html", {"teachers": teachers})
 
 
 def new(request):
@@ -43,24 +32,27 @@ def show(request, id):
             return redirect("teachers:show", id)
         return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
 
-    questions = teacher.get_questions()
-    answered_questions = teacher.get_answers()
+    questions = teacher.get_questions().order_by("-created_at")[:3]
+    answers = teacher.get_answers().order_by("-created_at")[:3]
+
     context = {
         "teacher": teacher,
         "questions": questions,
-        "answered_questions": answered_questions,
+        "answers": answers,
     }
 
     return render(request, "teachers/show.html", context)
 
 
+@login_required
 def edit(request, id):
-    teacher = get_object_or_404(TeacherInfo, id=id)
+    teacher = get_object_or_404(TeacherInfo, id=id, user=request.user)
     form = TeacherInfoForm(instance=teacher)
     return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
 
 
+@login_required
 def delete(request, id):
-    teacher = get_object_or_404(TeacherInfo, id=id)
+    teacher = get_object_or_404(TeacherInfo, id=id, user=request.user)
     teacher.delete()
     return redirect("teachers:index")

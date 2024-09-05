@@ -17,38 +17,43 @@
             <p class="p-4">空閒時間: {{ teacher.schedule }}</p>
         </div>
 
-        <section class="mt-6">
-            <h3 class="text-xl font-semibold text-gray-900">提過的問題</h3>
-            <ul class="mt-4">
-                {% for question in questions %}
-                <li class="mb-2">
-                    <a href="{% url 'questions:show' question.id %}" class="text-blue-500 hover:text-blue-700">
-                        {{ question.title }}
-                    </a>
-                </li>
-                {% empty %}
-                <li class="text-gray-500">無提問記錄</li>
-                {% endfor %}
-            </ul>
+        <section class="p-4 flex justify-around">
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold text-gray-900">提過的問題</h3>
+                <ul class="mt-4">
+                    {% for question in questions %}
+                    <li class="mb-2 text-center">
+                        <a href="{% url 'questions:show' question.id %}" class="text-blue-500 hover:text-blue-700">
+                            {{ question.title }}
+                        </a>
+                    </li>
+                    {% empty %}
+                    <li class="text-gray-500">無提問記錄</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold text-gray-900">回答過的問題</h3>
+                <ul class="mt-4">
+                    {% for question in answers %}
+                    <li class="mb-2 text-center">
+                        <a href="{% url 'questions:show' question.id %}" class="text-blue-500 hover:text-blue-700">
+                            {{ question.title }}
+                        </a>
+                    </li>
+                    {% empty %}
+                    <li class="text-gray-500">無回答記錄</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </section>
 
-        <section class="mt-6">
-            <h3 class="text-xl font-semibold text-gray-900">回答過的問題</h3>
-            <ul class="mt-4">
-                {% for question in answered_questions %}
-                <li class="mb-2">
-                    <a href="{% url 'questions:show' question.id %}" class="text-blue-500 hover:text-blue-700">
-                        {{ question.title }}
-                    </a>
-                </li>
-                {% empty %}
-                <li class="text-gray-500">無回答記錄</li>
-                {% endfor %}
-            </ul>
-        </section>
     </section>
 
     <div class="flex justify-between items-center mt-6">
+
+        {% if request.user == teacher.user %}
         <a href="{% url 'teachers:edit' teacher.id %}"
             class="px-4 py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition-colors">
             修改基本資訊
@@ -58,6 +63,7 @@
             onclick="return confirm('Want to delete?')">
             刪除資訊
         </a>
+        {% endif %}
     </div>
 
     {% endblock %}
