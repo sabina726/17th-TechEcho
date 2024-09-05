@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('questions', '0003_remove_question_downvote_remove_question_upvote_and_more'),
+        ("questions", "0003_remove_question_downvote_remove_question_upvote_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='questionuservotes',
-            name='vote_value',
+            model_name="questionuservotes",
+            name="vote_value",
         ),
         migrations.AddField(
-            model_name='questionuservotes',
-            name='vote_status',
-            field=models.CharField(default='neither', max_length=10),
+            model_name="questionuservotes",
+            name="vote_status",
+            field=models.CharField(default="neither", max_length=10),
         ),
     ]

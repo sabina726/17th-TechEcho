@@ -9,33 +9,69 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('questions', '0001_initial'),
+        ("questions", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='question',
-            old_name='follow',
-            new_name='followers',
+            model_name="question",
+            old_name="follow",
+            new_name="followers",
         ),
         migrations.AlterField(
-            model_name='question',
-            name='details',
-            field=models.TextField(validators=[django.core.validators.MinLengthValidator(20, '問題描述至少要二十個字')]),
+            model_name="question",
+            name="details",
+            field=models.TextField(
+                validators=[
+                    django.core.validators.MinLengthValidator(
+                        20, "問題描述至少要二十個字"
+                    )
+                ]
+            ),
         ),
         migrations.CreateModel(
-            name='QuestionUserVotes',
+            name="QuestionUserVotes",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('vote_value', models.IntegerField(choices=[(1, 'One'), (0, 'Zero'), (-1, 'Negative One')], default='zero')),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='questions.question')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "vote_value",
+                    models.IntegerField(
+                        choices=[(1, "One"), (0, "Zero"), (-1, "Negative One")],
+                        default="zero",
+                    ),
+                ),
+                (
+                    "question",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="questions.question",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='question',
-            name='voters',
-            field=models.ManyToManyField(related_name='votes', through='questions.QuestionUserVotes', to=settings.AUTH_USER_MODEL),
+            model_name="question",
+            name="voters",
+            field=models.ManyToManyField(
+                related_name="votes",
+                through="questions.QuestionUserVotes",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

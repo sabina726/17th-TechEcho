@@ -6,21 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('questions', '0002_rename_follow_question_followers_and_more'),
+        ("questions", "0002_rename_follow_question_followers_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='question',
-            name='downvote',
+            model_name="question",
+            name="downvote",
         ),
         migrations.RemoveField(
-            model_name='question',
-            name='upvote',
+            model_name="question",
+            name="upvote",
         ),
         migrations.AlterField(
-            model_name='questionuservotes',
-            name='vote_value',
-            field=models.IntegerField(choices=[(1, 'One'), (0, 'Zero'), (-1, 'Negative One')], default=0),
+            model_name="questionuservotes",
+            name="vote_value",
+            field=models.IntegerField(
+                choices=[(1, "One"), (0, "Zero"), (-1, "Negative One")], default=0
+            ),
         ),
     ]
