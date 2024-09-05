@@ -1,6 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'layouts/base.html' %}
 
-{% block content %} 
+{% block content %}
 <div>
     <h1>Current User: {{user}} </h1>
     <ul id="message_list">
@@ -15,10 +15,10 @@
             </li>
         {% endfor %}
     </ul>
-    <form>   
+    <form class="flex flex-col gap-2" method="POST" action="{% url "chat:room" room_id%}">
         {% csrf_token %}
         {{form}}
-        <button>send the message</button>
+        <button class="btn">send the message</button>
     </form>
 </div>
 

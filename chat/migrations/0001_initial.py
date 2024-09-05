@@ -10,30 +10,66 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('teachers', '0001_initial'),
+        ("teachers", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ChatGroup',
+            name="ChatGroup",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('group_name', models.CharField(max_length=100, unique=True)),
-                ('teacher', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='teachers.teacherinfo')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("group_name", models.CharField(max_length=100, unique=True)),
+                (
+                    "teacher",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="teachers.teacherinfo",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='GroupMessage',
+            name="GroupMessage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content', models.CharField(max_length=300)),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to=settings.AUTH_USER_MODEL)),
-                ('group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to='chat.chatgroup')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("content", models.CharField(max_length=300)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="messages",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "group",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="messages",
+                        to="chat.chatgroup",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['created'],
+                "ordering": ["created"],
             },
         ),
     ]

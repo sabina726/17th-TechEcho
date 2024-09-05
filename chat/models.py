@@ -28,4 +28,4 @@ class GroupMessage(models.Model):
         return f"{self.author.username} : {self.content}"
 
     class Meta:
-        ordering = ["created"]
+        ordering = ["created_at"]
