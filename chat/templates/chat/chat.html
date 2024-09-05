@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+<div>
+    <h1>Current User: {{user}} </h1>
+    <ul id="message_list">
+        {% for chat_message in chat_messages %}
+            <li>
+                <p>
+                    {{chat_message}}
+                </p>
+                <p>
+                    {{chat_message.created_at}}
+                </p>
+            </li>
+        {% endfor %}
+    </ul>
+    <form>   
+        {% csrf_token %}
+        {{form}}
+        <button>send the message</button>
+    </form>
+</div>
+
+{% endblock %}

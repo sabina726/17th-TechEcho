@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "search",
     "payments",
     "django_htmx",
+    "chat",
 ]
 
 

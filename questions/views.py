@@ -25,7 +25,7 @@ def index(request):
         questions = Question.objects.order_by(order if order_is_valid(order) else "-id")
         questions = paginate(request, questions)
         return render(
-            request, "questions/partial/_questions_list.html", {"questions": questions}
+            request, "questions/partials/_questions_list.html", {"questions": questions}
         )
 
     elif request.method == "POST":
@@ -146,7 +146,7 @@ def votes(request, id):
 
         return render(
             request,
-            "questions/_votes.html",
+            "questions/partials/_votes.html",
             {
                 "question": question,
                 "user": request.user,
@@ -170,6 +170,6 @@ def follows(request, id):
 
         return render(
             request,
-            "questions/_follows.html",
+            "questions/partials/_follows.html",
             {"question": question, "followed": question.followed_by(request.user)},
         )
