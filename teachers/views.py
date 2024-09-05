@@ -13,7 +13,7 @@ def index(request):
         form = TeacherInfoForm(request.POST)
         if form.is_valid():
             form.save()
-
+            messages.success(request, "成功")
             return redirect("teachers:index")
 
         return render(request, "teachers/new.html", {"form": form})
@@ -34,6 +34,7 @@ def show(request, id):
         form = TeacherInfoForm(request.POST, instance=teacher)
         if form.is_valid():
             form.save()
+            messages.success(request, "成功")
             return redirect("teachers:show", id)
         return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
 
@@ -60,4 +61,5 @@ def edit(request, id):
 def delete(request, id):
     teacher = get_object_or_404(TeacherInfo, id=id, user=request.user)
     teacher.delete()
+    messages.success(request, "刪除成功")
     return redirect("teachers:index")

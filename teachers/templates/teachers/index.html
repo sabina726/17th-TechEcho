@@ -19,14 +19,17 @@
                 <div class="flex flex-col">
                     <h3 class="text-xl font-semibold text-gray-900">{{ teacher.nickname }}</h3>
                     <p class="text-gray-700 mt-1">{{ teacher.expertise }}</p>
-                    <p class="text-gray-600 mt-1">{{ teacher.introduce|truncatechars:50 }}</p>
+                    {% if teacher.introduce|length > 50 %}
+                    <p class="text-gray-600 mt-1">{{ teacher.introduce|slice:":50" }}...</p>
+                    {% else %}
+                    <p class="text-gray-600 mt-1">{{ teacher.introduce }}</p>
+                    {% endif %}
+
                 </div>
             </a>
             {% endfor %}
         </section>
     </div>
 </div>
-
-{% include "shared/pagination.html" with pages=teachers only %}
 
 {% endblock %}

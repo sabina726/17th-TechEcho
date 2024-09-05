@@ -4,10 +4,10 @@
 import os
 from datetime import datetime
 
-from .ecpay_payment_sdk import ECPayPaymentSdk
+from .payment_sdk import ECPayPaymentSdk
 
 
-def ecpay_api():
+def ecpay_api(user):
     order_params = {
         "MerchantTradeNo": datetime.now().strftime("NO%Y%m%d%H%M%S"),
         # "StoreID": "",
@@ -16,8 +16,7 @@ def ecpay_api():
         "TotalAmount": 600,
         "TradeDesc": "測試付款",
         "ItemName": "升級成TechEcho Premium月訂閱用戶",
-        "ReturnURL": "https://techecho.tonytests.com/EC-pay_return",
-        # "ReturnURL": "https://www.ecpay.com.tw/return_url.php",
+        "ReturnURL": "https://techecho.tonytests.com/payments/ecpay_return",
         "ChoosePayment": "ALL",
         "ClientBackURL": "https://techecho.tonytests.com/payments/after_pay",
         # "ItemURL": "https://www.ecpay.com.tw/item_url.php",
@@ -25,6 +24,8 @@ def ecpay_api():
         # "ChooseSubPayment": "",
         "OrderResultURL": "https://techecho.tonytests.com/payments/after_pay",
         "NeedExtraPaidInfo": "Y",
+        "CustomField1": user,
+        "CustomField2": "",
         "EncryptType": 1,
     }
 

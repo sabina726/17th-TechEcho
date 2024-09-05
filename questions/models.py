@@ -5,8 +5,6 @@ from taggit.managers import TaggableManager
 
 from lib.models.soft_delete import SoftDeleteModel
 
-# Create your models here.
-
 
 class Question(SoftDeleteModel):
     title = models.CharField(max_length=50)

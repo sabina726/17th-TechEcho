@@ -38,7 +38,6 @@ def index(request):
         messages.error(request, "輸入資料錯誤，請再嘗試")
         return render(request, "questions/new.html", {"form": form})
 
-    # requires validation
     order_by = request.GET.get("order_by")
     questions = Question.objects.order_by(order_by if is_valid(order_by) else "-id")
 
