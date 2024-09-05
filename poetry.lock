@@ -483,6 +483,20 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "line-pay"
+version = "0.2.0"
+description = "LINE Pay API SDK for Python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "line-pay-0.2.0.tar.gz", hash = "sha256:20af5264a1417588057af9b7484c615a7a64038a24fd46525e3c1f936f3c2e41"},
+    {file = "line_pay-0.2.0-py3-none-any.whl", hash = "sha256:584f3b4bef4b57e3d3275ca6be941b876e10156063e739d1550ebbba7aafd3db"},
+]
+
+[package.dependencies]
+requests = ">=2.22.0"
+
+[[package]]
 name = "markupsafe"
 version = "2.1.5"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -1062,5 +1076,4 @@ windows = ["psycopg2"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-
-content-hash = "ee63c7106c156a492d23b1a47e39214af571d63e8a274bd576f8934e49ddff96"
+content-hash = "4ac002863f024ffc9f17ec823fe85a93c0ee9a84e0e55b3271f87663daffcf7c"

@@ -6,25 +6,28 @@ from teachers.models import TeacherInfo
 class TeacherInfoForm(forms.ModelForm):
     class Meta:
         model = TeacherInfo
-        fields = ["user", "expertise", "introduce"]
+        fields = ["user", "nickname", "expertise", "introduce", "schedule"]
         widgets = {
             "introduce": forms.Textarea(
                 attrs={
-                    "rows": 5,
-                    "cols": 40,
-                    "placeholder": "自我介紹",
-                    "class": "custom-textarea",
+                    "placeholder": "內文100~500",
                 }
             ),
             "expertise": forms.TextInput(
                 attrs={
                     "placeholder": "Ex:JavaScript..Python..",
-                    "class": "custom-input",
+                }
+            ),
+            "schedule": forms.Textarea(
+                attrs={
+                    "placeholder": "可諮詢時間",
                 }
             ),
         }
         labels = {
-            "user": "使用者",
+            "user": "",
+            "nickname": "暱稱",
             "expertise": "專業能力",
             "introduce": "自我介紹",
+            "schedule": "諮詢時間",
         }

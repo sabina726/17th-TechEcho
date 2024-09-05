@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import TeacherInfoForm
@@ -13,7 +14,19 @@ def index(request):
         return render(request, "teachers/new.html", {"form": form})
 
     teachers = TeacherInfo.objects.all()
-    return render(request, "teachers/index.html", {"teachers": teachers})
+    teacher_data = [
+        {
+            "teacher": teacher,
+            "questions": teacher.get_questions()[:3],
+            "answers": teacher.get_answers()[:3],
+        }
+        for teacher in teachers
+    ]
+
+    context = {
+        "teacher_data": teacher_data,
+    }
+    return render(request, "teachers/index.html", context)
 
 
 def new(request):
@@ -28,9 +41,17 @@ def show(request, id):
         if form.is_valid():
             form.save()
             return redirect("teachers:show", id)
-        return render(request, "teachers/new.html", {"form": form})
+        return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
 
-    return render(request, "teachers/show.html", {"teacher": teacher})
+    questions = teacher.get_questions()
+    answered_questions = teacher.get_answers()
+    context = {
+        "teacher": teacher,
+        "questions": questions,
+        "answered_questions": answered_questions,
+    }
+
+    return render(request, "teachers/show.html", context)
 
 
 def edit(request, id):
