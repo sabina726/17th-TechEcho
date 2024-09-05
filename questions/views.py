@@ -15,11 +15,20 @@ from .utils.question_user_votes import (
     upvoted_or_downvoted_or_neither,
     validate_votes_input,
 )
-from .utils.sort import is_valid
+from .utils.sort import order_is_valid
 
 
 def index(request):
-    if request.method == "POST":
+    # partial rendering only
+    if request.htmx and request.htmx.request.method == "GET":
+        order = request.GET.get("order")
+        questions = Question.objects.order_by(order if order_is_valid(order) else "-id")
+        questions = paginate(request, questions)
+        return render(
+            request, "questions/partial/_questions_list.html", {"questions": questions}
+        )
+
+    elif request.method == "POST":
         if not request.user.is_authenticated:
             messages.error(request, "請登入後再嘗試")
             return redirect("users:login")
@@ -27,7 +36,6 @@ def index(request):
         form = QuestionForm(request.POST)
         labels = parse_labels(request.POST)
 
-        # we require at least one label
         if labels and form.is_valid():
             # commit=False is not applicable here because instance.labels.set(labels) requires a pk
             # and since our pk is defined by the ORM not by us, it will only exist once we save it to the DB
@@ -42,10 +50,7 @@ def index(request):
         messages.error(request, "輸入資料錯誤，請再嘗試")
         return render(request, "questions/new.html", {"form": form})
 
-    # requires validation
-    order_by = request.GET.get("order_by")
-    questions = Question.objects.order_by(order_by if is_valid(order_by) else "-id")
-
+    questions = Question.objects.order_by("-id")
     questions = paginate(request, questions)
     return render(request, "questions/index.html", {"questions": questions})
 
@@ -63,11 +68,10 @@ def show(request, id):
 
         question = get_object_or_404(Question, pk=id, user=request.user)
         form = QuestionForm(request.POST, instance=question)
-        labels = request.POST.get("labels")
-        # we require at least one label
+        labels = parse_labels(request.POST)
+
         if labels and form.is_valid():
             instance = form.save(commit=False)
-            labels = [label["value"] for label in json.loads(labels)]
             instance.labels.set(labels)
             instance.save()
             form.save_m2m()
