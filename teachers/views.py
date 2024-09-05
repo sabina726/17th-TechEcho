@@ -1,5 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+
+from lib.utils.pagination import paginate
 
 from .forms import TeacherInfoForm
 from .models import TeacherInfo
@@ -10,11 +13,13 @@ def index(request):
         form = TeacherInfoForm(request.POST)
         if form.is_valid():
             form.save()
+
             return redirect("teachers:index")
+
         return render(request, "teachers/new.html", {"form": form})
 
     teachers = TeacherInfo.objects.all()
-
+    teachers = paginate(request, teachers)
     return render(request, "teachers/index.html", {"teachers": teachers})
 
 

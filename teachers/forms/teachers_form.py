@@ -10,7 +10,7 @@ class TeacherInfoForm(forms.ModelForm):
         widgets = {
             "introduce": forms.Textarea(
                 attrs={
-                    "placeholder": "內文100~500",
+                    "placeholder": "文字內容最少100~最多500",
                 }
             ),
             "expertise": forms.TextInput(

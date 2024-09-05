@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
-from django.utils import timezone
 
 from answers.models import Answer
 from questions.models import Question
