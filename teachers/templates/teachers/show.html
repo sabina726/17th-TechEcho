@@ -54,7 +54,8 @@
             修改基本資訊
         </a>
 
-        <a href="{% url 'teachers:delete' teacher.id %}" class="btn btn-error">
+        <a href="{% url 'teachers:delete' teacher.id %}" class="btn btn-error"
+            onclick="return confirm('Want to delete?')">
             刪除資訊
         </a>
     </div>

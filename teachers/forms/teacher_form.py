@@ -10,8 +10,6 @@ class TeacherInfoForm(forms.ModelForm):
         widgets = {
             "introduce": forms.Textarea(
                 attrs={
-                    "rows": 5,
-                    "cols": 50,
                     "placeholder": "內文100~500",
                 }
             ),
@@ -22,8 +20,6 @@ class TeacherInfoForm(forms.ModelForm):
             ),
             "schedule": forms.Textarea(
                 attrs={
-                    "rows": 3,
-                    "cols": 50,
                     "placeholder": "可諮詢時間",
                 }
             ),
