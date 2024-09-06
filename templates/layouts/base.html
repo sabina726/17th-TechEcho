@@ -13,7 +13,7 @@
   <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
   <title>TechEcho</title>
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
   {% include 'home/messages.html' %}
   {% include 'layouts/navbar.html' %}
   <div class="flex-grow">{% block content %} {% endblock %}</div>
