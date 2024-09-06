@@ -1,4 +1,5 @@
 import "./fontawesome";
+import "./components"
 import "htmx.org";
 import Alpine from 'alpinejs';
 import Tagify from '@yaireo/tagify';
