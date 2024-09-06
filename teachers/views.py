@@ -12,7 +12,9 @@ def index(request):
     if request.method == "POST":
         form = TeacherInfoForm(request.POST)
         if form.is_valid():
-            form.save()
+            teacher_info = form.save(commit=False)
+            teacher_info.user = request.user
+            teacher_info.save()
             messages.success(request, "成功")
             return redirect("teachers:index")
 
@@ -23,6 +25,7 @@ def index(request):
     return render(request, "teachers/index.html", {"teachers": teachers})
 
 
+@login_required
 def new(request):
     form = TeacherInfoForm()
     return render(request, "teachers/new.html", {"form": form})

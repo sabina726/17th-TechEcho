@@ -3,24 +3,18 @@
 {% block content %}
 <h1 class="p-6 text-4xl font-bold mb-6 text-gray-900 text-center">成為專家</h1>
 
-<div class="p-4 max-w-xl mx-auto bg-white shadow-lg rounded-lg border border-gray-300">
+<div class="p-4 max-w-xl mx-auto border border-gray-300">
 
     <section class="flex justify-center">
         <form action="{% url 'teachers:index' %}" method="POST" autocomplete="off" class="space-y-4">
             {% csrf_token %}
 
             <div class="grid gap-4">
-                {% for field in form %}
-                <div class="">
-                    <label for="{{ field.id }}" class="block text-gray-700 font-semibold mb-1">
-                        {{ field.label }}
-                    </label>
-                    {{ field }}
-                    {% if field.errors %}
-                    <p class="text-red-500 text-sm">{{ field.errors|striptags }}</p>
-                    {% endif %}
-                </div>
-                {% endfor %}
+                {{ form.user.as_hidden }}
+                <p>暱稱:{{ form.nickname }}</p>
+                <p>專業能力:{{ form.expertise }}</p>
+                <p>自我介紹:{{ form.introduce }}</p>
+                <p>諮詢時間:{{ form.schedule }}</p>
             </div>
 
             <button type="submit"
@@ -31,4 +25,5 @@
     </section>
 
 </div>
+
 {% endblock %}

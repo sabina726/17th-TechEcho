@@ -23,11 +23,9 @@ class TeacherInfoForm(forms.ModelForm):
                     "placeholder": "可諮詢時間",
                 }
             ),
+            "user": forms.HiddenInput(),
         }
-        labels = {
-            "user": "",
-            "nickname": "暱稱",
-            "expertise": "專業能力",
-            "introduce": "自我介紹",
-            "schedule": "諮詢時間",
-        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["user"].required = False
