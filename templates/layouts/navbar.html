@@ -18,7 +18,8 @@
         id="tags"
         name="q"
         placeholder="Search..."
-        class="w-full h-12 p-2 pr-6 border border-gray-300"
+        class="w-full h-12 p-2 pr-6 bg-white border border-gray-300"
+        value='{{ search_terms }}'
       />
       <button
         type="submit"
@@ -82,13 +83,7 @@
           >登入</a
         >
       </li>
-      <li>
-        <a
-          href="{% url 'users:logout'%}"
-          class="transition duration-300 ease-in-out hover:text-green-3"
-          >登出</a
-        >
-      </li>
+
       <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
         <a href="{% url 'users:register' %}" class="transition duration-300 ease-in-out hover:text-green-3">註冊</a>
       </li>
@@ -144,10 +139,7 @@
          class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">登入</a>
     </li>
     <li>
-      <a href="{% url 'users:logout'%}"
-         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">登出</a>
-    </li>
-    <li>
+
       <a href="{% url 'users:register' %}"
          class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">註冊</a>
 

@@ -1,12 +1,7 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-<div class="search-container">
-    <form method="GET" action="{% url 'search_view' %}">
-        <input type="text" name="q" placeholder="Search..." value="{{ query }}">
-        <button type="submit">Search</button>
-    </form>
-
+<div>
     {% if results %}
         <ul>
             {% for result in results %}
