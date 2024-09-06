@@ -43,8 +43,8 @@ CSRF_TRUSTED_ORIGINS = ["https://techecho.tonytests.com"]
 # Application definition
 
 INSTALLED_APPS = [
-    "taggit",
     "daphne",
+    "taggit",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -101,8 +101,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "core.wsgi.application"
-
+# WSGI_APPLICATION = "core.wsgi.application"
+ASGI_APPLICATION = "core.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -168,3 +168,6 @@ TAGGIT_CASE_INSENSITIVE = True
 LOGIN_URL = reverse_lazy("users:login")
 
 AUTH_USER_MODEL = "users.User"
+
+# to be changed to Redis, now we use django provided
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}

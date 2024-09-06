@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from chat.models import ChatGroup
 
-from .forms.form import ChatMessageForm
+from .forms.chat_form import ChatMessageForm
 
 
 # Create your views here.

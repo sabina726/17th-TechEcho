@@ -15,7 +15,12 @@
             </li>
         {% endfor %}
     </ul>
-    <form class="flex flex-col gap-2" method="POST" action="{% url "chat:room" room_id%}">
+    <form
+        class="flex flex-col gap-2"
+        hx-ext="ws"
+        ws-connect="/ws/chatroom/test"
+        ws-send
+    >
         {% csrf_token %}
         {{form}}
         <button class="btn">send the message</button>
