@@ -1,22 +1,42 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-<div class="p-6 max-w-2xl mx-auto bg-white shadow-lg rounded-lg">
-    <h1 class="text-center text-3xl text-gray-900">專家檔案</h1>
+
+<h1 class="text-center text-3xl font-bold text-gray-900 mb-6">專家檔案</h1>
+
+<div class="p-6 max-w-2xl mx-auto bg-white shadow-lg rounded-lg mt-8">
 
     <section class="flex justify-center">
-        <form action="{% url 'teachers:show' teacher.id %}" method="POST" autocomplete="off" class="space-y-4">
+        <form action="{% url 'teachers:show' teacher.id %}" method="POST" autocomplete="off" class="space-y-4 w-full">
             {% csrf_token %}
-            <div class="grid gap-4">
+            <div class="grid gap-6">
                 {{ form.user.as_hidden }}
-                <p>暱稱:{{ form.nickname }}</p>
-                <p>專業能力:{{ form.expertise }}</p>
-                <p>自我介紹:{{ form.introduce }}</p>
-                <p>諮詢時間:{{ form.schedule }}</p>
+                <div>
+                    <label class="block text-gray-700">暱稱:
+                        <p class="text-lg text-gray-800">{{ form.nickname }}</p>
+                    </label>
+                </div>
+                <div>
+                    <label class="block text-gray-700">專業能力:
+                        <p class="text-lg text-gray-800">{{ form.expertise }}</p>
+                    </label>
+                </div>
+                <div>
+                    <label class="block text-gray-700">自我介紹:
+                        <p class="text-lg text-gray-800">{{ form.introduce }}</p>
+                    </label>
+                </div>
+                <div>
+                    <label class="block text-gray-700">諮詢時間:
+                        <p class="text-lg text-gray-800">{{ form.schedule }}</p>
+                    </label>
+                </div>
             </div>
 
-            <button type="submit" class="btn">編輯檔案</button>
+            <button type="submit" class="btn btn-active btn-accent">編輯檔案
+            </button>
         </form>
     </section>
 </div>
+
 {% endblock %}
