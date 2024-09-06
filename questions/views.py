@@ -1,4 +1,5 @@
 import json
+from http.client import HTTPResponse
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -52,7 +53,7 @@ def index(request):
         return render(request, "questions/new.html", {"form": form})
 
     questions = Question.objects.prefetch_related("labels").order_by("-id")
-    questions = paginate(request, questions)
+    questions = paginate(request, questions, items_count=5)
     return render(request, "questions/index.html", {"questions": questions})
 
 
