@@ -11,9 +11,11 @@ class ChatMessageForm(ModelForm):
         widgets = {
             "content": forms.TextInput(
                 attrs={
-                    "placeholder": "Add message ...",
+                    "placeholder": "等待訊息中...",
                     "maxlength": "300",
                     "autofocus": True,
+                    "class": "input input-md input-bordered",
                 }
             )
         }
+        labels = {"content": "訊息"}
