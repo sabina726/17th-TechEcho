@@ -1,4 +1,4 @@
-<nav class="sticky top-0 left-0 z-20 w-full p-6 bg-blue-1" x-data="{ open: false, submenuOpen: false, expertOpen: false }" @resize.window="if (window.innerWidth > 768) open = false">
+<nav class="sticky top-0 left-0 z-20 w-full p-6 bg-blue-1" x-data="{ open: false, submenuOpen: false, expertOpen: false, userMenuOpen: false}" @resize.window="if (window.innerWidth > 768) open = false">
 
   <div class="flex items-center justify-between">
     <div class="text-4xl font-bold text-white animate-pulse whitespace-nowrap">
@@ -35,7 +35,7 @@
       選單
     </button>
 
-    <ul class="hidden space-x-4 text-xl text-white md:flex">
+    <ul class="hidden space-x-4 text-xl text-white md:flex whitespace-nowrap">
       <li class="relative tooltip tooltip-bottom" data-tip="問看看？">
         <a href="#" @click="submenuOpen = !submenuOpen"
            class="transition duration-300 ease-in-out hover:text-green-3">討論</a>
@@ -74,24 +74,45 @@
           >教學</a
         >
       </li>
-      <li>
-        <a
-          href="{% url 'users:login'%}"
-          class="transition duration-300 ease-in-out hover:text-green-3"
-          >登入</a
-        >
+
+    </li>
+    {% if is_authenticated %}
+    <div class="relative" x-data="{ userMenuOpen: false }">
+      <img
+          src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}/static/default-avatar.png{% endif %}"
+          alt="User Avatar"
+          class="w-8 h-8 rounded-full cursor-pointer"
+          @click="userMenuOpen = !userMenuOpen"
+      >
+      <ul x-show="userMenuOpen" @click.away="userMenuOpen = false" class="absolute right-0 mt-7 shadow-lg bg-vanilla-5 text-green-3">
+        <li>
+          <p class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">ID:{{ user.username }}</p>
       </li>
-      <li>
-        <a
-          href="{% url 'users:logout'%}"
-          class="transition duration-300 ease-in-out hover:text-green-3"
-          >登出</a
-        >
-      </li>
-      <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
-        <a href="{% url 'users:register' %}" class="transition duration-300 ease-in-out hover:text-green-3">註冊</a>
-      </li>
+        <li>
+              <a href="{% url 'users:logout' %}" class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">登出</a>
+          </li>
+
+      </ul>
+  </div>
+  {% else %}
+  <li>
+    <a
+      href="{% url 'users:login'%}?next={{ request.path }}"
+      class="transition duration-300 ease-in-out hover:text-green-3"
+      >登入</a
+    >
+  </li>
+  <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
+    <a
+      href="{% url 'users:register' %}"
+      class="transition duration-300 ease-in-out hover:text-green-3"
+      >註冊</a
+    >
+  </li>
+  {% endif %}
+  </ul>
     </ul>
+
   </div>
   <ul class="absolute right-0 z-10 w-full mt-6 text-lg bg-vanilla-5" x-show="open" @click.away="open = false"
       style="display: none">
@@ -138,18 +159,31 @@
         >教學</a
       >
     </li>
-    <li>
-      <a href="{% url 'users:login'%}"
-         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">登入</a>
-    </li>
-    <li>
-      <a href="{% url 'users:logout'%}"
-         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">登出</a>
-    </li>
-    <li>
-      <a href="{% url 'users:register' %}"
-         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">註冊</a>
+    {% if user.is_authenticated %}
+  </li>
 
-    </li>
+  <li>
+    <a
+      href="{% url 'users:logout'%}"
+      class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+      >登出</a
+    >
+  </li>
+  {% else %}
+  <li>
+    <a
+      href="{% url 'users:login'%}?next={{ request.path }}"
+      class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+      >登入</a
+    >
+  </li>
+  <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
+    <a
+      href="{% url 'users:register' %}"
+      class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+      >註冊</a
+    >
+  </li>
+  {% endif %}
   </ul>
 </nav>

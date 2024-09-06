@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .models import User
 
@@ -27,6 +28,7 @@ def register(request):
 
 
 def log_in(request):
+    next_url = request.GET.get("next")
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -36,6 +38,10 @@ def log_in(request):
         if user is not None:
             login(request, user)
             messages.success(request, "登入成功")
+            if next_url and url_has_allowed_host_and_scheme(
+                next_url, allowed_hosts={request.get_host()}
+            ):
+                return redirect(next_url)
             return redirect("index")
         else:
             messages.error(request, "登入失敗：用戶名或密碼不正確")

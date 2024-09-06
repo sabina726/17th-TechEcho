@@ -9,7 +9,7 @@ def index(request, id):
     if request.method == "POST":
         question = get_object_or_404(Question, pk=id)
         answer = question.answer_set.create(content=request.POST["content"])
-        messages.success(request, "新增成功")
+success(request, "新增成功")
         return redirect("questions:show", id=id)
 
 
