@@ -11,7 +11,6 @@
             {% csrf_token %}
 
             <div class="grid gap-4">
-                {{ form.user.as_hidden }}
                 <p>暱稱:{{ form.nickname }}</p>
                 <p>專業能力:{{ form.expertise }}</p>
                 <p>自我介紹:{{ form.introduce }}</p>

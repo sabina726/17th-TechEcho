@@ -5,8 +5,15 @@ from django.db import models
 from answers.models import Answer
 from questions.models import Question
 
+TIME_SLOTS = [
+    ("09:00-10:00", "09:00 - 10:00 AM"),
+    ("10:00-11:00", "10:00 - 11:00 AM"),
+    ("11:00-12:00", "11:00 - 12:00 PM"),
+    # Add more time slots as needed
+]
 
-class TeacherInfo(models.Model):
+
+class Teacher(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     expertise = models.CharField(max_length=255)
     introduce = models.TextField(
@@ -14,16 +21,15 @@ class TeacherInfo(models.Model):
     )
     nickname = models.CharField(max_length=50, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    schedule = models.TextField(blank=True, null=True)
+    schedule = models.TextField(
+        max_length=20, choices=TIME_SLOTS, blank=True, null=True
+    )
 
     def save(self, *args, **kwargs):
         if not self.pk:
             self.user.is_teacher = True
             self.user.save()
         super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.nickname or self.user.username} - {self.expertise}"
 
     def get_questions(self):
         return Question.objects.filter(user=self.user)

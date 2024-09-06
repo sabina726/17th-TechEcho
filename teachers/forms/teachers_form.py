@@ -1,11 +1,12 @@
 from django import forms
 
-from teachers.models import TeacherInfo
+from teachers.models import Teacher
 
 
 class TeacherInfoForm(forms.ModelForm):
+
     class Meta:
-        model = TeacherInfo
+        model = Teacher
         fields = ["user", "nickname", "expertise", "introduce", "schedule"]
         widgets = {
             "introduce": forms.Textarea(
@@ -18,7 +19,7 @@ class TeacherInfoForm(forms.ModelForm):
                     "placeholder": "Ex:JavaScript..Python..",
                 }
             ),
-            "schedule": forms.Textarea(
+            "schedule": forms.Select(
                 attrs={
                     "placeholder": "可諮詢時間",
                 }

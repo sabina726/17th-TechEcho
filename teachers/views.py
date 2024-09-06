@@ -5,7 +5,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from lib.utils.pagination import paginate
 
 from .forms import TeacherInfoForm
-from .models import TeacherInfo
+from .models import Teacher
+
+
+def mentor(request):
+    return render(request, "teachers/mentor.html")
 
 
 def index(request):
@@ -20,7 +24,7 @@ def index(request):
 
         return render(request, "teachers/new.html", {"form": form})
 
-    teachers = TeacherInfo.objects.all()
+    teachers = Teacher.objects.all()
     teachers = paginate(request, teachers)
     return render(request, "teachers/index.html", {"teachers": teachers})
 
@@ -32,7 +36,7 @@ def new(request):
 
 
 def show(request, id):
-    teacher = get_object_or_404(TeacherInfo, id=id)
+    teacher = get_object_or_404(Teacher, id=id)
     if request.method == "POST":
         form = TeacherInfoForm(request.POST, instance=teacher)
         if form.is_valid():
@@ -55,14 +59,14 @@ def show(request, id):
 
 @login_required
 def edit(request, id):
-    teacher = get_object_or_404(TeacherInfo, id=id, user=request.user)
+    teacher = get_object_or_404(Teacher, id=id, user=request.user)
     form = TeacherInfoForm(instance=teacher)
     return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
 
 
 @login_required
 def delete(request, id):
-    teacher = get_object_or_404(TeacherInfo, id=id, user=request.user)
+    teacher = get_object_or_404(Teacher, id=id, user=request.user)
     teacher.delete()
     messages.success(request, "刪除成功")
     return redirect("teachers:index")
