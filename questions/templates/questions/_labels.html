@@ -1,7 +1,6 @@
-{% load question_labels %}
+{% load questions %}
 <div class="my-2">
-    <label for="label
-    s">標籤</label>
+    <label for="labels">標籤</label>
     <input
         required
         x-data="label_input"
@@ -11,7 +10,7 @@
         placeholder="至少要填一個標籤"
         {% if question %}
             value="
-                {% for label in question|question_labels %}
+                {% for label in question|questions_labels %}
                     {{label}},
                 {% endfor %}
             "

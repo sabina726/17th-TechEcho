@@ -15,10 +15,8 @@ from pathlib import Path
 
 from django.urls import reverse_lazy
 
-# 確認狀態為開發或部署。開發時專用的設定
 from lib.utils.env import is_dev
 
-# 開發時才需要自己抓env variables
 if is_dev():
     from dotenv import load_dotenv
 
@@ -45,6 +43,7 @@ CSRF_TRUSTED_ORIGINS = ["https://techecho.tonytests.com"]
 # Application definition
 
 INSTALLED_APPS = [
+    "taggit",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -54,12 +53,12 @@ INSTALLED_APPS = [
     "home",
     "teachers",
     "questions",
-    "taggit",
     "answers",
     "ckeditor",
     "users",
     "search",
     "payments",
+    "django_htmx",
 ]
 
 
@@ -76,6 +75,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 
@@ -115,8 +115,6 @@ DATABASES = {
         "PORT": os.getenv("POSTGRES_PORT"),
     }
 }
-
-LOGIN_URL = "users:login"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -163,15 +161,8 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-# for Taggit, allows labels to be case insensitive
 TAGGIT_CASE_INSENSITIVE = True
 
-AUTHENTICATION_BACKENDS = [
-    "users.backends.EmailBackend",
-    "django.contrib.auth.backends.ModelBackend",
-]
-
 LOGIN_URL = reverse_lazy("users:login")
-
 
 AUTH_USER_MODEL = "users.User"

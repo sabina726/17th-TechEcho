@@ -1,40 +1,57 @@
 import json
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
 from answers.forms import AnswerForm
 from answers.models import Answer
+from lib.utils.pagination import paginate
 
 from .forms import QuestionForm
-from .models import Question
-
-# Create your views here.
+from .models import Question, QuestionUserVotes
+from .utils.labels import parse_labels
+from .utils.question_user_votes import (
+    upvoted_or_downvoted_or_neither,
+    validate_votes_input,
+)
+from .utils.sort import order_is_valid
 
 
 def index(request):
-    if request.method == "POST":
+    # partial rendering only
+    if request.htmx and request.htmx.request.method == "GET":
+        order = request.GET.get("order")
+        questions = Question.objects.order_by(order if order_is_valid(order) else "-id")
+        questions = paginate(request, questions)
+        return render(
+            request, "questions/partial/_questions_list.html", {"questions": questions}
+        )
+
+    elif request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.error(request, "請登入後再嘗試")
+            return redirect("users:login")
+
         form = QuestionForm(request.POST)
-        labels = request.POST.get("labels")
+        labels = parse_labels(request.POST)
 
-        print(labels)
-
-        # we require at least one label
         if labels and form.is_valid():
+            # commit=False is not applicable here because instance.labels.set(labels) requires a pk
+            # and since our pk is defined by the ORM not by us, it will only exist once we save it to the DB
             instance = form.save()
-            labels = [label["value"] for label in json.loads(labels)]
-
             instance.labels.set(labels)
+            instance.user = request.user
             instance.save()
+
             messages.success(request, "成功提問")
             return redirect("questions:index")
 
         messages.error(request, "輸入資料錯誤，請再嘗試")
         return render(request, "questions/new.html", {"form": form})
 
-    # requires validation
-    order_by = request.GET.get("order_by")
-    questions = Question.objects.order_by(order_by or "-id")
+    questions = Question.objects.order_by("-id")
+    questions = paginate(request, questions)
     return render(request, "questions/index.html", {"questions": questions})
 
 
@@ -44,14 +61,17 @@ def new(request):
 
 
 def show(request, id):
-    question = get_object_or_404(Question, pk=id)
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.error(request, "請登入後再嘗試")
+            return redirect("users:login")
+
+        question = get_object_or_404(Question, pk=id, user=request.user)
         form = QuestionForm(request.POST, instance=question)
-        labels = request.POST.get("labels")
-        # we require at least one label
+        labels = parse_labels(request.POST)
+
         if labels and form.is_valid():
             instance = form.save(commit=False)
-            labels = [label["value"] for label in json.loads(labels)]
             instance.labels.set(labels)
             instance.save()
             form.save_m2m()
@@ -63,6 +83,10 @@ def show(request, id):
         return render(
             request, "questions/edit.html", {"form": form, "question": question}
         )
+
+    question = get_object_or_404(Question, pk=id)
+    vote = upvoted_or_downvoted_or_neither(request, question)
+
     answers = question.answer_set.order_by("-id")
     form = AnswerForm()
     return render(
@@ -71,14 +95,16 @@ def show(request, id):
         {
             "question": question,
             "answers": answers,
+            "vote": vote,
             "form": form,
-            "labels": question.labels.all(),
+            "followed": question.followed_by(request.user),
         },
     )
 
 
+@login_required
 def edit(request, id):
-    question = get_object_or_404(Question, pk=id)
+    question = get_object_or_404(Question, pk=id, user=request.user)
     form = QuestionForm(instance=question)
     return render(
         request,
@@ -87,24 +113,63 @@ def edit(request, id):
     )
 
 
+@login_required
 def delete(request, id):
     if request.method == "POST":
-        question = get_object_or_404(Question, pk=id)
+        question = get_object_or_404(Question, pk=id, user=request.user)
         question.delete()
         return redirect("questions:index")
 
 
+@login_required
 def votes(request, id):
     if request.method == "POST":
         question = get_object_or_404(Question, pk=id)
-        votes_change = request.POST.get("votes_change")
-        # only predefined change in value is allowed
-        if votes_change in ("1", "-1"):
-            question.votes_count += int(votes_change)
-            question.save()
 
-        return redirect("questions:show", id=id)
+        if not question.has_voted(request.user):
+            record = QuestionUserVotes.objects.create(
+                question=question, user=request.user
+            )
+        else:
+            record = question.questionuservotes_set.get(user=request.user)
+
+        vote_change = request.POST.get("vote_change")
+        vote_status, actual_change = validate_votes_input(
+            record.vote_status, vote_change
+        )
+
+        record.vote_status = vote_status
+        record.save()
+
+        question.votes_count += actual_change
+        question.save()
+
+        return render(
+            request,
+            "questions/_votes.html",
+            {
+                "question": question,
+                "user": request.user,
+                "vote": record.vote_status,
+            },
+        )
 
 
-def bookmark(request, id):
-    pass
+@login_required
+def follows(request, id):
+    if request.method == "POST":
+        question = get_object_or_404(Question, pk=id)
+        if question.user == request.user:
+            messages.error(request, "發文者已自動追蹤自己的問題，不必額外追蹤")
+            return redirect("questions:show", id=id)
+
+        if question.followed_by(request.user):
+            question.followers.remove(request.user)
+        else:
+            question.followers.add(request.user)
+
+        return render(
+            request,
+            "questions/_follows.html",
+            {"question": question, "followed": question.followed_by(request.user)},
+        )

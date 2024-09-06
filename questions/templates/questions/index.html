@@ -1,7 +1,5 @@
 {% extends 'layouts/base.html' %}
 
-{% load question_labels %}
-
 {% block content %}
     <div class="p-6 max-w-4xl mx-auto relative">
         <div class="flex justify-between items-center p-1">
@@ -11,35 +9,18 @@
 
         <div class="flex gap-2 p-1">
             <p>選擇排序依據：</p>
-            <form action="{% url "questions:index" %}">
-                <button class="link" name="order_by" value="-votes_count">讚數</button>
-            </form>
-            <form action="{% url "questions:index" %}">
-                <button class="link" name="order_by" value="-follows_count">追蹤數</button>
+            <form
+                hx-get="{% url "questions:index" %}"
+                hx-target="#questions_list"
+            >
+                <button class="link" name="order" value="-votes_count">讚數</button>
+                <button class="link" name="order" value="-follows_count">追蹤數</button>
+                <button class="link" name="order" value="-id">發表時間</button>
             </form>
         </div>
 
-        <ul>
-            {% for question in questions %}
-                <li class="border-2 shadow p-2 mb-1 text-wrap break-all">
-                    <a href="{% url "questions:show" question.id%}">
-                        <h3 class="text-xl link">標題： {{question.title}}</h3>
-                    </a>
-
-                    <div>
-                        <span>標籤：</span>
-                        {% for label in question|question_labels %}
-                            <span>{{label}} </span>
-                        {% endfor %}
-                    </div>
-                    <p>內文: {{question.details|striptags|truncatechars:20}}</p>
-                    {% comment %} <p>{{question.user}}</p> {% endcomment %}
-                    {% comment %} upvotes {% endcomment %}
-                    {% comment %} answers(count) {% endcomment %}
-                    {% comment %} views {% endcomment %}
-                </li>
-            {% endfor %}
-        </ul>
-
+        <div id="questions_list">
+            {% include "questions/partial/_questions_list.html" with questions=questions only%}
+        </div>
     </div>
 {% endblock  %}
