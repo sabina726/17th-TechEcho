@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     "answers",
     "ckeditor",
     "users",
-    "search",
     "payments",
     "django_htmx",
 ]
