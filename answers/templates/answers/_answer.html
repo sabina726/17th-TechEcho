@@ -16,7 +16,7 @@
     <div class="flex items-center">
       <form action="{% url 'answers:delete' answer.id%}" method="POST">
         {% csrf_token %}
-        <button class="btn btn-sm bg-red-600 text-white">刪除</button>
+        <button class="btn btn-sm bg-red-700 text-white">刪除</button>
       </form>
     </div>
   </div>
