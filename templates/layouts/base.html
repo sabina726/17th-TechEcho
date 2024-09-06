@@ -11,9 +11,9 @@
   <script src="{% static 'scripts/app.js' %}" defer></script>
   <title>TechEcho</title>
 </head>
-<body class="flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
   {% include 'home/messages.html' %}
-  {% include 'layouts/navbar.html' %}
+  {% include 'layouts/navbar.html' with user=user %}
   <div class="flex-grow">{% block content %} {% endblock %}</div>
   <footer class="w-full p-4 text-center text-white bg-blue-1">
     <a href="#" class="transition duration-300 ease-in-out hover:text-green-3">📞 &ensp;聯絡我們</a>

@@ -7,19 +7,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('answers', '0001_initial'),
+        ("answers", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='answer',
-            name='downvote',
-            field=models.ManyToManyField(related_name='downvote', to=settings.AUTH_USER_MODEL),
+            model_name="answer",
+            name="downvote",
+            field=models.ManyToManyField(
+                related_name="downvote", to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AlterField(
-            model_name='answer',
-            name='upvote',
-            field=models.ManyToManyField(related_name='upvote', to=settings.AUTH_USER_MODEL),
+            model_name="answer",
+            name="upvote",
+            field=models.ManyToManyField(
+                related_name="upvote", to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]
