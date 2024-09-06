@@ -3,7 +3,7 @@ from django.core.validators import MinLengthValidator
 from django.db import models
 from taggit.managers import TaggableManager
 
-from lib.models.soft_delete import SoftDeleteModel
+from lib.models import SoftDeleteModel
 
 
 class Question(SoftDeleteModel):
@@ -23,13 +23,27 @@ class Question(SoftDeleteModel):
         settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL
     )
 
-    upvote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="upvotes")
-    downvote = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="downvotes"
+    voters = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="votes", through="QuestionUserVotes"
     )
-    follow = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="follows")
+    followers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="follows")
 
     labels = TaggableManager()
 
     def __str__(self):
         return self.title
+
+    def followed_by(self, user) -> bool:
+        return self.followers.filter(id=user.id).exists()
+
+    def has_voted(self, user) -> bool:
+        return self.voters.filter(id=user.id).exists()
+
+
+class QuestionUserVotes(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    vote_status = models.CharField(max_length=10, default="neither")
+
+    def __str__(self) -> str:
+        return f"question:{self.question.title} was voted {self.vote_status} by user:{self.user.username}"

@@ -7,7 +7,6 @@
     <section class="flex justify-center">
         <form action="{% url 'teachers:show' teacher.id %}" method="POST" autocomplete="off" class="space-y-4">
             {% csrf_token %}
-
             <div class="grid gap-4">
                 {{ form.user.as_hidden }}
                 <p>暱稱:{{ form.nickname }}</p>
@@ -19,6 +18,5 @@
             <button type="submit" class="btn">編輯檔案</button>
         </form>
     </section>
-
 </div>
 {% endblock %}

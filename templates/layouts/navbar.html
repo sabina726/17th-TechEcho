@@ -62,6 +62,9 @@
       <li>
         <a href="{% url 'users:logout'%}" class="transition duration-300 ease-in-out hover:text-green-3">登出</a>
       </li>
+      <li>
+        <a href="{% url 'users:logout'%}" class="transition duration-300 ease-in-out hover:text-green-3">登出</a>
+      </li>
       <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
         <a href="{% url 'users:register' %}" class="transition duration-300 ease-in-out hover:text-green-3">註冊</a>
       </li>
@@ -103,6 +106,10 @@
     <li>
       <a href="{% url 'users:login'%}"
         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">登入</a>
+    </li>
+    <li>
+      <a href="{% url 'users:logout'%}"
+        class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">登出</a>
     </li>
     <li>
       <a href="{% url 'users:logout'%}"
