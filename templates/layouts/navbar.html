@@ -58,7 +58,10 @@
 
 
       {% if user.is_authenticated %}
+
+      {% include "shared/notification.html" with user=user only%}
       <div class="relative">
+
         <img
           src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}/static/default-avatar.png{% endif %}"
           alt="User Avatar" class="w-8 h-8 rounded-full cursor-pointer" @click="userMenuOpen = !userMenuOpen">
@@ -73,6 +76,7 @@
           </li>
         </ul>
       </div>
+
       {% else %}
       <li>
         <a href="{% url 'users:login'%}?next={{ request.path }}"
@@ -84,8 +88,8 @@
       {% endif %}
     </ul>
 
-
   </div>
+
   <ul class="absolute right-0 z-10 w-full mt-6 text-lg bg-vanilla-5" x-show="open" @click.away="open = false"
     style="display: none">
 
