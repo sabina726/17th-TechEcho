@@ -1,0 +1,25 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+    <div class="flex justify-center gap-2 p-6 items-center">
+        <h1>
+            What chat room would you like to enter?<br>
+        </h1>
+        <input autofocus class="input input-bordered" id="room-name-input" type="text" size="100"><br>
+        <input class="text-white btn bg-green-3" id="room-name-submit" type="button" value="Enter">
+    </div>
+
+    <script>
+        document.querySelector('#room-name-input').onkeyup = function(e) {
+            if (e.key === 'Enter') {  // enter, return
+                document.querySelector('#room-name-submit').click();
+            }
+        };
+
+        document.querySelector('#room-name-submit').onclick = function(e) {
+            const roomName = document.querySelector('#room-name-input').value;
+            window.location.pathname = '/chat/' + roomName + '/';
+        };
+    </script>
+
+{% endblock content %}

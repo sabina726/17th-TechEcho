@@ -8,7 +8,7 @@
 
             <div>
                 <span>標籤：</span>
-                {% for label in question|questions_labels %}
+                {% for label in question.labels.all %}
                     <span>{{label}},</span>
                 {% endfor %}
             </div>

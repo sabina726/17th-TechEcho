@@ -6,7 +6,7 @@
             <div class="flex gap-4 items-center">
                 <h1 class="text-2xl">問題：{{question.title}}</h1>
                 {% if user.is_authenticated and user != question.user %}
-                    {% include "questions/_follows.html" with question=question followed=followed only %}
+                    {% include "questions/partials/_follows.html" with question=question followed=followed only %}
                 {% endif %}
             </div>
             <a href="{% url "questions:index" %}" class="btn">回到問題列表</a>
@@ -14,7 +14,7 @@
 
         <div class="p-2 border-2 mb-2">
             <p> 標籤：
-                {% for label in question|questions_labels %}
+                {% for label in question.labels.all %}
                     <span>{{label}} </span>
                 {% endfor %}
             </p>
@@ -39,7 +39,7 @@
             </p>
         </article>
 
-        {% include "questions/_votes.html" with question=question vote=vote only %}
+        {% include "questions/partials/_votes.html" with question=question vote=vote user=user only %}
 
         {% if user.is_authenticated and user == question.user %}
             <div class="flex gap-2">
