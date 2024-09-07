@@ -25,6 +25,5 @@ urlpatterns = [
     path("questions/", include("questions.urls")),
     path("users/", include("users.urls")),
     path("questions/<int:id>/answers/", include("answers.urls")),
-    path("search/", include("search.urls")),
     path("payments/", include("payments.urls")),
 ]
