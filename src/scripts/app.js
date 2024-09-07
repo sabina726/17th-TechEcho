@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         document.querySelector('#search-form').addEventListener('submit', () => {
-            input.value = tagify.value[0]?.value || "";
+            input.value = tagify.value[0]?.value || " ";
         });
     }
 });
