@@ -44,7 +44,7 @@
     {% if user.is_authenticated and user == question.user %}
     <div class="flex gap-2">
         <a href="{% url 'questions:edit' question.id%}" class="btn">編輯此問題</a>
-        <form action="{% url 'questions:delete' question.id%}" method="POST" onSubmit="return confirm('確定要刪除此問題嗎？')">
+        <form action="{% url 'questions:delete'  question.id%}" method="POST" onSubmit="return confirm('確定要刪除此問題嗎？')">
             {% csrf_token %}
             <button class="btn">刪除此問題</button>
         </form>
