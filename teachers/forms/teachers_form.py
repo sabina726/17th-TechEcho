@@ -11,7 +11,7 @@ class TeacherInfoForm(forms.ModelForm):
         widgets = {
             "introduce": forms.Textarea(
                 attrs={
-                    "placeholder": "文字內容最少100~最多500",
+                    "placeholder": "文字內容最少50~最多500",
                 }
             ),
             "expertise": forms.TextInput(
@@ -19,7 +19,7 @@ class TeacherInfoForm(forms.ModelForm):
                     "placeholder": "Ex:JavaScript..Python..",
                 }
             ),
-            "schedule": forms.Select(
+            "schedule": forms.TextInput(
                 attrs={
                     "placeholder": "可諮詢時間",
                 }

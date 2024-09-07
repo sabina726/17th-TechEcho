@@ -20,6 +20,11 @@
             {% endfor %}
         </section>
     </div>
+
+    <div>
+        {% include "shared/pagination.html" with pages=teachers only %}
+    </div>
+
 </div>
 
 {% endblock %}
