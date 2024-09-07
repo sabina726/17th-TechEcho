@@ -11,7 +11,7 @@
   <title>TechEcho</title>
 </head>
 <body class="flex flex-col min-h-screen" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-  {% include 'home/messages.html' %}
+  {% include 'shared/messages.html' %}
   {% include 'layouts/navbar.html' with user=user %}
   <div class="flex-grow">{% block content %} {% endblock %}</div>
   <footer class="w-full p-4 text-center text-white bg-blue-1">
