@@ -21,7 +21,7 @@
       選單
     </button>
 
-    <ul class="hidden space-x-4 text-xl text-white md:flex">
+    <ul class="hidden space-x-4 text-xl text-white md:flex whitespace-nowrap">
       <li class="relative tooltip tooltip-bottom" data-tip="問看看？">
         <a href="#" @click="submenuOpen = !submenuOpen"
           class="transition duration-300 ease-in-out hover:text-green-3">討論</a>
@@ -62,13 +62,12 @@
       <li>
         <a href="{% url 'users:logout'%}" class="transition duration-300 ease-in-out hover:text-green-3">登出</a>
       </li>
-      <li>
-        <a href="{% url 'users:logout'%}" class="transition duration-300 ease-in-out hover:text-green-3">登出</a>
-      </li>
       <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
         <a href="{% url 'users:register' %}" class="transition duration-300 ease-in-out hover:text-green-3">註冊</a>
       </li>
     </ul>
+
+
   </div>
   <ul class="absolute right-0 z-10 w-full mt-6 text-lg bg-vanilla-5" x-show="open" @click.away="open = false"
     style="display: none">
@@ -103,22 +102,22 @@
     <li>
       <a href="#" class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">教學</a>
     </li>
+    {% if user.is_authenticated %}
+    </li>
+
     <li>
-      <a href="{% url 'users:login'%}"
+      <a href="{% url 'users:logout'%}"
+        class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">登出</a>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url 'users:login'%}?next={{ request.path }}"
         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">登入</a>
     </li>
-    <li>
-      <a href="{% url 'users:logout'%}"
-        class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">登出</a>
-    </li>
-    <li>
-      <a href="{% url 'users:logout'%}"
-        class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">登出</a>
-    </li>
-    <li>
+    <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
       <a href="{% url 'users:register' %}"
         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">註冊</a>
-
     </li>
+    {% endif %}
   </ul>
 </nav>
