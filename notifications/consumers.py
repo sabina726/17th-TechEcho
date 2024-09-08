@@ -9,7 +9,7 @@ class NotificationConsumer(WebsocketConsumer):
         if not self.user.is_authenticated:
             self.close()
             return
-            
+
         for q in self.user.follows.all():
             group_name = f"notifications_questions_{q.id}"
             async_to_sync(self.channel_layer.group_add)(group_name, self.channel_name)

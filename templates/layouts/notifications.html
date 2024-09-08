@@ -6,6 +6,7 @@
         <span x-ref="number_span" id="notification-number" class="text-white bg-red-700 absolute rounded-full text-xs -mt-1.5 -ml-2 py-0 px-1.5"></span>
     </button>
     <ul x-show="notificationOpen" @click.away="closeDropdown()"
+        x-ref="dropdown"
         class="absolute right-0 z-20 mt-8 text-green-3 w-60 bg-vanilla-5"
         style="display: none"
         id="notification_list"
@@ -17,11 +18,11 @@
                 <p class="text-sm">{{message|wordwrap:10}}</p>
             </li>
         {% endfor %}
-            <li>
-                <button @click="#">
-                    清除所有通知
-                </a>
-            </li>
+        <div>
+            <button @click="clearAll()">
+                清除所有通知
+            </a>
+        </div>
     </ul>
 </li>
 

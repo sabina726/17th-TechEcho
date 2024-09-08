@@ -1,6 +1,6 @@
 import Alpine from "alpinejs"
 
-Alpine.data("notifications", (e) => ({
+Alpine.data("notifications", _ => ({
     notificationOpen: false,
     notifications_number:0,
 
@@ -20,4 +20,11 @@ Alpine.data("notifications", (e) => ({
     closeDropdown() {
         this.notificationOpen = false
     },
+
+    clearAll() {
+        this.$refs.number_span.innerHTML = ''
+        this.$refs.dropdown.querySelectorAll('li').forEach(notification => {
+            notification.remove()
+        })
+    }
 }))
