@@ -41,8 +41,6 @@ class ChatroomConsumer(WebsocketConsumer):
         event = {"type": "message_handler", "message_id": message.id}
         async_to_sync(self.channel_layer.group_send)(self.chatroom_name, event)
 
-    # a method automatically called every turn a message is sent to clients
-    # this is an event handler
     def message_handler(self, event):
         message_id = event["message_id"]
         message = GroupMessage.objects.get(pk=message_id)

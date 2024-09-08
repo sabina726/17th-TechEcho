@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "payments",
     "django_htmx",
     "chat",
+    "notifications",
 ]
 
 
