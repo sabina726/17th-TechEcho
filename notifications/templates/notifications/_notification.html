@@ -1,0 +1,7 @@
+<ul x-show="notificationOpen" @click.away="notificationOpen = false"
+    class="absolute right-0 z-20 mt-8 text-green-3 w-60 bg-vanilla-5" style="display: none"
+    id="notification_list" hx-swap-oob="afterbegin">
+    <li>
+        {{message}}
+    </li>
+</ul>

@@ -45,7 +45,9 @@ class ChatroomConsumer(WebsocketConsumer):
         message_id = event["message_id"]
         message = GroupMessage.objects.get(pk=message_id)
 
-        text = render_to_string(
+        # with websockets, it can't receive a HttpResponse Object
+        # hence, we have to return a html string or a json string
+        html = render_to_string(
             "chat/_message.html", {"message": message, "user": self.user}
         )
-        self.send(text_data=text)
+        self.send(text_data=html)
