@@ -1,6 +1,4 @@
-import Alpine from "alpinejs"
 import "./labels.js"
+import "./notifications.js"
 
-
-Alpine.start()
 

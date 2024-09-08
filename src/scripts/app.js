@@ -1,7 +1,7 @@
 import "./fontawesome";
 import "./components"
 import "htmx.org";
-import Alpine from 'alpinejs';
+import Alpine from "alpinejs"
 import Tagify from '@yaireo/tagify';
 import Swal from "sweetalert2";
 
@@ -34,4 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.Swal = Swal;
-Alpine.start();
+
+
+Alpine.start()

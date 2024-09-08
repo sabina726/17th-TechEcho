@@ -1,23 +1,28 @@
-<li class="tooltip tooltip-bottom" data-tip="沒有通知"
-    x-data="{notificationOpen:false}"
-    hx-ext="ws"
-    ws-connect="ws/notifications/"
-    ws-send>
-    <a href="#" @click="notificationOpen = !notificationOpen">
-        <i class="fa-regular fa-bell text-red-500"></i>
-    </a>
-    <ul x-show="notificationOpen" @click.away="notificationOpen = false"
-        class="absolute right-0 z-20 mt-8 text-green-3 w-60 bg-vanilla-5" style="display: none"
-        id="notification_list">
-    {% for message in messagas %}
-        <li>
-            <p>message</p>
-        </li>
-    {% endfor %}
-        <li>
-            <a href="#">
-                清除所有通知
-            </a>
-        </li>
+<li class="tooltip tooltip-bottom"
+    data-tip="沒有通知"
+    x-data="notifications">
+    <button @click.prevent="toggleDropdown()" class="relative">
+        <i class="fa-solid fa-bell"></i>
+        <span x-ref="number_span" id="notification-number" class="text-white bg-red-700 absolute rounded-full text-xs -mt-1.5 -ml-2 py-0 px-1.5"></span>
+    </button>
+    <ul x-show="notificationOpen" @click.away="closeDropdown()"
+        class="absolute right-0 z-20 mt-8 text-green-3 w-60 bg-vanilla-5"
+        style="display: none"
+        id="notification_list"
+        hx-ext="ws"
+        ws-connect="ws/notifications/"
+        ws-send>
+        {% for message in messagas %}
+            <li class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
+                <p class="font-bold">追蹤通知</p>
+                <p class="text-sm">{{message}}</p>
+            </li>
+        {% endfor %}
+            <li>
+                <a href="#">
+                    清除所有通知
+                </a>
+            </li>
     </ul>
 </li>
+
