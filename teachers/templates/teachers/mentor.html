@@ -1,0 +1,24 @@
+{% extends "layouts/base.html" %}
+
+
+{% block content %}
+
+<section class="p-6">
+    <div class="flex flex-wrap justify-center">
+        <h1 class="text-2xl font-bold text-gray-900 mb-4 p-4"> 讓您的知識與實務經驗成為啟發他人的超能力!</h1>
+        <p class="text-center leading-normal mb-6 p-2">
+            您經歷過學習開發與編程的道路上，不斷遇到問題但沒法找到資深前輩、技術專家深入細節討論、釐清的困境嗎
+            <br>
+            登記成為TechEcho的技術專家，讓其他人可直接 或 透過您回覆的問題發起線上即時討論、指導會談，讓您可更具互動性的引導幫助其他成長路上的工程師或技術愛好者
+        </p>
+        <p class="text-gray-700 mb-6 p-2">
+            無論您是想協助更多技術社群的後進、以教學驗證深化自己對不同領域技術的理解程度，或是純粹以您的技術與知識獲取額外的回報，歡迎成為TechEcho技術社群的技術專家
+        </p>
+    </div>
+
+    <div class="flex justify-center">
+        <a href="{% url 'teachers:new' %}" class="btn btn-active btn-primary">立即擁有啟發其他人的超能力</a>
+    </div>
+</section>
+
+{% endblock %}

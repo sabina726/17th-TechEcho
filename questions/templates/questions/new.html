@@ -1,26 +1,26 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
-    <form class="p-6 max-w-4xl mx-auto relative" action="{% url "questions:index" %}" method="POST">
-        {% csrf_token %}
+<form class="p-6 max-w-4xl mx-auto relative" action="{% url 'questions:index' %}" method="POST">
+    {% csrf_token %}
 
-        {% for field in form %}
-            <div class="form-control">
-                <label class="label">{{ field.label }}</label>
-                {{ field }}
-                <span class="text-red-500">{{ field.errors }}</span>
-            </div>
-        {% endfor %}
+    {% for field in form %}
+    <div class="form-control">
+        <label class="label">{{ field.label }}</label>
+        {{ field }}
+        <span class="text-red-500">{{ field.errors }}</span>
+    </div>
+    {% endfor %}
 
-        {% include "questions/_labels.html" %}
+    {% include "questions/_labels.html" %}
 
-        {% if user.is_authenticated %}
-            <button class="btn">新增此問題</button>
-        {% else %}
-            <p class="btn btn-disabled">須先註冊才能問問題</p>
-        {% endif %}
+    {% if user.is_authenticated %}
+    <button class="btn">新增此問題</button>
+    {% else %}
+    <p class="btn btn-disabled">須先註冊才能問問題</p>
+    {% endif %}
 
-        <a href="{% url "questions:index" %}" class="btn">回到問題列表</a>
-    </form>
+    <a href="{% url 'questions:index' %}" class="btn">回到問題列表</a>
+</form>
 
 {% endblock %}
