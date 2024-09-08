@@ -1,4 +1,5 @@
-{% extends "layouts/base.html" %} {% block content %}
+{% extends "layouts/base.html" %}
+{% block content %}
 <div class="outside">
   <div class="box"></div>
   <div class="reverse-box">TechEcho</div>
@@ -19,9 +20,12 @@
             </button>
         </form>
 
-        <span class="tag tag-blue">JavaScript</span>
-        <span class="tag tag-red">Python</span>
-    </div>
+        <div class="mt-6">
+            <a href="{% url 'search' %}?q=javascript" class="tag tag-yellow">JavaScript</a>
+            <a href="{% url 'search' %}?q=python" class="tag tag-blue">Python</a>
+            <a href="{% url 'search' %}?q=ruby" class="tag tag-red">Ruby</a>
+        </div>
+
 </div>
 
 {% endblock content %}
