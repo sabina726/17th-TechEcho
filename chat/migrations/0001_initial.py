@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                     "teacher",
                     models.OneToOneField(
                         on_delete=django.db.models.deletion.CASCADE,
-                        to="teachers.teacherinfo",
+                        to="teachers.Teacher",
                     ),
                 ),
             ],

@@ -1,30 +1,32 @@
 from django import forms
 
-from teachers.models import TeacherInfo
+from teachers.models import Teacher
 
 
 class TeacherInfoForm(forms.ModelForm):
+
     class Meta:
-        model = TeacherInfo
-        fields = ["user", "expertise", "introduce"]
+        model = Teacher
+        fields = ["user", "nickname", "expertise", "introduce", "schedule"]
         widgets = {
             "introduce": forms.Textarea(
                 attrs={
-                    "rows": 5,
-                    "cols": 40,
-                    "placeholder": "自我介紹",
-                    "class": "custom-textarea",
+                    "placeholder": "文字內容最少50~最多500",
                 }
             ),
             "expertise": forms.TextInput(
                 attrs={
                     "placeholder": "Ex:JavaScript..Python..",
-                    "class": "custom-input",
                 }
             ),
+            "schedule": forms.TextInput(
+                attrs={
+                    "placeholder": "可諮詢時間",
+                }
+            ),
+            "user": forms.HiddenInput(),
         }
-        labels = {
-            "user": "使用者",
-            "expertise": "專業能力",
-            "introduce": "自我介紹",
-        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["user"].required = False

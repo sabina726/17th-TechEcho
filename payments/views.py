@@ -18,10 +18,6 @@ def index(request):
     return render(request, "payments/index.html")
 
 
-def mentor(request):
-    return render(request, "payments/mentor.html")
-
-
 @login_required
 def payment_option(request):
     username = request.user.username

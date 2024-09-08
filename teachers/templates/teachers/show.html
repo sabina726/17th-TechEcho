@@ -1,30 +1,70 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-<div class="p-6 max-w-3xl mx-auto bg-white shadow-md rounded-lg relative">
-    <h1 class="text-4xl font-bold mb-6 text-gray-900">專家檔案</h1>
 
-    <section class="mb-6">
-        <div class="p-4 border border-gray-200 rounded-lg bg-gray-50 relative">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-2">{{ teacher.user.username }}</h2>
-            <p class="text-lg text-gray-600 mb-2">{{ teacher.expertise }}</p>
-            <article class="text-gray-700">{{ teacher.introduce }}</article>
-        </div>
-    </section>
+<div class="flex justify-around items-center mb-6">
+    <h1 class="p-6 text-4xl font-bold mb-6 text-gray-900 text-center">專家檔案</h1>
+    <button class="btn">聊天室</button>
+</div>
 
-    <div class="absolute bottom-4 right-4">
-        <form action="{% url 'teachers:delete' teacher.id %}" method="POST" onsubmit="return confirm('您確定要刪除這條資訊嗎？');">
-            {% csrf_token %}
-            <button type="submit"
-                class="inline-block px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors">刪除資訊</button>
-        </form>
+
+<div class="p-6 max-w-3xl mx-auto bg-white shadow-md">
+    <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-2">
+            {{ teacher.nickname }}
+        </h2>
+        <p class="text-lg text-gray-600 mb-2">{{ teacher.expertise }}</p>
+        <article class="text-gray-700 break-words">{{ teacher.introduce }}</article>
     </div>
 
     <div>
-        <a href="{% url 'teachers:edit' teacher.id %}"
-            class="absolute top-6 right-6 inline-block px-4 py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition-colors">編輯老師資訊</a>
+        <p class="p-4">空閒時間: {{ teacher.schedule }}</p>
     </div>
 
-    <a href="{% url 'teachers:index' %}" class="btn text-blue-500 hover:text-blue-700">專家列表</a>
+    <section class="flex justify-around">
+        <div class="">
+            <h3 class="text-xl font-semibold text-gray-900">提過的問題</h3>
+            <ul class="mt-4">
+                {% for question in questions %}
+                <li class="mb-2 text-center">
+                    <a href="{% url 'questions:show' question.id %}" class="text-blue-500 hover:text-blue-700">
+                        {{ question.title }}
+                    </a>
+                </li>
+                {% empty %}
+                <li class="text-gray-500">無提問記錄</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="">
+            <h3 class="text-xl font-semibold text-gray-900">回答過的問題</h3>
+            <ul class="mt-4">
+                {% for question in answers %}
+                <li class="mb-2 text-center">
+                    <a href="{% url 'questions:show' question.id %}" class="text-blue-500 hover:text-blue-700">
+                        {{ question.title }}
+                    </a>
+                </li>
+                {% empty %}
+                <li class="text-gray-500">無回答記錄</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+
+    <div class="flex justify-between items-center mt-6">
+        {% if request.user == teacher.user %}
+        <a href="{% url 'teachers:edit' teacher.id %}" class="px-4 py-2 btn btn-warning">
+            修改基本資訊
+        </a>
+
+        <a href="{% url 'teachers:delete' teacher.id %}" class="btn btn-error"
+            onclick="return confirm('Want to delete?')">
+            刪除資訊
+        </a>
+        {% endif %}
+    </div>
 </div>
+
 {% endblock %}

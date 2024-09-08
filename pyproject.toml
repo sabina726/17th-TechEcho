@@ -15,6 +15,7 @@ psycopg2 = {version = "^2.9.9", extras = ["windows"]}
 django-taggit = "^6.0.0"
 django-ckeditor = "^6.7.1"
 channels = {extras = ["daphne"], version = "^4.1.0"}
+django-htmx = "^1.19.0"
 
 [tool.poetry.extras]
 mac = ["psycopg2-binary"]
