@@ -11,16 +11,18 @@
     </button>
     <div x-show="notificationOpen" @click.away="closeDropdown()"
         class="absolute right-0 z-20 mt-8 text-green-3 w-60 bg-vanilla-5"
-        style="display: none"
-        hx-ext="ws"
-        ws-connect="ws/notifications/"
-        ws-send>
+        style="display: none">
         <ul x-ref="dropdown"
+            hx-ext="ws"
+            ws-connect="ws/notifications/"
+            ws-send
             id="notification_list">
             {% for notification in user_with_notifications.notification_set.all %}
                 <li class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
-                    <p class="text-sm">{{notification.message}}</p>
-                    <p class="text-xs">{{notification.created_at}}</p>
+                    <a href="{% url notification.url_name notification.question_id %}" @click.stop>
+                        <p class="text-sm">{{notification.message}}</p>
+                        <p class="text-xs">{{notification.created_at}}</p>
+                    </a>
                 </li>
             {% endfor %}
         </ul>

@@ -1,5 +1,3 @@
-import json
-
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.contrib import messages
@@ -8,7 +6,6 @@ from django.core.cache import cache
 from django.shortcuts import get_object_or_404, redirect, render
 
 from answers.forms import AnswerForm
-from answers.models import Answer
 from lib.utils.pagination import paginate
 
 from .forms import QuestionForm
@@ -167,7 +164,6 @@ def follows(request, id):
 
         channel_layer = get_channel_layer()
         channel_name = cache.get(f"notifications_user_{request.user.id}")
-        print("name: ", channel_name)
         if question.followed_by(request.user):
             question.followers.remove(request.user)
             if channel_name:

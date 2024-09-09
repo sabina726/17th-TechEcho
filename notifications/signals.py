@@ -16,14 +16,23 @@ def update_answers_count(sender, instance, created, **kwargs):
         question.save()
 
         message = f"{question.title} 有一個新回覆"
-
-        # save the news in db
-        # Prepare list of Notification instances
+        url_name = "questions:show"
+        question_id = question.id
+        # save the notifications in db
         notifications = [
-            Notification(user=user, message=message)
+            Notification(
+                user=user, question_id=question_id, message=message, url_name=url_name
+            )
             for user in question.followers.all()
         ]
-        notifications.append(Notification(user=question.user, message=message))
+        notifications.append(
+            Notification(
+                user=question.user,
+                question_id=question_id,
+                message=message,
+                url_name=url_name,
+            )
+        )
         notifications = Notification.objects.bulk_create(notifications)
 
         # send the news to followers/subscribers
@@ -33,6 +42,8 @@ def update_answers_count(sender, instance, created, **kwargs):
             "type": "send_notification",
             "message": message,
             "created_at": notifications[0].created_at,
+            "url_name": url_name,
+            "question_id": question_id,
         }
         async_to_sync(channel_layer.group_send)(group_name, event)
 

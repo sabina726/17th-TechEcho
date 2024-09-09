@@ -6,8 +6,6 @@ from channels.generic.websocket import WebsocketConsumer
 from django.core.cache import cache
 from django.template.loader import render_to_string
 
-from .models import Notification
-
 
 class NotificationConsumer(WebsocketConsumer):
     def connect(self):
@@ -49,13 +47,16 @@ class NotificationConsumer(WebsocketConsumer):
     def send_notification(self, event):
         message = event["message"]
         created_at = event["created_at"]
+        url_name = event["url_name"]
+        question_id = event["question_id"]
 
         html = render_to_string(
             "notifications/_new_notification.html",
             {
                 "message": message,
                 "created_at": created_at,
-                "user": self.user,
+                "url_name": url_name,
+                "question_id": question_id,
             },
         )
         self.send(text_data=html)
