@@ -42,11 +42,11 @@
         <ul x-show="expertOpen" @click.away="expertOpen = false"
           class="absolute left-0 z-20 mt-9 text-green-3 w-60 bg-vanilla-5" style="display: none">
           <li>
-            <a href="{% url 'teachers:new' %}"
+            <a href="{% url 'teachers:mentor' %}"
               class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">當專家</a>
           </li>
           <li>
-            <a href="{% url 'teachers:index' %}"
+            <a href="{% url 'payments:index' %}"
               class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">問專家</a>
 
           </li>
