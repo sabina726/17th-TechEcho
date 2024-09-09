@@ -10,7 +10,7 @@
         placeholder="至少要填一個標籤"
         {% if question %}
             value="
-                {% for label in question|questions_labels %}
+                {% for label in question.labels.all %}
                     {{label}},
                 {% endfor %}
             "
