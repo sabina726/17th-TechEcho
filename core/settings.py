@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.github",
 ]
 
 
@@ -180,13 +181,20 @@ SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": ["profile", "email"],
         "APP": {
-            "client_id": os.environ["CLIENT_ID"],
-            "secret": os.environ["CLIENT_SECRET"],
+            "client_id": os.environ["GOOGLE_CLIENT_ID"],
+            "secret": os.environ["GOOGLE_CLIENT_SECRET"],
         },
         "AUTH_PARAMS": {
             "access_type": "online",
         },
-    }
+    },
+    "github": {
+        "SCOPE": ["user", "repo", "read:org"],
+        "APP": {
+            "client_id": os.environ["GITHUB_CLIENT_ID"],
+            "secret": os.environ["GITHUB_CLIENT_SECRET"],
+        },
+    },
 }
 
 
@@ -197,3 +205,6 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
