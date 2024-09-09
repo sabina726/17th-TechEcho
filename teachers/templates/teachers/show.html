@@ -1,11 +1,12 @@
 {% extends "layouts/base.html" %}
-
+{% load custom_filters %}
 {% block content %}
 
 <div class="flex justify-around items-center mb-6">
     <h1 class="p-6 text-4xl font-bold mb-6 text-gray-900 text-center">專家檔案</h1>
-    <button class="btn">聊天室</button>
+    <a href="{% url 'chat:room' chat_group.id %}" class="btn">進入聊天室</a>
 </div>
+
 
 
 <div class="p-6 max-w-3xl mx-auto bg-white shadow-md">
@@ -18,7 +19,7 @@
     </div>
 
     <div>
-        <p class="p-4">空閒時間: {{ teacher.schedule }}</p>
+        <p class="p-4">空閒時間: {{ teacher.schedule|custom_time_format }}</p>
     </div>
 
     <section class="flex justify-around">

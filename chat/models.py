@@ -1,17 +1,12 @@
 from django.conf import settings
 from django.db import models
 
-from teachers.models import Teacher
 
-
-# Create your models here.
 class ChatGroup(models.Model):
     group_name = models.CharField(max_length=100, unique=True)
-    teacher = models.OneToOneField(Teacher, on_delete=models.CASCADE)
 
     def __str__(self):
-        # should be f"{self.group_name} by {self.teacher.nickname}" with TeacherInfo model updated in the future
-        return f"{self.group_name}"
+        return f"{self.group_name} by {self.assigned_teacher.nickname if self.assigned_teacher else 'Unknown Teacher'}"
 
 
 class GroupMessage(models.Model):

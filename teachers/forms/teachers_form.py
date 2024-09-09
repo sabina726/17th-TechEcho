@@ -3,7 +3,7 @@ from django import forms
 from teachers.models import Teacher
 
 
-class TeacherInfoForm(forms.ModelForm):
+class TeacherForm(forms.ModelForm):
 
     class Meta:
         model = Teacher
@@ -19,9 +19,10 @@ class TeacherInfoForm(forms.ModelForm):
                     "placeholder": "Ex:JavaScript..Python..",
                 }
             ),
-            "schedule": forms.TextInput(
+            "schedule": forms.TimeInput(
                 attrs={
                     "placeholder": "可諮詢時間",
+                    "type": "time",
                 }
             ),
             "user": forms.HiddenInput(),

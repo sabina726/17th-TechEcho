@@ -3,11 +3,10 @@
 <ul id="message_list" hx-swap-oob="beforeend">
     <li class="chat chat-{{message|check_author:user}}">
         <div class="chat-header">
-            {{message.author}}
+            {{message.author.username}}
             <time class="text-xs opacity-50">{{message.created_at}}</time>
         </div>
         <div class="chat-bubble">{{message.content}}</div>
         <div class="chat-footer opacity-50">Delivered</div>
     </li>
 </ul>
-
