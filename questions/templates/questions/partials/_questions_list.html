@@ -1,0 +1,20 @@
+{% load questions %}
+<ul>
+    {% for question in questions %}
+        <li class="border-2 shadow p-2 mb-1 text-wrap break-all">
+            <a href="{% url "questions:show" question.id%}">
+                <h3 class="text-xl link">標題： {{question.title}}</h3>
+            </a>
+
+            <div>
+                <span>標籤：</span>
+                {% for label in question.labels.all %}
+                    <span>{{label}},</span>
+                {% endfor %}
+            </div>
+            <p>內文: {{question.details|striptags|truncatechars:20}}</p>
+        </li>
+    {% endfor %}
+
+    {% include "shared/pagination.html" with pages=questions only %}
+</ul>

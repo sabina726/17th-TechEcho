@@ -44,6 +44,7 @@ SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "taggit",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -55,7 +56,6 @@ INSTALLED_APPS = [
     "teachers",
     "questions",
     "answers",
-    "ckeditor",
     "users",
     "payments",
     "django_htmx",
@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
+    "chat",
 ]
 
 
@@ -104,8 +105,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "core.wsgi.application"
-
+# WSGI_APPLICATION = "core.wsgi.application"
+ASGI_APPLICATION = "core.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -208,3 +209,6 @@ LOGOUT_REDIRECT_URL = "/"
 
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
+
+# to be changed to Redis, now we use django provided
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}

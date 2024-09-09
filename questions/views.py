@@ -1,7 +1,9 @@
 import json
+from http.client import HTTPResponse
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404, redirect, render
 
 from answers.forms import AnswerForm
@@ -25,7 +27,7 @@ def index(request):
         questions = Question.objects.order_by(order if order_is_valid(order) else "-id")
         questions = paginate(request, questions)
         return render(
-            request, "questions/partial/_questions_list.html", {"questions": questions}
+            request, "questions/partials/_questions_list.html", {"questions": questions}
         )
 
     elif request.method == "POST":
@@ -50,8 +52,8 @@ def index(request):
         messages.error(request, "輸入資料錯誤，請再嘗試")
         return render(request, "questions/new.html", {"form": form})
 
-    questions = Question.objects.order_by("-id")
-    questions = paginate(request, questions)
+    questions = Question.objects.prefetch_related("labels").order_by("-id")
+    questions = paginate(request, questions, items_count=5)
     return render(request, "questions/index.html", {"questions": questions})
 
 
@@ -146,10 +148,9 @@ def votes(request, id):
 
         return render(
             request,
-            "questions/_votes.html",
+            "questions/partials/_votes.html",
             {
                 "question": question,
-                "user": request.user,
                 "vote": record.vote_status,
             },
         )
@@ -170,6 +171,6 @@ def follows(request, id):
 
         return render(
             request,
-            "questions/_follows.html",
+            "questions/partials/_follows.html",
             {"question": question, "followed": question.followed_by(request.user)},
         )
