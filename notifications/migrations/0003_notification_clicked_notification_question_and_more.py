@@ -7,24 +7,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('notifications', '0002_notification_created_at'),
-        ('questions', '0005_remove_question_follows_count'),
+        ("notifications", "0002_notification_created_at"),
+        ("questions", "0005_remove_question_follows_count"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='notification',
-            name='clicked',
+            model_name="notification",
+            name="clicked",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='notification',
-            name='question',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='questions.question'),
+            model_name="notification",
+            name="question",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="questions.question",
+            ),
         ),
         migrations.AddField(
-            model_name='notification',
-            name='url_name',
+            model_name="notification",
+            name="url_name",
             field=models.CharField(max_length=100, null=True),
         ),
     ]

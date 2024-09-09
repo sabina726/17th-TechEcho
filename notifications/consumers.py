@@ -1,10 +1,11 @@
 import json
-from socket import timeout
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.core.cache import cache
 from django.template.loader import render_to_string
+
+from notifications.models import Notification
 
 
 class NotificationConsumer(WebsocketConsumer):
@@ -41,22 +42,33 @@ class NotificationConsumer(WebsocketConsumer):
                 )
 
     def receive(self, text_data=None):
+        print("---" * 10)
         if self.user.is_authenticated and self.user.id == self.scope["user"].id:
-            self.user.notification_set.all().delete()
+            answer_id = json.loads(text_data).get("answer_id")
+            print(answer_id)
+            try:
+                answer_id = int(answer_id)
+            except ValueError:
+                return
+
+            if answer_id == -1:
+                print("all deleted")
+                self.user.notification_set.all().delete()
+            else:
+                notification = Notification.objects.get(
+                    user=self.user, answer_id=answer_id
+                )
+                notification.delete()
 
     def send_notification(self, event):
-        message = event["message"]
-        created_at = event["created_at"]
-        url_name = event["url_name"]
-        question_id = event["question_id"]
-
         html = render_to_string(
             "notifications/_new_notification.html",
             {
-                "message": message,
-                "created_at": created_at,
-                "url_name": url_name,
-                "question_id": question_id,
+                "message": event["message"],
+                "created_at": event["created_at"],
+                "url_name": event["url_name"],
+                "question_id": event["question_id"],
+                "answer_id": event["answer_id"],
             },
         )
         self.send(text_data=html)

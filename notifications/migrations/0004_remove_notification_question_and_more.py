@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('notifications', '0003_notification_clicked_notification_question_and_more'),
+        ("notifications", "0003_notification_clicked_notification_question_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='notification',
-            name='question',
+            model_name="notification",
+            name="question",
         ),
         migrations.AddField(
-            model_name='notification',
-            name='question_id',
+            model_name="notification",
+            name="question_id",
             field=models.PositiveBigIntegerField(default=1),
         ),
     ]
