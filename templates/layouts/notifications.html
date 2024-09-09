@@ -13,9 +13,9 @@
         hx-ext="ws"
         ws-connect="ws/notifications/"
         ws-send>
-        {% for message in messagas %}
+        {% for notification in user_with_notifications.notification_set.all %}
             <li class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
-                <p class="text-sm">{{message|wordwrap:10}}</p>
+                <p class="text-sm">{{notification.message}}</p>
             </li>
         {% endfor %}
         <div>

@@ -5,6 +5,8 @@ from django.dispatch import receiver
 
 from answers.models import Answer
 
+from .models import Notification
+
 
 @receiver(post_save, sender=Answer)
 def update_answers_count(sender, instance, created, **kwargs):
@@ -13,6 +15,7 @@ def update_answers_count(sender, instance, created, **kwargs):
         question.answers_count = question.answer_set.count()
         question.save()
 
+        # send the news to followers/subscribers
         channel_layer = get_channel_layer()
         group_name = f"notifications_questions_{question.id}"
         event = {

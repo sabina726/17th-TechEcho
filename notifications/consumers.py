@@ -2,6 +2,8 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.template.loader import render_to_string
 
+from .models import Notification
+
 
 class NotificationConsumer(WebsocketConsumer):
     def connect(self):
@@ -34,6 +36,9 @@ class NotificationConsumer(WebsocketConsumer):
 
     def send_notification(self, event):
         message = event["message"]
+        # save the news in db
+        Notification.objects.create(user=self.user, message=message)
+
         html = render_to_string(
             "notifications/_new_notification.html",
             {"message": message, "user": self.user},
