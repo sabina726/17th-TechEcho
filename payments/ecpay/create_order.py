@@ -7,28 +7,8 @@ from datetime import datetime
 from .payment_sdk import ECPayPaymentSdk
 
 
-def ecpay_api(user):
-    order_params = {
-        "MerchantTradeNo": datetime.now().strftime("NO%Y%m%d%H%M%S"),
-        # "StoreID": "",
-        "MerchantTradeDate": datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
-        "PaymentType": "aio",
-        "TotalAmount": 600,
-        "TradeDesc": "測試付款",
-        "ItemName": "升級成TechEcho Premium月訂閱用戶",
-        "ReturnURL": "https://techecho.tonytests.com/payments/ecpay_return",
-        "ChoosePayment": "ALL",
-        "ClientBackURL": "https://techecho.tonytests.com/payments/after_pay",
-        # "ItemURL": "https://www.ecpay.com.tw/item_url.php",
-        # "Remark": "交易備註",
-        # "ChooseSubPayment": "",
-        "OrderResultURL": "https://techecho.tonytests.com/payments/after_pay",
-        "NeedExtraPaidInfo": "Y",
-        "CustomField1": user,
-        "CustomField2": "",
-        "EncryptType": 1,
-    }
-
+def ecpay_api(order_params):
+    order_params = order_params
     # 建立實體
     ecpay_payment_sdk = ECPayPaymentSdk(
         MerchantID=os.getenv("ECPAY_MerchantID"),
