@@ -1,6 +1,5 @@
-from random import seed
-from django.conf import settings
 from users.models import User
+
 
 def fetch_user_notifications(request):
     if request.user.is_authenticated:

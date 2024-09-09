@@ -18,7 +18,6 @@ class ChatroomConsumer(WebsocketConsumer):
         self.chatroom_name = self.scope["url_route"]["kwargs"]["chatroom_name"]
         self.group = get_object_or_404(ChatGroup, group_name=self.chatroom_name)
 
-        # self.channel_name is auto genearted by channels
         async_to_sync(self.channel_layer.group_add)(
             self.chatroom_name, self.channel_name
         )
@@ -26,28 +25,30 @@ class ChatroomConsumer(WebsocketConsumer):
         self.accept()
 
     def disconnect(self, close_code):
-        if self.user.is_authenticated:
+        if self.user.is_authenticated and self.user.id == self.scope["user"].id:
             async_to_sync(self.channel_layer.group_discard)(
                 self.chatroom_name, self.channel_name
             )
 
     def receive(self, text_data=None):
-        text_json = json.loads(text_data)
-        content = text_json["content"]
+        if self.user.is_authenticated and self.user.id == self.scope["user"].id:
+            text_json = json.loads(text_data)
+            content = text_json["content"]
 
-        message = GroupMessage.objects.create(
-            content=content, author=self.user, group=self.group
-        )
-        event = {"type": "message_handler", "message_id": message.id}
-        async_to_sync(self.channel_layer.group_send)(self.chatroom_name, event)
+            message = GroupMessage.objects.create(
+                content=content, author=self.user, group=self.group
+            )
+            event = {"type": "message_handler", "message_id": message.id}
+            async_to_sync(self.channel_layer.group_send)(self.chatroom_name, event)
 
     def message_handler(self, event):
-        message_id = event["message_id"]
-        message = GroupMessage.objects.get(pk=message_id)
+        if self.user.is_authenticated and self.user.id == self.scope["user"].id:
+            message_id = event["message_id"]
+            message = GroupMessage.objects.get(pk=message_id)
 
-        # with websockets, it can't receive a HttpResponse Object
-        # hence, we have to return a html string or a json string
-        html = render_to_string(
-            "chat/_message.html", {"message": message, "user": self.user}
-        )
-        self.send(text_data=html)
+            # with websockets, it can't receive a HttpResponse Object
+            # hence, we have to return a html string or a json string
+            html = render_to_string(
+                "chat/_message.html", {"message": message, "user": self.user}
+            )
+            self.send(text_data=html)

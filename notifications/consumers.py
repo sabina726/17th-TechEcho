@@ -1,3 +1,5 @@
+import json
+
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.template.loader import render_to_string
@@ -22,7 +24,7 @@ class NotificationConsumer(WebsocketConsumer):
         self.accept()
 
     def disconnect(self, code):
-        if self.user.is_authenticated:
+        if self.user.is_authenticated and self.user.id == self.scope["user"].id:
             for q in self.user.follows.all():
                 group_name = f"notifications_questions_{q.id}"
                 async_to_sync(self.channel_layer.group_discard)(
@@ -34,13 +36,18 @@ class NotificationConsumer(WebsocketConsumer):
                     group_name, self.channel_name
                 )
 
-    def send_notification(self, event):
-        message = event["message"]
-        # save the news in db
-        Notification.objects.create(user=self.user, message=message)
+    def receive(self, text_data=None):
+        if self.user.is_authenticated and self.user.id == self.scope["user"].id:
+            self.user.notification_set.all().delete()
 
-        html = render_to_string(
-            "notifications/_new_notification.html",
-            {"message": message, "user": self.user},
-        )
-        self.send(text_data=html)
+    def send_notification(self, event):
+        if self.user.is_authenticated and self.user.id == self.scope["user"].id:
+            message = event["message"]
+            # save the news in db
+            Notification.objects.create(user=self.user, message=message)
+
+            html = render_to_string(
+                "notifications/_new_notification.html",
+                {"message": message, "user": self.user},
+            )
+            self.send(text_data=html)

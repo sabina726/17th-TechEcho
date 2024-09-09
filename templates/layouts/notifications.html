@@ -3,26 +3,30 @@
     x-data="notifications">
     <button @click.prevent="toggleDropdown()" class="relative">
         <i class="fa-solid fa-bell"></i>
-        <span x-ref="number_span" id="notification-number" class="text-white bg-red-700 absolute rounded-full text-xs -mt-1.5 -ml-2 py-0 px-1.5"></span>
+        <span x-ref="number_span" id="notification-number" class="text-white bg-red-700 absolute rounded-full text-xs -mt-1.5 -ml-2 py-0 px-1.5">
+            {% if user_with_notifications.notification_set.exists %}
+                {{user_with_notifications.notification_set.all|length}}
+            {% endif %}
+        </span>
     </button>
-    <ul x-show="notificationOpen" @click.away="closeDropdown()"
-        x-ref="dropdown"
+    <div x-show="notificationOpen" @click.away="closeDropdown()"
         class="absolute right-0 z-20 mt-8 text-green-3 w-60 bg-vanilla-5"
         style="display: none"
-        id="notification_list"
         hx-ext="ws"
         ws-connect="ws/notifications/"
         ws-send>
-        {% for notification in user_with_notifications.notification_set.all %}
-            <li class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
-                <p class="text-sm">{{notification.message}}</p>
-            </li>
-        {% endfor %}
-        <div>
-            <button @click="clearAll()">
-                清除所有通知
-            </a>
-        </div>
-    </ul>
+        <ul x-ref="dropdown"
+            id="notification_list">
+            {% for notification in user_with_notifications.notification_set.all %}
+                <li class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert">
+                    <p class="text-sm">{{notification.message}}</p>
+                </li>
+            {% endfor %}
+        </ul>
+        {% csrf_token %}
+        <button @click="clearAll()">
+            清除所有通知
+        </button>
+    </div>
 </li>
 
