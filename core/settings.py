@@ -40,6 +40,7 @@ ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = ["https://techecho.tonytests.com"]
 
 
+SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
@@ -58,6 +59,11 @@ INSTALLED_APPS = [
     "users",
     "payments",
     "django_htmx",
+    "django.contrib.sites",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
 ]
 
 
@@ -75,6 +81,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 
@@ -110,8 +117,12 @@ DATABASES = {
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
         "HOST": os.getenv("POSTGRES_HOST"),
         "PORT": os.getenv("POSTGRES_PORT"),
+        "client_id": os.getenv("GOOGLE_CLIENT_ID"),
+        "secret": os.getenv("GOOGLE_CLIENT_SECRET"),
     }
 }
+
+CLIENT_ID = os.getenv("CLIENT_ID")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -163,3 +174,26 @@ TAGGIT_CASE_INSENSITIVE = True
 LOGIN_URL = reverse_lazy("users:login")
 
 AUTH_USER_MODEL = "users.User"
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["profile", "email"],
+        "APP": {
+            "client_id": os.environ["CLIENT_ID"],
+            "secret": os.environ["CLIENT_SECRET"],
+        },
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+    }
+}
+
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
