@@ -1,9 +1,10 @@
 import json
-from http.client import HTTPResponse
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
+from django.core.cache import cache
 from django.shortcuts import get_object_or_404, redirect, render
 
 from answers.forms import AnswerForm
@@ -164,10 +165,30 @@ def follows(request, id):
             messages.error(request, "發文者已自動追蹤自己的問題，不必額外追蹤")
             return redirect("questions:show", id=id)
 
+        channel_layer = get_channel_layer()
+        channel_name = cache.get(f"notifications_user_{request.user.id}")
+        print("name: ", channel_name)
         if question.followed_by(request.user):
             question.followers.remove(request.user)
+            if channel_name:
+                async_to_sync(channel_layer.send)(
+                    channel_name,
+                    {
+                        "type": "leave_group",
+                        "group_name": f"notifications_questions_{question.id}",
+                    },
+                )
+
         else:
             question.followers.add(request.user)
+            if channel_name:
+                async_to_sync(channel_layer.send)(
+                    channel_name,
+                    {
+                        "type": "join_group",
+                        "group_name": f"notifications_questions_{question.id}",
+                    },
+                )
 
         return render(
             request,
