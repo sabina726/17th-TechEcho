@@ -2,36 +2,65 @@ import "./fontawesome";
 import "./components"
 import "htmx.org";
 import Alpine from 'alpinejs';
-import Tagify from '@yaireo/tagify';
 import Swal from "sweetalert2";
 
-document.addEventListener('DOMContentLoaded', () => {
-    const input = document.querySelector('#tags');
-    const savedTagsElement = document.querySelector('#saved-tags');
+const container = document.getElementById('container');
 
-    if (input) {
-        const tagify = new Tagify(input, {
-            whitelist: ["JavaScript", "Python", "Ruby"],
-            maxTags: 1,
-            enforceWhitelist: true,
-            dropdown: {
-                maxItems: 3,
-                classname: "tags-look",
-                enabled: 0,
-                closeOnSelect: false
+        const codes = [
+            {
+                element: document.getElementById('code1'),
+                xSpeed: 3,
+                ySpeed: 3,
+                xPos: Math.random() * (container.clientWidth - 50),
+                yPos: Math.random() * (container.clientHeight - 50),
+                isBlurred: true
+            },
+            {
+                element: document.getElementById('code2'),
+                xSpeed: 2,
+                ySpeed: 2,
+                xPos: Math.random() * (container.clientWidth - 50),
+                yPos: Math.random() * (container.clientHeight - 50),
+                isBlurred: true
             }
-        });
+        ];
 
-        if (savedTagsElement?.value) {
-            tagify.addTags(JSON.parse(savedTagsElement.value));
+        function randomColor() {
+            return `hsl(${Math.random() * 360}, 100%, 50%)`;
         }
 
-        document.querySelector('#search-form').addEventListener('submit', (event) => {
-            const selectedTag = tagify.value[0]?.value || " ";
-            input.value = selectedTag.trim();
-        });
-    }
-});
+        function toggleBlur(code) {
+            code.element.style.filter = code.isBlurred ? 'blur(0px)' : 'blur(5px)';
+            code.isBlurred = !code.isBlurred;
+        }
+
+        function moveCodes() {
+            codes.forEach(code => {
+                const codeWidth = code.element.offsetWidth;
+                const codeHeight = code.element.offsetHeight;
+
+                code.xPos += code.xSpeed;
+                code.yPos += code.ySpeed;
+
+                if (code.xPos + codeWidth >= container.clientWidth || code.xPos <= 0) {
+                    code.xSpeed *= -1;
+                    code.element.style.color = randomColor();
+                    toggleBlur(code);
+                }
+
+                if (code.yPos + codeHeight >= container.clientHeight || code.yPos <= 0) {
+                    code.ySpeed *= -1;
+                    code.element.style.color = randomColor();
+                    toggleBlur(code);
+                }
+
+                code.element.style.transform = `translate(${code.xPos}px, ${code.yPos}px)`;
+            });
+
+            requestAnimationFrame(moveCodes);
+        }
+
+        moveCodes();
 
 window.Swal = Swal;
 Alpine.start();

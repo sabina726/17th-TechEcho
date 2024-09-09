@@ -1,5 +1,4 @@
-import json
-
+from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import render
 
@@ -20,9 +19,15 @@ def search(request):
 
         q_objects = Q()
         for term in search_terms:
-            q_objects |= Q(title__icontains=term) | Q(details__icontains=term)
+            q_objects |= (
+                Q(title__icontains=term)
+                | Q(details__icontains=term)
+                | Q(labels__name__icontains=term)
+            )
 
         questions = Question.objects.filter(q_objects).distinct()
+    else:
+        messages.info(request, "請輸入搜尋內容。")
 
     return render(
         request,
