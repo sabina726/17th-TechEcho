@@ -48,15 +48,13 @@ class NotificationConsumer(WebsocketConsumer):
 
     def send_notification(self, event):
         message = event["message"]
-        # save the news in db
-        # needs to be done at signal.py
-        notification = Notification.objects.create(user=self.user, message=message)
+        created_at = event["created_at"]
 
         html = render_to_string(
             "notifications/_new_notification.html",
             {
                 "message": message,
-                "created_at": notification.created_at,
+                "created_at": created_at,
                 "user": self.user,
             },
         )
