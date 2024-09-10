@@ -42,17 +42,14 @@ class NotificationConsumer(WebsocketConsumer):
                 )
 
     def receive(self, text_data=None):
-        print("---" * 10)
         if self.user.is_authenticated and self.user.id == self.scope["user"].id:
             answer_id = json.loads(text_data).get("answer_id")
-            print(answer_id)
             try:
                 answer_id = int(answer_id)
             except ValueError:
                 return
 
             if answer_id == -1:
-                print("all deleted")
                 self.user.notification_set.all().delete()
             else:
                 notification = Notification.objects.get(

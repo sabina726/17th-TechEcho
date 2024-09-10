@@ -20,15 +20,15 @@ Alpine.data("notifications", _ => ({
         this.notificationOpen = false;
     },
 
-    clear() {
-        console.log('sssssss');
+    clearCurrent() {
         this.notificationNumber -= 1;
+        this.$refs.number_span.innerHTML = this.notificationNumber;
         this.$el.closest("li").remove()
     },
 
     clearAll() {
         this.notificationNumber = 0;
-        this.$refs.number_span.innerHTML = '';
+        this.$refs.number_span.innerHTML = 0;
         this.$refs.dropdown.querySelectorAll('li').forEach(notification => {
             notification.remove()
         });

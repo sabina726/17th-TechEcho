@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('notifications', '0004_remove_notification_question_and_more'),
+        ("notifications", "0004_remove_notification_question_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='notification',
-            name='answer_id',
+            model_name="notification",
+            name="answer_id",
             field=models.PositiveBigIntegerField(default=0),
         ),
         migrations.AlterField(
-            model_name='notification',
-            name='question_id',
+            model_name="notification",
+            name="question_id",
             field=models.PositiveBigIntegerField(default=0),
         ),
     ]

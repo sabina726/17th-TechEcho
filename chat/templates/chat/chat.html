@@ -25,6 +25,7 @@
             hx-ext="ws"
             ws-connect="/ws/chatroom/test"
             ws-send
+            hx-on="htmx:wsAfterSend: this.reset()"
         >
             {% csrf_token %}
 
