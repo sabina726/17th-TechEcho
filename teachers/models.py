@@ -1,10 +1,10 @@
-import datetime
 import re
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
+from django.utils import timezone
 
 from answers.models import Answer
 from chat.models import ChatGroup
@@ -17,6 +17,16 @@ def verify(value):
         raise ValidationError("專業能力只能包含中英文字符")
 
 
+def generate_unique_group_name(base_name):
+    """Generates a unique group name by appending a number if necessary."""
+    group_name = base_name
+    counter = 1
+    while ChatGroup.objects.filter(group_name=group_name).exists():
+        group_name = f"{base_name}-{counter}"
+        counter += 1
+    return group_name
+
+
 class Teacher(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     expertise = models.CharField(max_length=255, validators=[verify])
@@ -25,7 +35,7 @@ class Teacher(models.Model):
     )
     nickname = models.CharField(max_length=50, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    schedule_start = models.DateTimeField(default=datetime.datetime.now)
+    schedule_start = models.DateTimeField(default=timezone.now)
     schedule_end = models.DateTimeField(null=True, blank=True)
     chat_group = models.OneToOneField(
         "chat.ChatGroup",
@@ -36,16 +46,20 @@ class Teacher(models.Model):
     )
 
     def save(self, *args, **kwargs):
+        # 如果是新紀錄，則設定 user 為 teacher 並保存
         if not self.pk:
             super().save(*args, **kwargs)
             self.user.is_teacher = True
             self.user.save()
-        # 如果没有 chat_group，创建一个新的 ChatGroup
+
+        # 如果沒有 chat_group，則創建一個新的群組
         if not self.chat_group:
-            chat_group = ChatGroup.objects.create(
-                group_name=f"{self.nickname or self.user.username}",
-            )
+            base_name = self.nickname or self.user.username
+            unique_group_name = generate_unique_group_name(base_name)
+            chat_group = ChatGroup.objects.create(group_name=unique_group_name)
             self.chat_group = chat_group
+            self.chat_group.save()
+        # 不再更新已存在的 chat_group 名稱
         super().save(*args, **kwargs)
 
     def __str__(self):
