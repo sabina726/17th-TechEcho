@@ -1,27 +1,38 @@
-{% extends "layouts/base.html" %} {% block content %}
-<div class="outside">
-  <div class="box"></div>
-  <div class="reverse-box">TechEcho</div>
-</div>
+{% extends "layouts/base.html" %}
+{% block content %}
+<div class="relative w-full h-screen overflow-hidden">
+    <div id="container">
+        <div id="code1" class="code">Python</div>
+        <div id="code2" class="code">JavaScript</div>
+        <div id="code3" class="code">Ruby</div>
+    </div>
+    <div class="outside">
+        <div class="box">
+        </div>
+        <div class="reverse-box">TechEcho</div>
+    </div>
 
-<div class="flex items-center justify-center h-screen mt-auto">
-    <div class="relative w-full max-w-xl px-2">
-        <form method="GET" action="{% url 'search' %}" class="relative flex items-center">
-            <input
-                type="text"
-                name="q"
-                class="w-full p-2 pr-10 border border-gray-300 h-14 rounded-3xl mt-28"
-                placeholder="Search..."
-                value="{{ query }}"
-            >
-            <button type="submit" class="absolute text-gray-500 bottom-4 right-5">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </form>
+    <div class="relative z-10 flex items-center justify-center h-full mt-40">
+        <div class="relative w-full max-w-xl px-2">
+            <form method="GET" action="{% url 'search' %}" class="relative flex items-center">
+                <input
+                    type="text"
+                    name="q"
+                    class="w-full p-2 pr-10 border border-gray-300 h-14 rounded-3xl"
+                    placeholder="Search..."
+                    value="{{ query }}"
+                >
+                <button type="submit" class="absolute text-gray-500 bottom-4 right-5">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
 
-        <span class="tag-blue">JavaScript</span>
-        <span class="tag-red">Python</span>
+            <div class="flex mt-6 space-x-2">
+                <a href="{% url 'search' %}?q=javascript" class="tag tag-yellow">JavaScript</a>
+                <a href="{% url 'search' %}?q=python" class="tag tag-blue">Python</a>
+                <a href="{% url 'search' %}?q=ruby" class="tag tag-red">Ruby</a>
+            </div>
+        </div>
     </div>
 </div>
-
 {% endblock content %}
