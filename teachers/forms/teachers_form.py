@@ -7,7 +7,7 @@ class TeacherForm(forms.ModelForm):
 
     class Meta:
         model = Teacher
-        fields = ["user", "nickname", "expertise", "introduce", "schedule"]
+        fields = "__all__"
         widgets = {
             "introduce": forms.Textarea(
                 attrs={
@@ -19,10 +19,16 @@ class TeacherForm(forms.ModelForm):
                     "placeholder": "Ex:JavaScript..Python..",
                 }
             ),
-            "schedule": forms.TimeInput(
+            "schedule_start": forms.DateTimeInput(
                 attrs={
-                    "placeholder": "可諮詢時間",
-                    "type": "time",
+                    "placeholder": "開始諮詢時間",
+                    "type": "datetime-local",  # HTML5 的日期時間格式
+                }
+            ),
+            "schedule_end": forms.DateTimeInput(
+                attrs={
+                    "placeholder": "結束諮詢時間",
+                    "type": "datetime-local",
                 }
             ),
             "user": forms.HiddenInput(),

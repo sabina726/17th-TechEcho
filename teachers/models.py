@@ -25,7 +25,8 @@ class Teacher(models.Model):
     )
     nickname = models.CharField(max_length=50, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    schedule = models.TimeField(default=datetime.time(0, 0))
+    schedule_start = models.DateTimeField(default=datetime.datetime.now)
+    schedule_end = models.DateTimeField(null=True, blank=True)
     chat_group = models.OneToOneField(
         "chat.ChatGroup",
         on_delete=models.SET_NULL,

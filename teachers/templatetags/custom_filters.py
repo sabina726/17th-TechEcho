@@ -1,19 +1,12 @@
-from django import template
 import datetime
+
+from django import template
 
 register = template.Library()
 
 
 @register.filter
 def custom_time_format(value):
-    if isinstance(value, datetime.time):
-        return (
-            "12:00 AM"
-            if value.hour == 0 and value.minute == 0
-            else (
-                "12:00 PM"
-                if value.hour == 12 and value.minute == 0
-                else value.strftime("%I:%M %p")
-            )
-        )
+    if isinstance(value, datetime):
+        return value.strftime("%Y-%m-%d %H:%M")
     return value

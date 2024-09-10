@@ -19,7 +19,14 @@
     </div>
 
     <div>
-        <p class="p-4">空閒時間: {{ teacher.schedule|custom_time_format }}</p>
+        <p class="p-4">
+            空閒時間: 從 {{ teacher_schedule_start|date:"Y-m-d H:i" }}
+            {% if teacher_schedule_end %}
+            到 {{ teacher_schedule_end|date:"Y-m-d H:i" }}
+            {% else %}
+            到 未指定結束時間
+            {% endif %}
+        </p>
     </div>
 
     <section class="flex justify-around">

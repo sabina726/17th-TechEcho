@@ -44,7 +44,7 @@ def show(request, id):
         form = TeacherForm(request.POST, instance=teacher)
         if form.is_valid():
             form.save()
-            messages.success(request, "成功")
+            messages.success(request, "更新成功")
             return redirect("teachers:show", id=id)
         return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
 
@@ -55,9 +55,8 @@ def show(request, id):
         "questions": questions,
         "answers": answers,
         "chat_group": chat_group,
-        "teacher_schedule": (
-            teacher.schedule if isinstance(teacher.schedule, time) else None
-        ),
+        "teacher_schedule_start": teacher.schedule_start,
+        "teacher_schedule_end": teacher.schedule_end,
     }
 
     return render(request, "teachers/show.html", context)
