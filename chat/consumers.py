@@ -36,8 +36,8 @@ class ChatroomConsumer(WebsocketConsumer):
                 async_to_sync(self.channel_layer.group_send)(
                     str(self.chatroom_id), event
                 )
-        except Exception as e:
-            print(f"Error in receive method: {e}")
+        except Exception:
+            pass
 
     def message_handler(self, event):
         message_id = event["message_id"]
