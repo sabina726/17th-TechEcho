@@ -9,7 +9,7 @@
     <section class="flex justify-center">
         <form action="{% url 'teachers:index' %}" method="POST" autocomplete="off" class="space-y-4">
             {% csrf_token %}
-
+            {{ form.user.as_hidden }}
             <div class="grid gap-4">
                 <p>暱稱:{{ form.nickname }}</p>
                 <p>專業能力:{{ form.expertise }}</p>
