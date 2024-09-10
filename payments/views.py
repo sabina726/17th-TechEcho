@@ -25,29 +25,32 @@ from .ecpay.create_order import ecpay_api
 from .models import Order
 
 
-# General
+###  General
 def index(request):
     return render(request, "payments/index.html")
 
 
+def check_premium_status(user):
+    payment_user = get_object_or_404(User, username=user.username)
+    if payment_user.is_student:
+        return True
+    else:
+        return False
+
+
 @login_required
 def payment_option(request):
-    username = request.user.username
-    payment_user = get_object_or_404(User, username=username)
-    print(f"{payment_user}")
-    if payment_user.is_student:
-        print(f"{payment_user} 已是付費學生")
-        return render(request, "payments/after_pay.html", {"user_id": username})
-    else:
-        print(f"{payment_user} 還不是付費學生")
-        return render(request, "payments/payment_option.html")
+    if check_premium_status(request.user):
+        return render(request, "payments/after_pay.html")
+
+    return render(request, "payments/payment_option.html")
 
 
-# EC-pay use only
+###  EC-pay use only
 def ecpay_create_payment(request):
     request_user = request.user.username
     system_user = get_object_or_404(User, username=request_user)
-
+    print(system_user.id)
     order = Order.objects.create(
         user_id=system_user.id,
         order_id=uuid.uuid4().hex[:20],  # 訂單號碼
@@ -64,11 +67,11 @@ def ecpay_create_payment(request):
         "TotalAmount": order.amount,
         "TradeDesc": "TechEcho Premium",
         "ItemName": "升級成TechEcho Premium月訂閱用戶",
-        "ReturnURL": "https://techecho.tonytests.com/payments/ecpay_return/",
+        "ReturnURL": "https://techecho.tonytests2.com/payments/ecpay_return/",
         "ChoosePayment": "Credit",
         "ClientBackURL": "https://techecho.tonytests.com/payments/ecpay_after_pay/",
         "OrderResultURL": "https://techecho.tonytests.com/payments/ecpay_after_pay/",
-        "CustomField1": "system_user.id",
+        "CustomField1": str(system_user.id),
         "CustomField2": "",
         "EncryptType": 1,
     }
@@ -121,11 +124,12 @@ def ecpay_return(request):
 @csrf_exempt
 def ecpay_after_pay(request):
     if request.method == "POST":
-        user_id = request.POST.get("CustomField1")
-        return render(request, "payments/after_pay.html", {"user_id": user_id})
+        return redirect("payments:ecpay_after_pay")
+    else:
+        return render(request, "payments/after_pay.html")
 
 
-# Line-pay use only
+###  Line-pay use only
 def linepay_create_payment(request):
     request_user = request.user.username
     system_user = get_object_or_404(User, username=request_user)
@@ -249,19 +253,19 @@ def linepay_confirm_payment(request):
         order.status = "paid"
         order.save()
         User.objects.filter(id=order.user_id).update(is_student="True")
-        username = request.user.username
-        return render(request, "payments/after_pay.html", {"username": username})
     else:
         order.status = "failed"
         order.save()
-        return HttpResponse("Line Payment confirmation failed.")
+        print("Line Payment confirmation failed.")
+
+    return render(request, "payments/after_pay.html")
 
 
 def linepay_cancel_payment(request):
     return HttpResponse("Payment canceled!")
 
 
-# Internal/Admin use only
+###  Internal/Admin use only
 @login_required
 def disable_premium(request):
     username = request.user.username

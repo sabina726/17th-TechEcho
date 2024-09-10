@@ -7,8 +7,8 @@ import Swal from "sweetalert2";
 const container = document.getElementById('container');
 const codes = [];
 
-    for (let i = 1; i <= 10; i++) {
-        const fontSize = Math.random() * (40 - 20) + 20;
+    for (let i = 1; i <= 3; i++) {
+        const fontSize = Math.random() * (60 - 40) + 20;
         const element = document.getElementById(`code${i}`);
 
         element.style.fontSize = `${fontSize}px`;
