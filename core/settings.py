@@ -119,8 +119,6 @@ DATABASES = {
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
         "HOST": os.getenv("POSTGRES_HOST"),
         "PORT": os.getenv("POSTGRES_PORT"),
-        "client_id": os.getenv("GOOGLE_CLIENT_ID"),
-        "secret": os.getenv("GOOGLE_CLIENT_SECRET"),
     }
 }
 
