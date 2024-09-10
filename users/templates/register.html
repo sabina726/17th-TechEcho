@@ -1,4 +1,6 @@
-{% extends "layouts/base.html" %} {% block content %}
+{% extends "layouts/base.html" %}
+{% load socialaccount %}
+{% block content %}
 
 <div
   class="flex flex-col justify-center min-h-screen py-12 bg-gray-100 sm:px-6 lg:px-8"
@@ -8,7 +10,6 @@
       註冊帳號
     </h2>
   </div>
-
   <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
     <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
 
@@ -87,29 +88,28 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-3 gap-3 mt-6">
+       <div class="grid grid-cols-3 gap-3 mt-6">
           <div>
             <a
-              href="#"
+              href="{% provider_login_url 'github' %}"
               class="flex items-center justify-center w-full px-8 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
             >
               <img
                 class="w-6 h-6"
                 src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg"
-                alt=""
+                alt="GitHub"
               />
             </a>
           </div>
           <div>
-            <div>
-              <a
-                href="#"
-                class="flex items-center justify-center w-full px-8 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
-              >
-                <img
-                  class="w-6 h-6"
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png"
-                  alt=""
+            <a
+              href="{% provider_login_url 'google' %}"
+              class="flex items-center justify-center w-full px-8 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+            >
+              <img
+                class="w-6 h-6"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png"
+                alt="Google"
                 />
               </a>
             </div>

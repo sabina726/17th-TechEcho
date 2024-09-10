@@ -40,6 +40,7 @@ ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = ["https://techecho.tonytests.com"]
 
 
+SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
@@ -58,6 +59,12 @@ INSTALLED_APPS = [
     "users",
     "payments",
     "django_htmx",
+    "django.contrib.sites",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.github",
     "chat",
 ]
 
@@ -76,6 +83,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 
@@ -113,6 +121,8 @@ DATABASES = {
         "PORT": os.getenv("POSTGRES_PORT"),
     }
 }
+
+CLIENT_ID = os.getenv("CLIENT_ID")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -164,6 +174,39 @@ TAGGIT_CASE_INSENSITIVE = True
 LOGIN_URL = reverse_lazy("users:login")
 
 AUTH_USER_MODEL = "users.User"
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["profile", "email"],
+        "APP": {
+            "client_id": os.environ["GOOGLE_CLIENT_ID"],
+            "secret": os.environ["GOOGLE_CLIENT_SECRET"],
+        },
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+    },
+    "github": {
+        "SCOPE": ["user", "repo", "read:org"],
+        "APP": {
+            "client_id": os.environ["GITHUB_CLIENT_ID"],
+            "secret": os.environ["GITHUB_CLIENT_SECRET"],
+        },
+    },
+}
+
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 # to be changed to Redis, now we use django provided
 CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
