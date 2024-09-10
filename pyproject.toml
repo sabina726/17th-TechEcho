@@ -16,6 +16,7 @@ django-taggit = "^6.0.0"
 django-htmx = "^1.19.0"
 channels = {extras = ["daphne"], version = "^4.1.0"}
 
+
 [tool.poetry.extras]
 mac = ["psycopg2-binary"]
 windows = ["psycopg2"]
