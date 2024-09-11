@@ -1,19 +1,45 @@
 {% extends "layouts/base.html" %}
 
-
 {% block content %}
-
-<h1 class="text-2xl font-bold text-gray-900 mb-4">解鎖向領域專家 或 編程大神 直接交流的道路! </h1>
-        <h2 class="text-gray-700 mb-6">
-            付費升級為Premium用戶即可發起線上指導的申請，讓您的學習之路更上一層樓。
-            <br>
-            我們深知編程學習在非即時性文字交流時的局限性，透過TechEcho的線上互動工具、您可與技術專家即時(文字/語音)通訊來進行高效率的溝通交流，並透過線上白板、共編程式碼等介面釐清相關問題與知識觀念。
-        </h2>
-        <h2 class="text-gray-700 mb-6">
-            無論您想提升職場技能、學術成就還是個人興趣，讓TechEcho 與 技術社群的各方專家給予您學習、解決問題道路上更多的互動成長機會，打開成功的大門！
-        </h2>
-
-        <a href="{% url 'payments:payment_option' %}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">立即開啟高速學習的大門</a>
+    <div id="container">
+        <div id="code1" class="code">Python</div>
+        <div id="code2" class="code">JavaScript</div>
+        <div id="code3" class="code">Ruby</div>
     </div>
 
-{% endblock  %}
+    <div class="flex items-center justify-center min-h-screen" x-data="{ open: false, paymentMethod: '' }">
+        <div class="max-w-2xl p-6 mx-auto transition-transform duration-300 transform bg-white rounded-lg shadow-lg hover:scale-125">
+            <h1 class="mb-6 text-3xl font-extrabold text-black">
+                解鎖向領域專家 或 編程大神 直接交流的道路!
+            </h1>
+            <h2 class="mb-6 leading-relaxed text-gray-700">
+                付費升級為 Premium 用戶即可發起線上指導的申請，讓您的學習之路更上一層樓。
+                <br>
+                我們深知編程學習在非即時性文字交流時的局限性，透過 TechEcho 的線上互動工具，
+                您可與技術專家即時(文字/語音)通訊來進行高效率的溝通交流，並透過線上白板、共編程式碼等介面釐清相關問題與知識觀念。
+            </h2>
+            <h2 class="mb-8 leading-relaxed text-gray-700">
+                無論您想提升職場技能、學術成就還是個人興趣，讓 TechEcho 與 技術社群的各方專家給予您學習、解決問題道路上更多的互動成長機會，打開成功的大門！
+            </h2>
+
+            <div class="flex justify-center mt-4 space-x-4">
+                <button @click="paymentMethod = 'credit'; open = true" class="z-10 px-8 py-4 text-white rounded bg-green-4 hover:bg-green-3">信用卡支付</button>
+                <button @click="paymentMethod = 'line'; open = true" class="z-10 px-8 py-4 text-white rounded bg-green-4 hover:bg-green-3">Line-pay支付</button>
+            </div>
+        </div>
+
+        <div x-show="open" x-transition class="fixed inset-0 z-20 flex items-center justify-center">
+            <div class="fixed inset-0 bg-black opacity-50" @click="open = false"></div>
+            <div class="z-10 p-6 bg-white rounded-lg">
+                <h3 class="mb-4 text-lg font-bold">確認支付方式</h3>
+                <p x-text="paymentMethod === 'credit' ? '使用信用卡支付' : '使用 Line-pay 支付'"></p>
+                <div class="mt-4">
+                    <button @click="open = false" class="px-3 py-1 mr-2 bg-gray-300 rounded hover:bg-gray-400">取消</button>
+                    <a :href="paymentMethod === 'credit' ? '{% url 'payments:ecpay_create_payment' %}' : '{% url 'payments:linepay_create_payment' %}'" class="px-4 py-2 text-white rounded bg-green-4 hover:bg-green-3" @click="open = false">確認支付</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
