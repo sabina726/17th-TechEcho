@@ -18,7 +18,7 @@ def index(request):
     if request.method == "POST":
         # 檢查是否該使用者已經是專家
         if Teacher.objects.filter(user=request.user).exists():
-            messages.success(request, "你已經註冊為專家，無法重複註冊")
+            messages.error(request, "你已經註冊為專家，無法重複註冊")
             return redirect("teachers:index")
 
         form = TeacherForm(request.POST)
@@ -38,6 +38,9 @@ def index(request):
 
 @login_required
 def new(request):
+    if request.user.is_teacher:
+        messages.error(request, "你已經註冊為專家，無法重複註冊")
+        return redirect("teachers:show", request.user.teacher.id)
     form = TeacherForm()
     return render(request, "teachers/new.html", {"form": form})
 
