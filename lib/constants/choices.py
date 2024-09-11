@@ -40,5 +40,5 @@ programming_languages = (
     "scheme",
     "prolog",
     "smalltalk",
-    "vala"
+    "vala",
 )

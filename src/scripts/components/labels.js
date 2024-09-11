@@ -1,6 +1,5 @@
 import Alpine from "alpinejs"
 import Tagify from "@yaireo/tagify"
-import programmingLanguages from "../../constants/choices.js"
 
 Alpine.data("label_input", () => ({
     init() {
@@ -50,6 +49,12 @@ Alpine.data("label_input", () => ({
                 "vala"
             ],
             enforceWhitelist: true,
+            dropdown: {
+                maxItems: 20,
+                classname: 'tags-look',
+                enabled: 0,
+                closeOnSelect: false
+            }
         })
     },
 }))
