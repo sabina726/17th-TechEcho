@@ -1,3 +1,4 @@
+# a context processor for all authenticated user to prefetch its notifications
 from users.models import User
 
 

@@ -50,7 +50,7 @@ Alpine.data("label_input", () => ({
             ],
             enforceWhitelist: true,
             dropdown: {
-                maxItems: 20,
+                maxItems: 30,
                 classname: 'tags-look',
                 enabled: 0,
                 closeOnSelect: false
