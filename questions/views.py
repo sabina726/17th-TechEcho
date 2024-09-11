@@ -36,7 +36,11 @@ def index(request):
         form = QuestionForm(request.POST)
         labels = parse_labels(request.POST)
 
-        if labels and form.is_valid():
+        if not labels:
+            messages.error(request, "標籤至少要一個，且是認可的程式語言")
+            return render(request, "questions/new.html", {"form": form})
+
+        if form.is_valid():
             # commit=False is not applicable here because instance.labels.set(labels) requires a pk
             # and since our pk is defined by the ORM not by us, it will only exist once we save it to the DB
             instance = form.save()
@@ -73,7 +77,11 @@ def show(request, id):
         form = QuestionForm(request.POST, instance=question)
         labels = parse_labels(request.POST)
 
-        if labels and form.is_valid():
+        if not labels:
+            messages.error(request, "標籤至少要一個，且是認可的程式語言")
+            return render(request, "questions/new.html", {"form": form})
+
+        if form.is_valid():
             instance = form.save(commit=False)
             instance.labels.set(labels)
             instance.save()
