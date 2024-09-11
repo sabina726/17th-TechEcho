@@ -16,23 +16,20 @@ def register(request):
         form = UsersForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            login(request, user, backend="django.contrib.auth.backends.ModelBackend")
             request.session["new_user"] = True
             messages.success(request, "註冊成功並已自動登入！")
             return redirect("index")
         else:
             if "username" in form.errors:
-                for error in form.errors["username"]:
-                    messages.error(request, "帳號錯誤")
+                messages.error(request, "帳號錯誤")
             if "email" in form.errors:
-                for error in form.errors["email"]:
-                    messages.error(request, "信箱已註冊過，或格式不正確")
+                messages.error(request, "信箱已註冊過，或格式不正確")
             if "password1" in form.errors:
-                for error in form.errors["password1"]:
-                    messages.error(request, "密碼錯誤")
+                messages.error(request, "密碼錯誤")
             if "password2" in form.errors:
-                for error in form.errors["password2"]:
-                    messages.error(request, "密碼不一致")
+                messages.error(request, "密碼不一致")
+
     else:
         form = UsersForm()
     return render(request, "layouts/register.html", {"form": form})
@@ -47,7 +44,7 @@ def log_in(request):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request, user)
+            login(request, user, backend="django.contrib.auth.backends.ModelBackend")
             messages.success(request, "登入成功")
             return redirect(next_url)
         else:
