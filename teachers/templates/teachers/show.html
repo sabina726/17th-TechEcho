@@ -13,7 +13,8 @@
     </div>
 
     <div>
-        <p class="p-4">空閒時間: {{ teacher.schedule }}</p>
+        {# <p class="p-4">空閒時間: {{ teacher.schedule }}</p> #}
+        <a href="{% url 'appointments:schedule' %}" class="btn btn-sm mb-4 mt-6" >我的可預約時段</a>
     </div>
 
     <section class="flex justify-around">
