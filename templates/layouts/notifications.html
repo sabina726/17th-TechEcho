@@ -1,6 +1,6 @@
 <li class="tooltip tooltip-bottom"
     x-data="notifications"
-    data-tip="沒有通知">
+    :data-tip="notificationNumber == 0 && '沒有通知'">
     <button @click.prevent="toggleDropdown()" class="relative">
         <i class="fa-solid fa-bell"></i>
         <span x-ref="number_span" id="notification-number" class="text-white bg-red-700 absolute rounded-full text-xs -mt-1.5 -ml-2 py-0 px-1.5">
@@ -35,7 +35,9 @@
         </ul>
         <button name="answer_id" value="-1"
             ws-send
-            class="text-sm py-1" @click="clearAll()">
+            class="text-sm py-1"
+            @click="clearAll()"
+            x-show="notificationNumber > 0">
             清除所有通知
         </button>
     </form>
