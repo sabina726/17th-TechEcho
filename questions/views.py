@@ -56,6 +56,9 @@ def index(request):
 
 
 def new(request):
+    if request.user.is_anonymous:
+        messages.error(request, "只有登入過使用者才能發問喔")
+        return redirect("users:login")
     form = QuestionForm()
     return render(request, "questions/new.html", {"form": form})
 
