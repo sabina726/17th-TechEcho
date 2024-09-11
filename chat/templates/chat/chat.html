@@ -23,7 +23,10 @@
             {% endfor %}
         </ul>
 
-        <form class="w-full py-2 flex flex-row gap-2" hx-ext="ws" ws-connect="/ws/chatroom/{{ chat_group.id }}/" ws-send
+        <form class="w-full py-2 flex flex-row gap-2"
+            hx-ext="ws"
+            ws-connect="/ws/chatroom/{{ chat_group.id }}/"
+            ws-send
             hx-on="htmx:wsAfterSend: this.reset()">
             {% csrf_token %}
 

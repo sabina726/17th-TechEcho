@@ -1,7 +1,6 @@
 import { library, dom } from "@fortawesome/fontawesome-svg-core"
 
-import { faMagnifyingGlass, faArrowUp, faArrowDown} from "@fortawesome/free-solid-svg-icons"
-import { faBell } from "@fortawesome/free-regular-svg-icons"
+import { faMagnifyingGlass, faArrowUp, faArrowDown, faBell} from "@fortawesome/free-solid-svg-icons"
 
 import Alpine from 'alpinejs';
 

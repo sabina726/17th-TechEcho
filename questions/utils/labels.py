@@ -1,5 +1,7 @@
 import json
 
+from lib.constants.choices import programming_languages
+
 
 def parse_labels(request_method):
     labels = request_method.get("labels")
@@ -16,4 +18,4 @@ def parse_labels(request_method):
 
 
 def label_is_valid(label):
-    return label.lower() in ("javascript", "python", "ruby")
+    return label.lower() in programming_languages

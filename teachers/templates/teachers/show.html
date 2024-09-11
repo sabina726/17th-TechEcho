@@ -19,7 +19,6 @@
     </div>
 
     <div>
-
         <p class="p-4">
             空閒時間: 從 {{ teacher_schedule_start|date:"Y-m-d H:i" }}
             {% if teacher_schedule_end %}
@@ -50,12 +49,12 @@
         <div class="">
             <h3 class="text-xl font-semibold text-gray-900">回答過的問題</h3>
             <ul class="mt-4">
-                {% for question in answers %}
-                <li class="mb-2 text-center">
-                    <a href="{% url 'questions:show' question.id %}" class="text-blue-500 hover:text-blue-700">
-                        {{ question.content|truncatechars:10 }}
-                    </a>
-                </li>
+                {% for answer in answers %}
+                    <li class="mb-2 text-center">
+                        <a href="{% url 'questions:show' answer.question.id %}" class="text-blue-500 hover:text-blue-700">
+                            {{ answer.question.details|truncatechars:10 }}
+                        </a>
+                    </li>
                 {% empty %}
                 <li class="text-gray-500">無回答記錄</li>
                 {% endfor %}

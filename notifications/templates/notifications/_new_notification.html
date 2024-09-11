@@ -1,0 +1,16 @@
+<ul id="notification_list" hx-swap-oob="afterbegin">
+    <li class="flex justify-between items-center bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert"
+        >
+        <a class="truncate text-wrap" href="{% url url_name question_id %}" @click.stop>
+            <p class="text-sm">{{message}}</p>
+            <p class="text-xs">{{created_at}}</p>
+        </a>
+        <button name="answer_id"
+            value="{{answer_id}}"
+            class="btn btn-xs"
+            ws-send
+            x-on:click="$nextTick(() => clearCurrent())">
+            X
+        </button>
+    </li>
+</ul>

@@ -13,8 +13,10 @@ from .models import Appointment, Schedule
 @login_required
 @teacher_required
 def schedule(request):
-    schedules = Schedule.objects.filter(teacher=request.user).prefetch_related(
-        "appointment_set"
+    schedules = (
+        Schedule.objects.filter(teacher=request.user)
+        .prefetch_related("appointment_set")
+        .order_by("start_time")
     )
     return render(request, "appointments/schedule.html", {"schedules": schedules})
 
@@ -65,7 +67,9 @@ def schedule_delete(request, id):
 @login_required
 @student_required
 def appointment(request):
-    appointments = Appointment.objects.filter(student=request.user)
+    appointments = Appointment.objects.filter(student=request.user).order_by(
+        "schedule__teacher", "schedule__start_time"
+    )
     return render(
         request, "appointments/appointment.html", {"appointments": appointments}
     )
@@ -76,9 +80,7 @@ def appointment(request):
 def appointment_new(request, id):
     schedule = get_object_or_404(Schedule, id=id)
     if request.method == "POST":
-        appointment = Appointment.objects.create(
-            schedule=schedule, student=request.user
-        )
+        Appointment.objects.create(schedule=schedule, student=request.user)
         messages.success(request, "預約成功")
         return redirect("appointments:appointment")
     return render(request, "appointments/appointment_new.html", {"schedule": schedule})
@@ -122,7 +124,9 @@ def appointment_delete(request, id):
 @login_required
 @student_required
 def schedule_available(request):
-    schedules = Schedule.objects.exclude(appointment__isnull=False)
+    schedules = Schedule.objects.exclude(appointment__isnull=False).order_by(
+        "teacher", "start_time"
+    )
     return render(
         request, "appointments/schedule_available.html", {"schedules": schedules}
     )

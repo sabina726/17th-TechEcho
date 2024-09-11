@@ -11,7 +11,7 @@
 
         {% if user.is_authenticated and user == answer.user %}
             <div class="flex items-center">
-                <button @click="edit = !edit" class="btn btn-sm bg-blue-600 text-white">编辑</button>
+                <button @click="edit = !edit" class="btn btn-sm bg-blue-600 text-white">編輯</button>
                 <form action="{% url 'answers:delete' answer.id%}" method="POST" onSubmit="return confirm('確定要刪除嗎？')">
                     {% csrf_token %}
                     <button class="btn btn-sm bg-red-600 text-white">刪除</button>

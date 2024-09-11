@@ -6,7 +6,6 @@ app_name = "payments"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("payment_option/", views.payment_option, name="payment_option"),
     path(
         "ecpay_create_payment/", views.ecpay_create_payment, name="ecpay_create_payment"
     ),

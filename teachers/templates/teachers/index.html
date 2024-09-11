@@ -5,9 +5,13 @@
 <div class="p-6 max-w-4xl mx-auto">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-4xl font-bold text-gray-900">專家列表</h2>
-        <a href="{% url 'payments:index' %}" class="btn btn-neutral">
-            升級成為TechEcho Premium用戶以發起線上指導
-        </a>
+        {% if user.is_authenticated %}
+            {% if not user.is_student %}
+             <a href="{% url 'payments:index' %}" class="btn btn-neutral">
+                升級成為TechEcho Premium用戶以發起線上指導
+             </a>
+            {% endif %}
+         {% endif %}
     </div>
 
     <div class="p-6 max-w-4xl mx-auto">

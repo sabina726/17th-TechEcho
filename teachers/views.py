@@ -55,6 +55,7 @@ def show(request, id):
 
     questions = teacher.get_questions().order_by("-created_at")[:3]
     answers = teacher.get_answers().order_by("-created_at")[:3]
+
     context = {
         "teacher": teacher,
         "questions": questions,
