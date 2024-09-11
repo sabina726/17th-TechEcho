@@ -9,13 +9,8 @@ from .forms.chat_form import ChatMessageForm
 # Create your views here.
 @login_required
 def index(request):
-    if request.method == "POST":
-        pass
-        ChatGroup.objects.create(
-            group_name="test",
-        )
-
-    return render(request, "chat/index.html")
+    chat_groups = ChatGroup.objects.all()
+    return render(request, "chat/index.html", {"chat_groups": chat_groups})
 
 
 @login_required
@@ -33,6 +28,7 @@ def room(request, id):
             return redirect("chat:room", id=id)
 
     form = ChatMessageForm()
+
     return render(
         request,
         "chat/chat.html",
@@ -40,5 +36,6 @@ def room(request, id):
             "chat_messages": chat_messages,
             "form": form,
             "room_id": id,
+            "chat_group": chat_group,
         },
     )

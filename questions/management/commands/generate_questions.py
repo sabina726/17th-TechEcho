@@ -1,22 +1,24 @@
 import random
+
 from django.core.management.base import BaseCommand
 from faker import Faker
-from users.models import User
+
 from questions.models import Question
+from users.models import User
+
 
 class Command(BaseCommand):
     help = "生成指定數量的獨特技術問題，類似於 Stack Overflow 上的問題"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--number', type=int, default=10,
-            help="指定要生成的獨特技術問題數量"
+            "--number", type=int, default=10, help="指定要生成的獨特技術問題數量"
         )
 
     def handle(self, *args, **kwargs):
         fake = Faker("zh_TW")
         users = User.objects.all()  # 不再限制為 is_student=True 的用戶
-        question_count = kwargs['number']
+        question_count = kwargs["number"]
 
         if not users.exists():
             self.stdout.write(self.style.ERROR("資料庫中未找到用戶。"))
@@ -145,7 +147,11 @@ class Command(BaseCommand):
         ]
 
         if question_count > len(technical_questions):
-            self.stdout.write(self.style.ERROR(f"無法生成 {question_count} 個獨特問題，只能生成 {len(technical_questions)} 個獨特問題。"))
+            self.stdout.write(
+                self.style.ERROR(
+                    f"無法生成 {question_count} 個獨特問題，只能生成 {len(technical_questions)} 個獨特問題。"
+                )
+            )
             return
 
         generated_titles = set()
@@ -168,9 +174,8 @@ class Command(BaseCommand):
                 details=fake.text(max_nb_chars=200),
                 user=user,
                 votes_count=votes_count,  # 確保 Question 模型中有這個字段
-
                 answers_count=answers_count,  # 確保 Question 模型中有這個字段
-                follows_count=follows_count  # 確保 Question 模型中有這個字段
+                follows_count=follows_count,  # 確保 Question 模型中有這個字段
             )
             created_count += 1
             self.stdout.write(self.style.SUCCESS(f"已創建問題：{title}"))

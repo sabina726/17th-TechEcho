@@ -1,10 +1,12 @@
 import random
+
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from faker import Faker
-from questions.models import Question
+
 from answers.models import Answer, Vote
-from django.contrib.auth import get_user_model
+from questions.models import Question
 
 User = get_user_model()
 
