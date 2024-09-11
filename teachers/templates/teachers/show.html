@@ -2,19 +2,19 @@
 {% load custom_filters %}
 {% block content %}
 
-<div class="flex justify-around items-center mb-6">
-    <h1 class="p-6 text-4xl font-bold mb-6 text-gray-900 text-center">專家檔案</h1>
+<div class="flex items-center justify-around mb-6">
+    <h1 class="p-6 mb-6 text-4xl font-bold text-center text-gray-900">專家檔案</h1>
     <a href="{% url 'chat:room' chat_group.id %}" class="btn">進入聊天室</a>
 </div>
 
 
 
-<div class="p-6 max-w-3xl mx-auto bg-white shadow-md">
+<div class="max-w-3xl p-6 mx-auto bg-white shadow-md">
     <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-2">
+        <h2 class="mb-2 text-2xl font-semibold text-gray-800">
             {{ teacher.nickname }}
         </h2>
-        <p class="text-lg text-gray-600 mb-2">{{ teacher.expertise }}</p>
+        <p class="mb-2 text-lg text-gray-600">{{ teacher.expertise }}</p>
         <article class="text-gray-700 break-words">{{ teacher.introduce }}</article>
     </div>
 
@@ -28,7 +28,7 @@
             到 未指定結束時間
             {% endif %}
         </p>
-        <a href="{% url 'appointments:schedule' %}" class="btn btn-sm mb-4 mt-6">我的可預約時段</a>
+        <a href="{% url 'appointments:schedule' %}" class="mt-6 mb-4 btn btn-sm">我的可預約時段</a>
     </div>
 
     <section class="flex justify-around">
@@ -63,7 +63,7 @@
         </div>
     </section>
 
-    <div class="flex justify-between items-center mt-6">
+    <div class="flex items-center justify-between mt-6">
         {% if request.user == teacher.user %}
         <a href="{% url 'teachers:edit' teacher.id %}" class="px-4 py-2 btn btn-warning">
             修改基本資訊
