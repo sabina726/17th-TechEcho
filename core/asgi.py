@@ -19,13 +19,18 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 # handles http only
 django_asgi_app = get_asgi_application()
 
-from chat import routing
+from chat import routing as crouting
+from notifications import routing as nrouting
 
 application = ProtocolTypeRouter(
     {
         "http": django_asgi_app,
         "websocket": AllowedHostsOriginValidator(
-            AuthMiddlewareStack(URLRouter(routing.websocket_urlpatterns))
+            AuthMiddlewareStack(
+                URLRouter(
+                    crouting.websocket_urlpatterns + nrouting.websocket_urlpatterns
+                )
+            )
         ),
     }
 )

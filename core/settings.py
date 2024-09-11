@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.github",
     "chat",
     "appointments",
+    "notifications",
 ]
 
 
@@ -101,12 +102,12 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "lib.utils.users.fetch_user_notifications",
             ],
         },
     },
 ]
 
-# WSGI_APPLICATION = "core.wsgi.application"
 ASGI_APPLICATION = "core.asgi.application"
 
 # Database

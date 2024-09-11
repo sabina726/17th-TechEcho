@@ -1,13 +1,11 @@
-import json
-from http.client import HTTPResponse
-
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
+from django.core.cache import cache
 from django.shortcuts import get_object_or_404, redirect, render
 
 from answers.forms import AnswerForm
-from answers.models import Answer
 from answers.utils.answers_sort import get_ordered_answers
 from lib.utils.pagination import paginate
 
@@ -39,7 +37,11 @@ def index(request):
         form = QuestionForm(request.POST)
         labels = parse_labels(request.POST)
 
-        if labels and form.is_valid():
+        if not labels:
+            messages.error(request, "標籤至少要一個，且是認可的程式語言")
+            return render(request, "questions/new.html", {"form": form})
+
+        if form.is_valid():
             # commit=False is not applicable here because instance.labels.set(labels) requires a pk
             # and since our pk is defined by the ORM not by us, it will only exist once we save it to the DB
             instance = form.save()
@@ -59,6 +61,9 @@ def index(request):
 
 
 def new(request):
+    if request.user.is_anonymous:
+        messages.error(request, "只有登入過使用者才能發問喔")
+        return redirect("users:login")
     form = QuestionForm()
     return render(request, "questions/new.html", {"form": form})
 
@@ -73,7 +78,11 @@ def show(request, id):
         form = QuestionForm(request.POST, instance=question)
         labels = parse_labels(request.POST)
 
-        if labels and form.is_valid():
+        if not labels:
+            messages.error(request, "標籤至少要一個，且是認可的程式語言")
+            return render(request, "questions/new.html", {"form": form})
+
+        if form.is_valid():
             instance = form.save(commit=False)
             instance.labels.set(labels)
             instance.save()
@@ -166,10 +175,29 @@ def follows(request, id):
             messages.error(request, "發文者已自動追蹤自己的問題，不必額外追蹤")
             return redirect("questions:show", id=id)
 
+        channel_layer = get_channel_layer()
+        channel_name = cache.get(f"notifications_user_{request.user.id}")
         if question.followed_by(request.user):
             question.followers.remove(request.user)
+            if channel_name:
+                async_to_sync(channel_layer.send)(
+                    channel_name,
+                    {
+                        "type": "leave_group",
+                        "group_name": f"notifications_questions_{question.id}",
+                    },
+                )
+
         else:
             question.followers.add(request.user)
+            if channel_name:
+                async_to_sync(channel_layer.send)(
+                    channel_name,
+                    {
+                        "type": "join_group",
+                        "group_name": f"notifications_questions_{question.id}",
+                    },
+                )
 
         return render(
             request,

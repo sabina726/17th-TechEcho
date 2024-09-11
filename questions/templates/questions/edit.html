@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
-    <form action="{% url "questions:show" question.id%}" method="POST">
+    <form class="container border mt-4 rounded-lg p-6 max-w-4xl mx-auto relative mb-2" action="{% url "questions:show" question.id%}" method="POST">
         {% csrf_token %}
 
         {% for field in form %}
