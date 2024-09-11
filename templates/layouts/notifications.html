@@ -15,11 +15,12 @@
         hx-ext="ws"
         ws-connect="ws/notifications/">
         <ul x-ref="dropdown"
-            id="notification_list">
+            id="notification_list"
+            class="w-full">
             {% for notification in user_with_notifications.notification_set.all %}
                 <li class="flex justify-between items-center bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3" role="alert"
                     >
-                    <a href="{% url notification.url_name notification.question_id %}" @click.stop>
+                    <a class="truncate text-wrap" href="{% url notification.url_name notification.question_id %}" @click.stop>
                         <p class="text-sm">{{notification.message}}</p>
                         <p class="text-xs">{{notification.created_at}}</p>
                     </a>
