@@ -67,7 +67,7 @@ def ecpay_create_payment(request):
         "TotalAmount": order.amount,
         "TradeDesc": "TechEcho Premium",
         "ItemName": "升級成TechEcho Premium月訂閱用戶",
-        "ReturnURL": "https://techecho.tonytests2.com/payments/ecpay_return/",
+        "ReturnURL": "https://techecho.tonytests.com/payments/ecpay_return/",
         "ChoosePayment": "Credit",
         "ClientBackURL": "https://techecho.tonytests.com/payments/ecpay_after_pay/",
         "OrderResultURL": "https://techecho.tonytests.com/payments/ecpay_after_pay/",
