@@ -16,6 +16,11 @@ def mentor(request):
 
 def index(request):
     if request.method == "POST":
+        # 檢查是否該使用者已經是專家
+        if Teacher.objects.filter(user=request.user).exists():
+            messages.success(request, "你已經註冊為專家，無法重複註冊")
+            return redirect("teachers:index")
+
         form = TeacherForm(request.POST)
         if form.is_valid():
             teacher_info = form.save(commit=False)
