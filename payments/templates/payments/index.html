@@ -8,6 +8,7 @@
 </div>
 
 <div class="flex items-center justify-center min-h-screen" x-data="{ open: false, paymentMethod: '' }">
+
     <div
         class="max-w-2xl p-6 mx-auto transition-transform duration-300 transform bg-white rounded-lg shadow-lg hover:scale-125">
         <h1 class="mb-6 text-3xl font-extrabold text-black">
@@ -22,6 +23,10 @@
         <h2 class="mb-8 leading-relaxed text-gray-700">
             無論您想提升職場技能、學術成就還是個人興趣，讓 TechEcho 與 技術社群的各方專家給予您學習、解決問題道路上更多的互動成長機會，打開成功的大門！
         </h2>
+
+        <div class="flex justify-center">
+            <a href="{% url 'teachers:index' %}" class="btn">目前專家</a>
+        </div>
 
         <div class="flex justify-center mt-4 space-x-4">
             <button @click="paymentMethod = 'credit'; open = true"
@@ -45,11 +50,6 @@
     </div>
 </div>
 
-<div>
-    <a href="{% url 'teachers:index' %}" class="btn">目前專家</a>
-</div>
 
-
-{% endblock %}
 
 {% endblock %}

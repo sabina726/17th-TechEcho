@@ -21,7 +21,7 @@ def index(request):
             teacher_info = form.save(commit=False)
             teacher_info.user = request.user
             teacher_info.save()
-            messages.success(request, "成功")
+            messages.success(request, "歡迎加入")
             return redirect("teachers:index")
 
         return render(request, "teachers/new.html", {"form": form})
