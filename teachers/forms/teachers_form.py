@@ -7,24 +7,32 @@ class TeacherForm(forms.ModelForm):
 
     class Meta:
         model = Teacher
-        fields = "__all__"
+        fields = [
+            "user",
+            "nickname",
+            "expertise",
+            "introduce",
+            "schedule_start",
+            "schedule_end",
+        ]
         widgets = {
+            "nickname": forms.TextInput(attrs={"class": "block w-full p-2"}),
             "introduce": forms.Textarea(
                 attrs={
                     "placeholder": "文字內容最少50~最多500",
-                    "class": "block",
+                    "class": "block w-full p-2",
                 }
             ),
             "expertise": forms.TextInput(
                 attrs={
                     "placeholder": "Ex:JavaScript..Python..",
-                    "class": "block",
+                    "class": "block w-full p-2",
                 }
             ),
             "schedule_start": forms.DateTimeInput(
                 attrs={
                     "placeholder": "開始諮詢時間",
-                    "type": "datetime-local",  # HTML5 的日期時間格式
+                    "type": "datetime-local",
                     "class": "block px-4 py-2 mt-2 text-gray-800 bg-white border border-gray-300",
                 }
             ),

@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from answers.models import Answer
 from chat.models import ChatGroup
+from lib.models import SoftDeleteModel
 from questions.models import Question
 
 
@@ -17,7 +18,7 @@ def verify(value):
         raise ValidationError("專業能力只能包含中英文字符")
 
 
-class Teacher(models.Model):
+class Teacher(SoftDeleteModel):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     expertise = models.CharField(max_length=255, validators=[verify])
     introduce = models.TextField(
