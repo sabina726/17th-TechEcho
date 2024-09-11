@@ -1,8 +1,6 @@
-import "./components/fontawesome";
 import "./components"
 import "htmx.org";
-import Alpine from 'alpinejs';
-import Swal from "sweetalert2";
+
 
 const container = document.getElementById('container');
 const codes = [];
@@ -58,6 +56,4 @@ function moveCodes() {
 }
 
 moveCodes();
-
-window.Swal = Swal;
 

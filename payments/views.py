@@ -26,10 +26,6 @@ from .models import Order
 
 
 ###  General
-def index(request):
-    return render(request, "payments/index.html")
-
-
 def check_premium_status(user):
     payment_user = get_object_or_404(User, username=user.username)
     if payment_user.is_student:
@@ -38,16 +34,18 @@ def check_premium_status(user):
         return False
 
 
-@login_required
-def payment_option(request):
-    if check_premium_status(request.user):
-        return render(request, "payments/after_pay.html")
-
-    return render(request, "payments/payment_option.html")
+def index(request):
+    if request.user.is_authenticated:
+        if check_premium_status(request.user):
+            return render(request, "payments/after_pay.html")
+    return render(request, "payments/index.html")
 
 
 ###  EC-pay use only
+@login_required
 def ecpay_create_payment(request):
+    if check_premium_status(request.user):
+        return render(request, "payments/after_pay.html")
     request_user = request.user.username
     system_user = get_object_or_404(User, username=request_user)
     print(system_user.id)
@@ -130,7 +128,10 @@ def ecpay_after_pay(request):
 
 
 ###  Line-pay use only
+@login_required
 def linepay_create_payment(request):
+    if check_premium_status(request.user):
+        return render(request, "payments/after_pay.html")
     request_user = request.user.username
     system_user = get_object_or_404(User, username=request_user)
     order = Order.objects.create(

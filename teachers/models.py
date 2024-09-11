@@ -18,7 +18,7 @@ def verify(value):
         raise ValidationError("專業能力只能包含中英文字符")
 
 
-class Teacher(SoftDeleteModel):
+class Teacher(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     expertise = models.CharField(max_length=255, validators=[verify])
     introduce = models.TextField(
@@ -56,7 +56,7 @@ class Teacher(SoftDeleteModel):
             super().save(update_fields=["chat_group_id"])
 
     def __str__(self):
-        return f"{self.user.username} - {self.expertise}"
+        return f"{self.nickname} - {self.expertise}"
 
     def get_questions(self):
         return Question.objects.filter(user=self.user)

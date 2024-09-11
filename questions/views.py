@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
 from answers.forms import AnswerForm
 from answers.utils.answers_sort import get_ordered_answers
@@ -127,80 +128,76 @@ def edit(request, id):
 
 
 @login_required
+@require_POST
 def delete(request, id):
-    if request.method == "POST":
-        question = get_object_or_404(Question, pk=id, user=request.user)
-        question.delete()
-        return redirect("questions:index")
+    question = get_object_or_404(Question, pk=id, user=request.user)
+    question.delete()
+    return redirect("questions:index")
 
 
 @login_required
+@require_POST
 def votes(request, id):
-    if request.method == "POST":
-        question = get_object_or_404(Question, pk=id)
+    question = get_object_or_404(Question, pk=id)
 
-        if not question.has_voted(request.user):
-            record = QuestionUserVotes.objects.create(
-                question=question, user=request.user
-            )
-        else:
-            record = question.questionuservotes_set.get(user=request.user)
+    if not question.has_voted(request.user):
+        record = QuestionUserVotes.objects.create(question=question, user=request.user)
+    else:
+        record = question.questionuservotes_set.get(user=request.user)
 
-        vote_change = request.POST.get("vote_change")
-        vote_status, actual_change = validate_votes_input(
-            record.vote_status, vote_change
-        )
+    vote_change = request.POST.get("vote_change")
+    vote_status, actual_change = validate_votes_input(record.vote_status, vote_change)
 
-        record.vote_status = vote_status
-        record.save()
+    record.vote_status = vote_status
+    record.save()
 
-        question.votes_count += actual_change
-        question.save()
+    question.votes_count += actual_change
+    question.save()
 
-        return render(
-            request,
-            "questions/partials/_votes.html",
-            {
-                "question": question,
-                "vote": record.vote_status,
-            },
-        )
+    return render(
+        request,
+        "questions/partials/_votes.html",
+        {
+            "question": question,
+            "vote": record.vote_status,
+        },
+    )
 
 
 @login_required
+@require_POST
 def follows(request, id):
-    if request.method == "POST":
-        question = get_object_or_404(Question, pk=id)
-        if question.user == request.user:
-            messages.error(request, "發文者已自動追蹤自己的問題，不必額外追蹤")
-            return redirect("questions:show", id=id)
+    question = get_object_or_404(Question, pk=id)
+    if question.user == request.user:
+        messages.error(request, "發文者已自動追蹤自己的問題，不必額外追蹤")
+        return redirect("questions:show", id=id)
 
-        channel_layer = get_channel_layer()
-        channel_name = cache.get(f"notifications_user_{request.user.id}")
-        if question.followed_by(request.user):
-            question.followers.remove(request.user)
-            if channel_name:
-                async_to_sync(channel_layer.send)(
-                    channel_name,
-                    {
-                        "type": "leave_group",
-                        "group_name": f"notifications_questions_{question.id}",
-                    },
-                )
+    channel_layer = get_channel_layer()
+    channel_name = cache.get(f"notifications_user_{request.user.id}")
+    if question.followed_by(request.user):
+        question.followers.remove(request.user)
+        if channel_name:
+            async_to_sync(channel_layer.send)(
+                channel_name,
+                {
+                    "type": "leave_group",
+                    "group_name": f"notifications_questions_{question.id}",
+                },
+            )
 
-        else:
-            question.followers.add(request.user)
-            if channel_name:
-                async_to_sync(channel_layer.send)(
-                    channel_name,
-                    {
-                        "type": "join_group",
-                        "group_name": f"notifications_questions_{question.id}",
-                    },
-                )
+    else:
+        question.followers.add(request.user)
+        if channel_name:
+            async_to_sync(channel_layer.send)(
+                channel_name,
+                {
+                    "type": "join_group",
+                    "group_name": f"notifications_questions_{question.id}",
+                },
+            )
 
-        return render(
-            request,
-            "questions/partials/_follows.html",
-            {"question": question, "followed": question.followed_by(request.user)},
-        )
+    return render(
+        request,
+        "questions/partials/_follows.html",
+        {"question": question, "followed": question.followed_by(request.user)},
+    )

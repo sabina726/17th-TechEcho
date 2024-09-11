@@ -12,7 +12,7 @@ class Schedule(models.Model):
     end_time = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.teacher.name} - {self.start_time} to {self.end_time}"
+        return f"{self.teacher} - {self.start_time} to {self.end_time}"
 
 
 class Appointment(models.Model):

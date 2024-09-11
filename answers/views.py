@@ -5,7 +5,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from answers.models import Answer, Vote
-from lib.utils.pagination import paginate
 from questions.models import Question
 
 
@@ -13,9 +12,7 @@ from questions.models import Question
 @require_POST
 def index(request, id):
     question = get_object_or_404(Question, pk=id)
-    answer = question.answer_set.create(
-        content=request.POST["content"], user=request.user
-    )
+    question.answer_set.create(content=request.POST["content"], user=request.user)
     messages.success(request, "新增成功")
     return redirect("questions:show", id=id)
 
@@ -35,7 +32,6 @@ def edit(request, id):
     answer = get_object_or_404(Answer, pk=id, user=request.user)
     answer.content = request.POST["content"]
     answer.save()
-    messages.success(request, "編輯成功")
     return render(request, "answers/_answer_content.html", {"answer": answer})
 
 
