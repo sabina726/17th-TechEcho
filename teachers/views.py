@@ -32,7 +32,7 @@ def index(request):
         return render(request, "teachers/new.html", {"form": form})
 
     teachers = Teacher.objects.all()
-    teachers = paginate(request, teachers)
+    teachers = paginate(request, teachers, items_count=8)
     return render(request, "teachers/index.html", {"teachers": teachers})
 
 
