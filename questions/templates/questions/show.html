@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load questions %}
 {% block content %}
-    <div class="p-6 max-w-4xl mx-auto relative mb-2">
+    <div class="container border mt-4 rounded-lg p-6 max-w-4xl mx-auto relative mb-2">
         <div class="flex justify-between items-baseline mb-2">
             <div class="flex gap-4 items-center">
                 <h1 class="text-2xl">問題：{{question.title}}</h1>
@@ -12,7 +12,7 @@
             <a href="{% url "questions:index" %}" class="btn">回到問題列表</a>
         </div>
 
-        <div class="p-2 border-2 mb-2">
+        <div class="p-2 border-2 mb-2 rounded-lg">
             <p> 標籤：
                 {% for label in question.labels.all %}
                     <span>{{label}} </span>
@@ -20,22 +20,22 @@
             </p>
         </div>
 
-        <div class="flex gap-2 mb-2">
+        <div class="flex gap-2 mb-2 text-gray-500">
             <span>提問者：{{question.user}}</span>
-            <span>｜初始日期：{{question.created_at}}</span>
-            <span>｜最後修改日期：
+            <span>｜建立時間：{{question.created_at|date:'Y/m/d H:i' }}</span>
+            <span>｜更新時間：
                 {% if question.updated_at %}
-                    {{question.updated_at}}
+                    {{question.updated_at|date:'Y/m/d H:i' }}
                 {% else %}
-                    {{question.created_at}}
+                    {{question.created_at|date:'Y/m/d H:i' }}
                 {% endif %}
             </span>
         </div>
 
-        <article  class="p-2 border-2 mb-2">
+        <article  class="p-2 border-2 mb-2 rounded-lg">
             <h3 class="mb-2">問題內容：</h3>
             <p class="text-wrap break-all">
-                {{question.details|linebreaks}}
+                {{question.details|linebreaksbr}}
             </p>
         </article>
 
@@ -43,10 +43,10 @@
 
         {% if user.is_authenticated and user == question.user %}
             <div class="flex gap-2">
-                <a href="{% url "questions:edit" question.id%}" class="btn">編輯此問題</a>
+                <a href="{% url "questions:edit" question.id%}" class="btn btn-sm bg-blue-600 text-white">編輯此問題</a>
                 <form action="{% url "questions:delete"  question.id%}" method="POST" onSubmit="return confirm('確定要刪除此問題嗎？')">
                     {% csrf_token %}
-                    <button class="btn">刪除此問題</button>
+                    <button class="btn btn-sm bg-red-600 text-white">刪除此問題</button>
                 </form>
             </div>
         {% endif %}
