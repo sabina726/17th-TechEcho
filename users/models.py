@@ -5,23 +5,20 @@ from django.utils.text import slugify
 
 
 class User(AbstractUser):
-
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
     name = models.CharField(max_length=255, default="default_value")
     slug = models.SlugField(unique=True, blank=True, null=True)
     email = models.EmailField(unique=True)
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.name)
+            self.slug = f"{base_slug}-{get_random_string(10)}"
+        super().save(*args, **kwargs)
 
-def save(self, *args, **kwargs):
-    if not self.slug:
-        base_slug = slugify(self.name)
-        self.slug = f"{base_slug}-{get_random_string(10)}"
-    super().save(*args, **kwargs)
-
-
-def __str__(self):
-    return self.name
+    def __str__(self):
+        return self.name
 
 
 class Profile(models.Model):
