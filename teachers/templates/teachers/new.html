@@ -9,12 +9,16 @@
     <section class="flex justify-center">
         <form action="{% url 'teachers:index' %}" method="POST" autocomplete="off" class="space-y-4">
             {% csrf_token %}
-
+            {{ form.user.as_hidden }}
             <div class="grid gap-4">
                 <p>暱稱:{{ form.nickname }}</p>
                 <p>專業能力:{{ form.expertise }}</p>
                 <p>自我介紹:{{ form.introduce }}</p>
-                <p>諮詢時間:{{ form.schedule }}</p>
+            </div>
+
+            <div class="flex">
+                <p>開始時間:{{ form.schedule_start }}</p>
+                <p>結束時間:{{ form.schedule_end }}</p>
             </div>
 
             <button type="submit" class="btn btn-active btn-accent">
