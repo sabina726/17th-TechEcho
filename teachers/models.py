@@ -14,7 +14,7 @@ from questions.models import Question
 
 def verify(value):
     # 正則表達式：允許中文字符、英文字符和空格
-    if not re.match(r"^[\u4e00-\u9fffA-Za-z\s]*$", value):
+    if not re.match(r"^[\u4e00-\u9fffA-Za-z\s,.+#，]*$", value):
         raise ValidationError("專業能力只能包含中英文字符")
 
 
@@ -26,6 +26,7 @@ class Teacher(models.Model):
     )
     nickname = models.CharField(max_length=50, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     schedule_start = models.DateTimeField(default=timezone.now)
     schedule_end = models.DateTimeField(null=True, blank=True)
     chat_group = models.OneToOneField(
@@ -35,6 +36,9 @@ class Teacher(models.Model):
         blank=True,
         related_name="assigned_teacher",
     )
+
+    class Meta:
+        ordering = ["-updated_at"]
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -56,10 +60,4 @@ class Teacher(models.Model):
             super().save(update_fields=["chat_group_id"])
 
     def __str__(self):
-        return f"{self.nickname} - {self.expertise}"
-
-    def get_questions(self):
-        return Question.objects.filter(user=self.user)
-
-    def get_answers(self):
-        return Answer.objects.filter(user=self.user)
+        return f"{self.user.username} - {self.expertise}"

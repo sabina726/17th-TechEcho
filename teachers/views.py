@@ -4,7 +4,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
+from answers.models import Answer
 from lib.utils.pagination import paginate
+from questions.models import Question
 
 from .forms import TeacherForm
 from .models import Teacher
@@ -31,7 +33,7 @@ def index(request):
 
         return render(request, "teachers/new.html", {"form": form})
 
-    teachers = Teacher.objects.all()
+    teachers = Teacher.objects.all().order_by("-updated_at")
     teachers = paginate(request, teachers, items_count=8)
     return render(request, "teachers/index.html", {"teachers": teachers})
 
@@ -53,8 +55,12 @@ def show(request, id):
             return redirect("teachers:show", id=id)
         return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
 
-    questions = teacher.get_questions().order_by("-created_at")[:3]
-    answers = teacher.get_answers().order_by("-created_at")[:3]
+    questions = Question.objects.filter(user=teacher.user).order_by("-created_at")[:3]
+    answers = (
+        Answer.objects.filter(user=teacher.user)
+        .select_related("question", "user")
+        .order_by("-created_at")[:3]
+    )
     context = {
         "teacher": teacher,
         "questions": questions,
