@@ -113,6 +113,8 @@ def edit(request, id):
 @login_required
 def delete(request, id):
     teacher = get_object_or_404(Teacher, id=id, user=request.user)
+    teacher.user.is_teacher = False
+    teacher.user.save()
     teacher.delete()
     messages.success(request, "刪除成功")
     return redirect("teachers:index")
