@@ -16,6 +16,8 @@ def mentor(request):
 
 
 def index(request):
+    label_filter = request.GET.get("label", None)
+
     if request.method == "POST":
         # 檢查是否該使用者已經是專家
         if Teacher.objects.filter(user=request.user).exists():
@@ -40,8 +42,21 @@ def index(request):
         return render(request, "teachers/new.html", {"form": form})
 
     teachers = Teacher.objects.all().prefetch_related("labels").order_by("-updated_at")
+
+    if label_filter:
+        teachers = teachers.filter(labels__name__icontains=label_filter)
+
+    all_labels = set(teachers.values_list("labels__name", flat=True).distinct())
+
     teachers = paginate(request, teachers, items_count=8)
-    return render(request, "teachers/index.html", {"teachers": teachers})
+    return render(
+        request,
+        "teachers/index.html",
+        {
+            "teachers": teachers,
+            "all_labels": all_labels,
+        },
+    )
 
 
 @login_required

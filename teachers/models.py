@@ -1,19 +1,9 @@
-import re
-
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import IntegrityError, models
-from django.utils import timezone
 from taggit.managers import TaggableManager
 
 from chat.models import ChatGroup
-
-
-def verify(value):
-    # 正則表達式：允許中文字符、英文字符和空格
-    if not re.match(r"^[\u4e00-\u9fffA-Za-z\s,.+#，]*$", value):
-        raise ValidationError("專業能力只能包含中英文字符")
 
 
 class Teacher(models.Model):
@@ -55,4 +45,4 @@ class Teacher(models.Model):
             super().save(update_fields=["chat_group_id"])
 
     def __str__(self):
-        return f"{self.user.username} - {self.expertise}"
+        return f"{self.user.username}"
