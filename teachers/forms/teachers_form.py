@@ -10,19 +10,12 @@ class TeacherForm(forms.ModelForm):
         exclude = ["user"]
         fields = [
             "user",
-            "expertise",
             "introduce",
         ]
         widgets = {
             "introduce": forms.Textarea(
                 attrs={
                     "placeholder": "文字內容最少50~最多500",
-                    "class": "block w-full p-2 border border-sky-800 rounded-lg indent-2 bg-gray-300",
-                }
-            ),
-            "expertise": forms.TextInput(
-                attrs={
-                    "placeholder": "Ex:JavaScript..Python..",
                     "class": "block w-full p-2 border border-sky-800 rounded-lg indent-2 bg-gray-300",
                 }
             ),

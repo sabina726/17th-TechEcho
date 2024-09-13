@@ -2,37 +2,35 @@
 
 {% block content %}
 
-<h1 class="p-6 text-4xl font-bold mb-6 text-blue-2 text-center">成為專家</h1>
+<h1 class="p-3 text-5xl font-bold text-blue-2 text-center">成為專家</h1>
 
 <div class="p-6 m-6 max-w-2xl mx-auto bg-blue-1 mt-8 border border-sky-800 rounded-md">
 
-    <section class="flex justify-center m-1 p-1">
-        <form action="{% url 'teachers:index' %}" method="POST" autocomplete="off" class="space-y-4">
-            {% csrf_token %}
-            <div class="grid gap-4">
+    <section class="flex justify-center"></section>
+    <form action="{% url 'teachers:index' %}" method="POST" autocomplete="off" class="space-y-4">
+        {% csrf_token %}
+        <div class="grid gap-4">
 
-                <p class="text-lg">使用者:</p>
-                <p class="text-gray-700 text-lg">{{ request.user.username }}</p>
-                {{ form.user.errors }}
+            <p class="text-lg">使用者:</p>
+            <p class="text-gray-700 text-lg">{{ request.user.username }}</p>
+            {{ form.user.errors }}
 
-                <p class="text-lg">專業能力:</p>
-                {{ form.expertise }}
-                {{ form.expertise.errors }}
+            {% include "teachers/partials/_labels.html" with teacher=teacher only %}
 
-                <p class="text-lg">自我介紹:</p>
-                {{ form.introduce }}
-                {% if form.introduce.errors %}
-                <p class="text-red-500 text-sm mt-1">
-                    {{ form.introduce.errors }}
-                </p>
-                {% endif %}
-            </div>
-
-            <div class="flex justify-end">
-                <button type="submit" class="btn btn-accent">成為專家</button>
-            </div>
-        </form>
+            <p class="text-lg">自我介紹:</p>
+            {{ form.introduce }}
+            {% if form.introduce.errors %}
+            <p class="text-red-500 text-sm mt-1">
+                {{ form.introduce.errors }}
+            </p>
+            {% endif %}
+        </div>
+        <div class="flex justify-end">
+            <button type="submit" class="btn btn-active btn-accent">成為專家</button>
+        </div>
+    </form>
     </section>
+
 
 </div>
 

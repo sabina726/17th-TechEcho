@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
 from answers.models import Answer
+from lib.utils.labels import parse_labels
 from lib.utils.pagination import paginate
 from questions.models import Question
 
@@ -22,16 +23,23 @@ def index(request):
             return redirect("teachers:index")
 
         form = TeacherForm(request.POST)
+        labels = parse_labels(request.POST)
+
+        if not labels:
+            messages.error(request, "標籤至少要一個，且是認可的程式語言")
+            return render(request, "teachers/new.html", {"form": form})
+
         if form.is_valid():
             teacher_info = form.save(commit=False)
             teacher_info.user = request.user
             teacher_info.save()
+            teacher_info.labels.set(labels)
             messages.success(request, "歡迎加入")
             return redirect("teachers:index")
 
         return render(request, "teachers/new.html", {"form": form})
 
-    teachers = Teacher.objects.all().order_by("-updated_at")
+    teachers = Teacher.objects.all().prefetch_related("labels").order_by("-updated_at")
     teachers = paginate(request, teachers, items_count=8)
     return render(request, "teachers/index.html", {"teachers": teachers})
 
@@ -50,8 +58,12 @@ def show(request, id):
     chat_group = teacher.chat_group
     if request.method == "POST":
         form = TeacherForm(request.POST, instance=teacher)
+        labels = parse_labels(request.POST)
         if form.is_valid():
-            form.save()
+            teacher_info = form.save(commit=False)  # 暫存資料，避免直接提交
+            if labels:
+                teacher_info.labels.set(labels)
+            teacher_info.save()
             messages.success(request, "更新成功")
             return redirect("teachers:show", id=id)
         return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
@@ -76,7 +88,11 @@ def show(request, id):
 def edit(request, id):
     teacher = get_object_or_404(Teacher, id=id, user=request.user)
     form = TeacherForm(instance=teacher)
-    return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
+    return render(
+        request,
+        "teachers/edit.html",
+        {"teacher": teacher, "form": form, "labels": teacher.labels.all()},
+    )
 
 
 @login_required

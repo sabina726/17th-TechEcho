@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import IntegrityError, models
 from django.utils import timezone
+from taggit.managers import TaggableManager
 
 from chat.models import ChatGroup
 
@@ -17,7 +18,7 @@ def verify(value):
 
 class Teacher(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    expertise = models.CharField(max_length=255, validators=[verify])
+    labels = TaggableManager()
     introduce = models.TextField(
         validators=[MinLengthValidator(50), MaxLengthValidator(500)]
     )

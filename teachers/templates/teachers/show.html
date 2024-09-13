@@ -18,8 +18,15 @@
     </div>
 
     <div class="flex p-2 m-2 indent-2 bg-blue-2">
-        <p class="text-white">專業領域:</p>
-        <span class="text-white">{{ teacher.expertise}}</span>
+        <p class="m-2 text-white">專業能力:
+            {% if teacher.labels.all %}
+            {% for label in teacher.labels.all %}
+            <span>{{ label.name }}</span>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            {% else %}
+            無標籤
+            {% endif %}
+        </p>
     </div>
 
     <div>

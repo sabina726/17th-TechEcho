@@ -2,9 +2,9 @@
 
 {% block content %}
 
-<h1 class="text-center text-3xl font-bold text-blue-2 mb-6">專家檔案</h1>
+<h1 class="text-center text-5xl font-bold text-blue-2 p-3">專家檔案</h1>
 
-<div class="p-6 m-6 max-w-2xl mx-auto bg-blue-1 mt-8 border border-sky-800 rounded-md">
+<div class="p-6 mb-4 max-w-2xl mx-auto bg-blue-1 border border-sky-800 rounded-md">
 
 
     <section class="flex justify-center">
@@ -16,9 +16,7 @@
                 <p class="text-gray-700 text-lg">{{ request.user.username }}</p>
                 {{ form.user.errors }}
 
-                <p class="text-lg">專業能力:</p>
-                {{ form.expertise }}
-                {{ form.expertise.errors }}
+                {% include "teachers/partials/_labels.html" with teacher=teacher only %}
 
                 <p class="text-lg">自我介紹:</p>
                 {{ form.introduce }}
