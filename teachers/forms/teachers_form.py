@@ -1,5 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
 
 from teachers.models import Teacher
 
@@ -8,45 +7,35 @@ class TeacherForm(forms.ModelForm):
 
     class Meta:
         model = Teacher
+        exclude = ["user"]
         fields = [
             "user",
-            "nickname",
             "expertise",
             "introduce",
-            "schedule_start",
-            "schedule_end",
         ]
         widgets = {
-            "nickname": forms.TextInput(attrs={"class": "block w-full p-2"}),
             "introduce": forms.Textarea(
                 attrs={
                     "placeholder": "文字內容最少50~最多500",
-                    "class": "block w-full p-2",
+                    "class": "block w-full p-2 border border-sky-800 rounded-lg indent-2 bg-gray-300",
                 }
             ),
             "expertise": forms.TextInput(
                 attrs={
                     "placeholder": "Ex:JavaScript..Python..",
-                    "class": "block w-full p-2",
+                    "class": "block w-full p-2 border border-sky-800 rounded-lg indent-2 bg-gray-300",
                 }
             ),
-            "schedule_start": forms.DateTimeInput(
-                attrs={
-                    "placeholder": "開始諮詢時間",
-                    "type": "datetime-local",
-                    "class": "block px-4 py-2 mt-2 text-gray-800 bg-white border border-gray-300",
-                }
-            ),
-            "schedule_end": forms.DateTimeInput(
-                attrs={
-                    "placeholder": "結束諮詢時間",
-                    "type": "datetime-local",
-                    "class": "block px-4 py-2 mt-2 text-gray-800 bg-white border border-gray-300",
-                }
-            ),
-            "user": forms.HiddenInput(),
+            "username": forms.TextInput(),
         }
 
     def __init__(self, *args, **kwargs):
+        # Retrieve the current request user
+        self.request_user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
-        self.fields["user"].required = False
+
+        # Set the user field to the current user and make it readonly
+        if self.request_user:
+            self.fields["user"].initial = self.request_user
+            self.fields["user"].widget = forms.HiddenInput()
+            self.fields["user"].disabled = True

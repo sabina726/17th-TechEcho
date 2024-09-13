@@ -2,28 +2,35 @@
 
 {% block content %}
 
-<h1 class="p-6 text-4xl font-bold mb-6 text-gray-900 text-center">成為專家</h1>
+<h1 class="p-6 text-4xl font-bold mb-6 text-blue-2 text-center">成為專家</h1>
 
-<div class="p-4 max-w-xl mx-auto border border-gray-300">
+<div class="p-6 m-6 max-w-2xl mx-auto bg-blue-1 mt-8 border border-sky-800 rounded-md">
 
-    <section class="flex justify-center">
+    <section class="flex justify-center m-1 p-1">
         <form action="{% url 'teachers:index' %}" method="POST" autocomplete="off" class="space-y-4">
             {% csrf_token %}
-            {{ form.user.as_hidden }}
             <div class="grid gap-4">
-                <p>暱稱:{{ form.nickname }}</p>
-                <p>專業能力:{{ form.expertise }}</p>
-                <p>自我介紹:{{ form.introduce }}</p>
+
+                <p class="text-lg">使用者:</p>
+                <p class="text-gray-700 text-lg">{{ request.user.username }}</p>
+                {{ form.user.errors }}
+
+                <p class="text-lg">專業能力:</p>
+                {{ form.expertise }}
+                {{ form.expertise.errors }}
+
+                <p class="text-lg">自我介紹:</p>
+                {{ form.introduce }}
+                {% if form.introduce.errors %}
+                <p class="text-red-500 text-sm mt-1">
+                    {{ form.introduce.errors }}
+                </p>
+                {% endif %}
             </div>
 
-            <div class="flex">
-                <p>開始時間:{{ form.schedule_start }}</p>
-                <p>結束時間:{{ form.schedule_end }}</p>
+            <div class="flex justify-end">
+                <button type="submit" class="btn btn-accent">成為專家</button>
             </div>
-
-            <button type="submit" class="btn btn-active btn-accent">
-                成為專家
-            </button>
         </form>
     </section>
 

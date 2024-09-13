@@ -6,10 +6,7 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import IntegrityError, models
 from django.utils import timezone
 
-from answers.models import Answer
 from chat.models import ChatGroup
-from lib.models import SoftDeleteModel
-from questions.models import Question
 
 
 def verify(value):
@@ -24,11 +21,8 @@ class Teacher(models.Model):
     introduce = models.TextField(
         validators=[MinLengthValidator(50), MaxLengthValidator(500)]
     )
-    nickname = models.CharField(max_length=50, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    schedule_start = models.DateTimeField(default=timezone.now)
-    schedule_end = models.DateTimeField(null=True, blank=True)
     chat_group = models.OneToOneField(
         "chat.ChatGroup",
         on_delete=models.SET_NULL,

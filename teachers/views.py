@@ -1,5 +1,3 @@
-from datetime import time
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
@@ -40,6 +38,10 @@ def index(request):
 
 @login_required
 def new(request):
+    if Teacher.objects.filter(user=request.user).exists():
+        messages.error(request, "你已經註冊為專家，無法重複註冊")
+        return redirect("teachers:show", id=request.user.teacher.id)
+
     form = TeacherForm()
     return render(request, "teachers/new.html", {"form": form})
 
@@ -66,8 +68,6 @@ def show(request, id):
         "questions": questions,
         "answers": answers,
         "chat_group": chat_group,
-        "teacher_schedule_start": teacher.schedule_start,
-        "teacher_schedule_end": teacher.schedule_end,
     }
 
     return render(request, "teachers/show.html", context)

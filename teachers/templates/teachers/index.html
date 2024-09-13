@@ -4,14 +4,14 @@
 
 <div class="p-6 max-w-4xl mx-auto">
     <div class="flex justify-between items-center mb-6">
-        <h2 class="text-4xl font-bold text-gray-900">專家列表</h2>
+        <h2 class="text-4xl font-bold text-blue-2">專家列表</h2>
         {% if user.is_authenticated %}
-            {% if not user.is_student %}
-             <a href="{% url 'payments:index' %}" class="btn btn-neutral">
-                升級成為TechEcho Premium用戶以發起線上指導
-             </a>
-            {% endif %}
-         {% endif %}
+        {% if not user.is_student %}
+        <a href="{% url 'payments:index' %}" class="btn btn-neutral">
+            升級成為TechEcho Premium用戶以發起線上指導
+        </a>
+        {% endif %}
+        {% endif %}
     </div>
 
     <div class="p-6 max-w-4xl mx-auto">
@@ -19,7 +19,7 @@
             {% for teacher in teachers %}
             <a href="{% url 'teachers:show' teacher.id %}" class="block mb-4 p-4 shadow-md hover:bg-gray-100">
                 <div class="flex flex-col">
-                    <h3 class="text-xl font-semibold text-gray-900">{{ teacher.nickname }}</h3>
+                    <h3 class="text-xl font-semibold text-gray-900">{{ teacher.user }}</h3>
                     <p class="text-gray-700 mt-1">{{ teacher.expertise }}</p>
                     <p class="text-gray-600 mt-1">{{ teacher.introduce|truncatechars:50 }}</p>
                 </div>
