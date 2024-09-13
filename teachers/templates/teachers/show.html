@@ -32,7 +32,7 @@
             <ul class="mt-4">
                 {% for question in questions %}
                 <li class="mb-2 text-center">
-                    <a href="{% url 'questions:show' question.id %}" class="text-blue-500 hover:text-blue-700">
+                    <a href="{% url 'questions:show' question.id %}" class="text-white hover:text-blue-700">
                         {{ question.title|truncatechars:10 }}
                     </a>
                 </li>
@@ -47,7 +47,7 @@
             <ul class="mt-4">
                 {% for answer in answers %}
                 <li class="mb-2 text-center">
-                    <a href="{% url 'questions:show' answer.question.id %}" class="text-blue-500 hover:text-blue-700">
+                    <a href="{% url 'questions:show' answer.question.id %}" class="text-white hover:text-blue-700">
                         {{ answer.content|truncatechars:10 }}
                     </a>
                 </li>

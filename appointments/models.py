@@ -24,4 +24,4 @@ class Appointment(models.Model):
     )
 
     def __str__(self):
-        return f"Appointment for {self.student.name} - {self.schedule}"
+        return f"Appointment for {self.student.username} - {self.schedule}"

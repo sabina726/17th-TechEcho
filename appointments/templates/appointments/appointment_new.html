@@ -8,7 +8,7 @@
             <a href="{% url 'appointments:appointment' %}" class="btn">查看我的預約</a>
         </div>
         <div class="text-md mb-4 mt-4">
-            <p class="font-bold mb-2">預約專家：<span class="text-blue-600">{{ schedule.teacher.name }}</span></p>
+            <p class="font-bold mb-2">預約專家：<span class="text-blue-600">{{ schedule.teacher.username }}</span></p>
             <p class="mb-2">預約時間：{{ schedule.start_time|date:'Y/m/d H:i' }} - {{ schedule.end_time|date:'Y/m/d H:i' }}</p>
             <form method="POST" action="{% url 'appointments:appointment_new' schedule.id %}">
                 {% csrf_token %}

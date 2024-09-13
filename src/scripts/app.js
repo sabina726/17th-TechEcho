@@ -8,16 +8,17 @@ const codes = [];
 for (let i = 1; i <= 3; i++) {
     const fontSize = Math.random() * (60 - 40) + 20;
     const element = document.getElementById(`code${i}`);
-
-    element.style.fontSize = `${fontSize}px`;
-    codes.push({
-        element: document.getElementById(`code${i}`),
-        xSpeed: (i % 2 === 0) ? 2 : 3,
-        ySpeed: (i % 2 === 0) ? 2 : 3,
-        xPos: Math.random() * (container.clientWidth - 50),
-        yPos: Math.random() * (container.clientHeight - 50),
-        isBlurred: true
-    });
+    if (element) {
+        element.style.fontSize = `${fontSize}px`;
+        codes.push({
+            element: document.getElementById(`code${i}`),
+            xSpeed: (i % 2 === 0) ? 2 : 3,
+            ySpeed: (i % 2 === 0) ? 2 : 3,
+            xPos: Math.random() * (container.clientWidth - 50),
+            yPos: Math.random() * (container.clientHeight - 50),
+            isBlurred: true
+        });
+    }
 }
 
 function randomColor() {
