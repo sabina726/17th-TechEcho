@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"tailwindcss -i ./src/styles/style.css -o ./static/styles/style.css --watch\" \"esbuild ./src/scripts/app.js --bundle --outfile=./static/scripts/app.js --watch\""
+    "dev": "concurrently \"tailwindcss -i ./src/styles/style.css -o ./static/styles/style.css --watch\" \"esbuild ./src/scripts/app.js --bundle --outfile=./static/scripts/app.js --watch\"",
+    "build": "node ./esbuild.js"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,7 @@
     "alpinejs": "^3.14.1",
     "animate.css": "^4.1.1",
     "htmx.org": "^2.0.2",
+    "monaco-editor": "^0.51.0",
     "sweetalert2": "^11.12.4"
   }
 }
