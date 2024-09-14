@@ -4,6 +4,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.main.js';
 self.MonacoEnvironment = {
 	getWorkerUrl: function (moduleId, label) {
 		if (label === 'json') {
+			// this has to change, and all the following
 			return './vs/language/json/json.worker.js';
 		}
 		if (label === 'css' || label === 'scss' || label === 'less') {

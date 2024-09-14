@@ -24,14 +24,14 @@ build({
 	bundle: true,
 	format: 'iife',
 	outbase: './node_modules/monaco-editor/esm/',
-	outdir: path.join(__dirname, 'static')
+	outdir: path.join(__dirname, 'static/editors')
 });
 
 build({
 	entryPoints: ['./src/scripts/editors.js'],
 	bundle: true,
 	format: 'iife',
-	outdir: path.join(__dirname, 'static'),
+	outdir: path.join(__dirname, 'static/editors'),
 	loader: {
 		'.ttf': 'file'
 	}
