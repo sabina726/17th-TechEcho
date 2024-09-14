@@ -1,6 +1,6 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.main.js';
 import Cookies from 'js-cookie'
-
+import getDefaultSnippets from '../constants/editorDefaultSnippets'
 let language = 'javascript';
 
 self.MonacoEnvironment = {
@@ -19,7 +19,7 @@ self.MonacoEnvironment = {
 };
 
 const editor = monaco.editor.create(document.getElementById('editor'), {
-	value: "console.log('Hello World')",
+	value: getDefaultSnippets(language),
 	language: language,
 	theme: 'vs-light',
 	fontSize: 12
@@ -27,9 +27,9 @@ const editor = monaco.editor.create(document.getElementById('editor'), {
 
 const languageSelect = document.getElementById('language-select');
 languageSelect.value = language;
-console.log(language)
 languageSelect.addEventListener('change', (event) => {
 	language = event.target.value;
+	editor.setValue(getDefaultSnippets(language))
 	monaco.editor.setModelLanguage(editor.getModel(), language);
 });
 

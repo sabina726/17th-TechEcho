@@ -7,5 +7,4 @@ RUN apt-get update && \
     apt-get install -y nodejs && \
     apt-get clean
 
-# Set the working directory
 WORKDIR /code
