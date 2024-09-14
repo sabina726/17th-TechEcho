@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blogs', '0003_category_blog_author_blog_comments_count_blog_views_and_more'),
+        ("blogs", "0003_category_blog_author_blog_comments_count_blog_views_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='blog',
-            name='is_draft',
+            model_name="blog",
+            name="is_draft",
             field=models.BooleanField(default=True),
         ),
     ]

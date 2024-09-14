@@ -36,12 +36,17 @@ def new(request):
 
             elif action == "preview":
                 # Just render the preview page without saving
-                return render(request, "blogs/preview.html", {"blog": blog})
+                return render(
+                    request, "blogs/preview.html", {"blog": blog, "form": form}
+                )
 
             elif action == "publish":
                 blog.is_draft = False  # Publish the blog
                 blog.save()
                 return redirect("blogs:index")
+
+        # If form is not valid, render the form again with errors
+        return render(request, "blogs/new.html", {"form": form})
 
     else:
         form = BlogForm()
