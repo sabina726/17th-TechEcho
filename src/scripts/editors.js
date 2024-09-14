@@ -46,10 +46,8 @@ fontSizeSelect.addEventListener('change', (event) => {
 
 const evalBtn = document.getElementById('eval');
 evalBtn.addEventListener('click', async () => {
-	const text = editor.getValue();
-
 	const params = new URLSearchParams();
-	params.append('text', text);
+	params.append('code', editor.getValue());
 	params.append('language', language);
 
 	try {
@@ -62,17 +60,10 @@ evalBtn.addEventListener('click', async () => {
 			body: params.toString(),
 		})
 
-		// const data = await response.json();
+		const data = await response.json();
 
-		// if (data.status === 'fail') {
-		// 	if (data.result === '') {
-		// 		alert('Invalid code.');
-		// 	} else {
-		// 		alert('An error occurred.');
-		// 	}
-		// } else if (data.status === 'success') {
-		// 	alert(data.result);
-		// }
+		alert(data.result)
+
 	} catch (error) {
 		alert('An error occurred during the request.');
 	}
