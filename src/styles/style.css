@@ -29,6 +29,22 @@
   @apply text-purple-800 bg-purple-100 dark:bg-purple-900 dark:text-purple-300;
 }
 
+.tag-pink {
+  @apply text-pink-800 bg-pink-100 dark:bg-pink-900 dark:text-pink-300;
+}
+
+.tag-teal {
+  @apply text-teal-800 bg-teal-100 dark:bg-teal-900 dark:text-teal-300;
+}
+
+.tag-orange {
+  @apply text-orange-800 bg-orange-100 dark:bg-orange-900 dark:text-orange-300;
+}
+
+.tag-amber {
+  @apply text-amber-800 bg-amber-100 dark:bg-amber-900 dark:text-amber-300;
+}
+
 .tags-look .tagify__dropdown__item {
   display: inline-block;
   vertical-align: middle;
