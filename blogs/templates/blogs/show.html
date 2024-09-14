@@ -2,7 +2,6 @@
 
 {% block content %}
 <div class="max-w-2xl mx-auto p-6 bg-white border border-gray-300 rounded-lg shadow-md">
-    <!-- Blog Header with User Information and Created Date -->
     <div class="flex items-center mb-6">
         <img src="{{ blog.author.profile_image.url }}" alt="{{ blog.author.username }}" class="w-12 h-12 rounded-full mr-4">
         <div>
@@ -12,20 +11,19 @@
         </div>
     </div>
 
-    <!-- Blog Content -->
     <div class="mb-6">
         <h1 class="text-2xl font-bold mb-4">{{ blog.title }}</h1>
-        <div class="prose max-w-full">{{ blog.content|linebreaks }}</div>
+        <!-- Updated content div with text wrapping -->
+        <div class="max-w-full whitespace-pre-wrap break-words">{{ blog.content }}</div>
+
     </div>
 
     {% if blog.image %}
-    <!-- Blog Image -->
     <div class="mb-6">
         <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="rounded-lg shadow">
     </div>
     {% endif %}
 
-    <!-- Blog Footer with Edit and Delete Options -->
     <div class="flex justify-between items-center">
         <a href="{% url 'blogs:edit' blog.pk %}" class="text-blue-500 hover:text-blue-700">編輯文章</a>
         <form action="{% url 'blogs:delete' blog.pk %}" method="post">

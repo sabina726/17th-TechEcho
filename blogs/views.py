@@ -6,14 +6,15 @@ from .models import Blog
 
 
 def index(request):
-    blogs = Blog.objects.filter(is_draft=False)  # Get only published blogs
+    blogs = Blog.objects.filter(is_draft=False).order_by("-created_at")
     return render(request, "blogs/index.html", {"blogs": blogs})
 
 
 @login_required
 def user_drafts(request):
-    # Get only drafts created by the current user
-    drafts = Blog.objects.filter(author=request.user, is_draft=True)
+    drafts = Blog.objects.filter(author=request.user, is_draft=True).order_by(
+        "-created_at"
+    )
     return render(request, "blogs/user_drafts.html", {"drafts": drafts})
 
 
@@ -22,30 +23,26 @@ def new(request):
     if request.method == "POST":
         form = BlogForm(request.POST)
         if form.is_valid():
-            blog = form.save(commit=False)  # Do not save to the database yet
-            blog.author = (
-                request.user
-            )  # Assign the current logged-in user as the author
+            blog = form.save(commit=False)
+            blog.author = request.user
 
             action = request.POST.get("action")
 
             if action == "save_draft":
-                blog.is_draft = True  # Save as a draft
+                blog.is_draft = True
                 blog.save()
                 return redirect("blogs:index")
 
             elif action == "preview":
-                # Just render the preview page without saving
                 return render(
                     request, "blogs/preview.html", {"blog": blog, "form": form}
                 )
 
             elif action == "publish":
-                blog.is_draft = False  # Publish the blog
+                blog.is_draft = False
                 blog.save()
                 return redirect("blogs:index")
 
-        # If form is not valid, render the form again with errors
         return render(request, "blogs/new.html", {"form": form})
 
     else:
