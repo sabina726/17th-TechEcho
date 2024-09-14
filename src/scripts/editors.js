@@ -18,7 +18,8 @@ self.MonacoEnvironment = {
 };
 
 monaco.editor.create(document.getElementById('editor'), {
-	value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
-	language: 'html'
+	value: `console.log('Hello, World!');`,
+    language: 'javascript',
+    theme: 'vs-dark', // Default theme
 });
 
