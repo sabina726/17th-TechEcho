@@ -2,13 +2,15 @@ import uuid
 
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render, reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from .forms import UsersForm
+from users.forms import UserProfileForm, UsersForm
+
 from .helper import send_forget_password_mail
-from .models import Profile, User
+from .models import PasswordReset, User
 
 
 def register(request):
@@ -48,7 +50,12 @@ def log_in(request):
             messages.success(request, "登入成功")
             return redirect(next_url)
         else:
-            messages.error(request, "登入失敗，帳號或密碼錯誤")
+            if "username" in form.errors:
+                messages.error(request, "帳號錯誤")
+            if "password1" in form.errors:
+                messages.error(request, "密碼錯誤")
+            if "username" and "password1" in form.errors:
+                messages.error(request, "登入失敗，帳號密碼錯誤或尚未註冊")
     else:
         form = AuthenticationForm()
     return render(request, "layouts/login.html", {"form": form, "next": next_url})
@@ -69,9 +76,9 @@ def forget_password(request):
             messages.error(request, "找不到此帳號。")
             return redirect("users:forget_password")
 
-        profile, created = Profile.objects.get_or_create(user=user)
-        profile.forget_password_token = uuid.uuid4()
-        profile.save()
+        password_reset, created = PasswordReset.objects.get_or_create(user=user)
+        password_reset.forget_password_token = uuid.uuid4()
+        password_reset.save()
 
         send_forget_password_mail(user.email, profile.forget_password_token)
         messages.success(request, "重設密碼的郵件已發送。")
@@ -85,12 +92,12 @@ def forget_password(request):
 
 def change_password(request, token):
     try:
-        profile = Profile.objects.get(forget_password_token=token)
-    except Profile.DoesNotExist:
+        password_reset = PasswordReset.objects.get(forget_password_token=token)
+    except PasswordReset.DoesNotExist:
         messages.error(request, "無效")
         return redirect("users:login")
 
-    user = profile.user
+    user = password_reset.user
 
     if request.method == "POST":
         new_password = request.POST.get("new_password")
@@ -100,8 +107,8 @@ def change_password(request, token):
             user.set_password(new_password)
             user.save()
 
-            profile.forget_password_token = None
-            profile.save()
+            password_reset.forget_password_token = None
+            password_reset.save()
 
             messages.success(request, "密碼已成功更改，請使用新密碼登入。")
             return redirect("users:login")
@@ -113,5 +120,23 @@ def change_password(request, token):
     return render(request, "layouts/change_password.html", context)
 
 
+@login_required
 def profile(request):
-    return render(request, "layouts/profile.html")
+    context = {"user": request.user}
+    return render(request, "layouts/profile.html", context)
+
+
+@login_required
+def profile_edit(request):
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "您的個人資料已成功更新。")
+            return redirect("users:profile")
+        else:
+            messages.error(request, "請更正以下錯誤。")
+    else:
+        form = UserProfileForm(instance=request.user)
+
+    return render(request, "layouts/profile_edit.html", {"form": form})

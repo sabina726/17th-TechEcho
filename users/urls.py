@@ -13,4 +13,5 @@ urlpatterns = [
         "change-password/<uuid:token>/", views.change_password, name="change_password"
     ),
     path("profile/", views.profile, name="profile"),
+    path("profile/edit", views.profile_edit, name="profile_edit"),
 ]

@@ -1,168 +1,281 @@
-<nav class="sticky top-0 left-0 z-20 w-full p-6 bg-blue-1"
+<nav
+  class="sticky top-0 left-0 z-20 w-full p-6 bg-blue-1"
   x-data="{ open: false, submenuOpen: false, expertOpen: false, userMenuOpen: false, teacherOpen: false}"
-  @resize.window="if (window.innerWidth > 768) open = false">
+  @resize.window="if (window.innerWidth > 768) open = false"
+>
   <div class="flex items-center justify-between">
     <div class="text-4xl font-bold text-white animate-pulse whitespace-nowrap">
       <a href="{% url 'index' %}">TechEcho( )</a>
     </div>
 
     {% if request.path != '/' %}
-    <form method="GET" action="{% url 'search' %}" class="relative flex items-center">
+    <form
+      method="GET"
+      action="{% url 'search' %}"
+      class="relative flex items-center"
+    >
       <input
         type="text"
         name="q"
         class="w-full h-12 p-4 bg-white border border-gray-300 rounded-3xl"
         placeholder="Search..."
         value="{{ query }}"
-      >
+      />
       <button type="submit" class="absolute text-gray-500 bottom-3 right-3">
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
     </form>
     {% endif %}
 
-    <button @click="open = !open" class="relative text-xl text-white md:hidden whitespace-nowrap">
+    <button
+      @click="open = !open"
+      class="relative text-xl text-white md:hidden whitespace-nowrap"
+    >
       選單
     </button>
 
     <ul class="hidden space-x-4 text-xl text-white md:flex whitespace-nowrap">
       <li class="relative tooltip tooltip-bottom" data-tip="問看看？">
-        <a href="#" @click="submenuOpen = !submenuOpen"
-          class="transition duration-300 ease-in-out hover:text-green-3">討論</a>
-        <ul x-show="submenuOpen" @click.away="submenuOpen = false"
-          class="absolute left-0 z-20 mt-9 text-green-3 w-60 bg-vanilla-5" style="display: none">
+        <a
+          href="#"
+          @click="submenuOpen = !submenuOpen"
+          class="transition duration-300 ease-in-out hover:text-green-3"
+          >討論</a
+        >
+        <ul
+          x-show="submenuOpen"
+          @click.away="submenuOpen = false"
+          class="absolute left-0 z-20 mt-9 text-green-3 w-60 bg-vanilla-5"
+          style="display: none"
+        >
           <li>
-            <a href="{% url 'questions:new' %}"
-              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">發問題</a>
+            <a
+              href="{% url 'questions:new' %}"
+              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
+              >發問題</a
+            >
           </li>
           <li>
-            <a href="{% url 'questions:index' %}"
-              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">看問題</a>
+            <a
+              href="{% url 'questions:index' %}"
+              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
+              >看問題</a
+            >
           </li>
         </ul>
       </li>
       <li class="relative tooltip tooltip-bottom" data-tip="找專家？">
-        <a href="#" @click="expertOpen = !expertOpen"
-          class="transition duration-300 ease-in-out hover:text-green-3">專家</a>
-        <ul x-show="expertOpen" @click.away="expertOpen = false"
-          class="absolute left-0 z-20 mt-9 text-green-3 w-60 bg-vanilla-5" style="display: none">
+        <a
+          href="#"
+          @click="expertOpen = !expertOpen"
+          class="transition duration-300 ease-in-out hover:text-green-3"
+          >專家</a
+        >
+        <ul
+          x-show="expertOpen"
+          @click.away="expertOpen = false"
+          class="absolute left-0 z-20 mt-9 text-green-3 w-60 bg-vanilla-5"
+          style="display: none"
+        >
           <li>
-            <a href="{% url 'teachers:index' %}"
-              class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">專家清單</a>
+            <a
+              href="{% url 'teachers:index' %}"
+              class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+              >專家清單</a
+            >
           </li>
           <li>
-            <a href="{% url 'teachers:mentor' %}"
-              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">當專家</a>
+            <a
+              href="{% url 'teachers:mentor' %}"
+              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
+              >當專家</a
+            >
           </li>
           <li>
-            <a href="{% url 'payments:index' %}"
-              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">問專家</a>
-
+            <a
+              href="{% url 'payments:index' %}"
+              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
+              >問專家</a
+            >
           </li>
         </ul>
       </li>
       <li class="relative tooltip tooltip-bottom" data-tip="想預約？">
-        <a href="#" @click="teacherOpen = !teacherOpen"
-          class="transition duration-300 ease-in-out hover:text-green-3">預約</a>
-        <ul x-show="teacherOpen" @click.away="teacherOpen = false"
-          class="absolute left-0 z-20 mt-9 text-green-3 w-60 bg-vanilla-5" style="display: none">
+        <a
+          href="#"
+          @click="teacherOpen = !teacherOpen"
+          class="transition duration-300 ease-in-out hover:text-green-3"
+          >預約</a
+        >
+        <ul
+          x-show="teacherOpen"
+          @click.away="teacherOpen = false"
+          class="absolute left-0 z-20 mt-9 text-green-3 w-60 bg-vanilla-5"
+          style="display: none"
+        >
           <li>
-            <a href="{% url 'appointments:schedule_available' %}"
-              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">專家時間</a>
+            <a
+              href="{% url 'appointments:schedule_available' %}"
+              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
+              >專家時間</a
+            >
           </li>
           <li>
-            <a href="{% url 'appointments:schedule' %}"
-              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">授課時間</a>
-
+            <a
+              href="{% url 'appointments:schedule' %}"
+              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
+              >授課時間</a
+            >
           </li>
         </ul>
       </li>
 
       {% if user.is_authenticated %}
-      <div class="relative inline-flex items-center">
-        <span class="pr-3 transition duration-300 ease-in-out">{{ user.username }}</span>
+      <div
+        class="relative inline-flex items-center"
+        @click="userMenuOpen = !userMenuOpen"
+      >
+        <span
+          class="pr-3 transition duration-300 ease-in-out hover:text-green-3 no-underline hover:underline"
+          >{{ user.username }}</span
+        >
         <img
           src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar"
-          alt="User Avatar" class="rounded-full cursor-pointer w-7 h-7" @click="userMenuOpen = !userMenuOpen">
+          alt="User Avatar"
+          class="rounded-full cursor-pointer w-7 h-7"
+        />
 
-          <ul x-show="userMenuOpen" @click.away="userMenuOpen = false"
-          class="absolute left-0 z-20 top-5 mt-9 text-green-3 w-60 bg-vanilla-5" style="display: none">
+        <ul
+          x-show="userMenuOpen"
+          @click.away="userMenuOpen = false"
+          class="absolute left-0 z-20 top-5 mt-9 text-green-3 w-60 bg-vanilla-5"
+          style="display: none"
+        >
           <li>
-            <a href="{% url 'users:profile' %}" class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">個人簡介</a>
+            <a
+              href="{% url 'users:profile' %}"
+              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
+              >個人簡介</a
+            >
           </li>
           <li>
-            <a href="{% url 'users:logout' %}"
-              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4">登出</a>
+            <a
+              href="{% url 'users:logout' %}"
+              class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
+              >登出</a
+            >
           </li>
         </ul>
       </div>
-      {% include "layouts/notifications.html" with user=user %}
-      {% else %}
+      {% include "layouts/notifications.html" with user=user %} {% else %}
       <li>
-        <a href="{% url 'users:login'%}?next={{ request.path }}"
-          class="transition duration-300 ease-in-out hover:text-green-3">登入</a>
+        <a
+          href="{% url 'users:login'%}?next={{ request.path }}"
+          class="transition duration-300 ease-in-out hover:text-green-3"
+          >登入</a
+        >
       </li>
       <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
-        <a href="{% url 'users:register' %}" class="transition duration-300 ease-in-out hover:text-green-3">註冊</a>
+        <a
+          href="{% url 'users:register' %}"
+          class="transition duration-300 ease-in-out hover:text-green-3"
+          >註冊</a
+        >
       </li>
       {% endif %}
     </ul>
-
   </div>
 
-  <ul class="absolute right-0 z-10 w-full mt-6 text-lg bg-vanilla-5" x-show="open" @click.away="open = false"
-    style="display: none">
-
+  <ul
+    class="absolute right-0 z-10 w-full mt-6 text-lg bg-vanilla-5"
+    x-show="open"
+    @click.away="open = false"
+    style="display: none"
+  >
     <li @click="submenuOpen = !submenuOpen">
-      <a href="#" class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">討論</a>
+      <a
+        href="#"
+        class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+        >討論</a
+      >
       <ul x-show="submenuOpen" class="mt-2 ml-4">
         <li>
-          <a href="{% url 'questions:new' %}"
-            class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">發問題</a>
+          <a
+            href="{% url 'questions:new' %}"
+            class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+            >發問題</a
+          >
         </li>
         <li>
-          <a href="{% url 'questions:index' %}"
-            class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">看問題</a>
+          <a
+            href="{% url 'questions:index' %}"
+            class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+            >看問題</a
+          >
         </li>
       </ul>
     </li>
     <li @click="expertOpen = !expertOpen">
-      <a href="#" class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">專家</a>
+      <a
+        href="#"
+        class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+        >專家</a
+      >
       <ul x-show="expertOpen" class="mt-2 ml-4">
         <li>
-          <a href="{% url 'teachers:index' %}"
-            class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">專家清單</a>
+          <a
+            href="{% url 'teachers:index' %}"
+            class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+            >專家清單</a
+          >
         </li>
         <li>
-          <a href="{% url 'teachers:new' %}"
-            class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">當專家</a>
+          <a
+            href="{% url 'teachers:new' %}"
+            class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+            >當專家</a
+          >
         </li>
         <li>
-          <a href="{% url 'teachers:index' %}"
-            class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">問專家</a>
-
+          <a
+            href="{% url 'teachers:index' %}"
+            class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+            >問專家</a
+          >
         </li>
       </ul>
     </li>
     <li>
-      <a href="#" class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">預約</a>
+      <a
+        href="#"
+        class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+        >預約</a
+      >
     </li>
     {% if user.is_authenticated %}
 
-
-      <li>
-        <a href="{% url 'users:logout'%}"
-          class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">登出</a>
-      </li>
-      {% else %}
-      <li>
-        <a href="{% url 'users:login'%}?next={{ request.path }}"
-          class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">登入</a>
-      </li>
-      <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
-        <a href="{% url 'users:register' %}"
-          class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4">註冊</a>
-      </li>
+    <li>
+      <a
+        href="{% url 'users:logout'%}"
+        class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+        >登出</a
+      >
+    </li>
+    {% else %}
+    <li>
+      <a
+        href="{% url 'users:login'%}?next={{ request.path }}"
+        class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+        >登入</a
+      >
+    </li>
+    <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
+      <a
+        href="{% url 'users:register' %}"
+        class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
+        >註冊</a
+      >
+    </li>
     {% endif %}
   </ul>
 </nav>
