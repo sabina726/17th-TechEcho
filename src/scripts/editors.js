@@ -19,13 +19,15 @@ self.MonacoEnvironment = {
 };
 
 const editor = monaco.editor.create(document.getElementById('editor'), {
-	value: "",
+	value: "console.log('Hello World')",
 	language: language,
 	theme: 'vs-light',
 	fontSize: 12
 });
 
 const languageSelect = document.getElementById('language-select');
+languageSelect.value = language;
+console.log(language)
 languageSelect.addEventListener('change', (event) => {
 	language = event.target.value;
 	monaco.editor.setModelLanguage(editor.getModel(), language);
@@ -49,7 +51,6 @@ evalBtn.addEventListener('click', async () => {
 	const params = new URLSearchParams();
 	params.append('code', editor.getValue());
 	params.append('language', language);
-
 	try {
 		const response = await fetch(document.getElementById('eval-url').value, {
 			method: 'POST',

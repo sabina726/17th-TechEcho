@@ -11,8 +11,6 @@ const esbuild = require('esbuild');
 const path = require('path');
 const fs = require('fs');
 
-// got to understand the details of this line
-removeDir('dist', (entry) => /index.html$/.test(entry));
 
 const workerEntryPoints = [
 	'vs/language/css/css.worker.js',
