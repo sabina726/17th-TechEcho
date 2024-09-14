@@ -1,26 +1,24 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.main.js';
 
 
+
 self.MonacoEnvironment = {
-	getWorkerUrl: function (moduleId, label) {
-		if (label === 'json') {
-			// this has to change, and all the following
-			return './vs/language/json/json.worker.js';
-		}
+	getWorkerUrl: function (_, label) {
 		if (label === 'css' || label === 'scss' || label === 'less') {
-			return './vs/language/css/css.worker.js';
+			return document.getElementById('css').value;
 		}
 		if (label === 'html' || label === 'handlebars' || label === 'razor') {
-			return './vs/language/html/html.worker.js';
+			return document.getElementById('html').value;
 		}
 		if (label === 'typescript' || label === 'javascript') {
-			return './vs/language/typescript/ts.worker.js';
+			return document.getElementById('typescript').value;
 		}
-		return './vs/editor/editor.worker.js';
+		return document.getElementById('editor_worker').value;
 	}
 };
 
-monaco.editor.create(document.getElementById('container'), {
+monaco.editor.create(document.getElementById('editor'), {
 	value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
-	language: 'javascript'
+	language: 'html'
 });
+

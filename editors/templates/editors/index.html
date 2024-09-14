@@ -6,13 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
 </head>
 <body>
-    <h1>test</h1>
+    <h1>簡易編輯器</h1>
     <link rel="stylesheet" href="{% static 'editors/editors.css' %}" />
+    <script src="{% static 'editors/editors.js' %}" type="module"></script>
 
-    <div id="container" style="width: 800px; height: 600px; border: 1px solid #ccc"></div>
-    <script type="module" src="{% static 'editors/editors.js' %}"></script>
+    <div id="editor" style="width: 800px; height: 600px; border: 1px solid #ccc"></div>
+    <input type="hidden" id="css" value={% static 'editors/vs/language/css/css.worker.js' %}>
+    <input type="hidden" id="html" value={% static 'editors/vs/language/html/html.worker.js' %}>
+    <input type="hidden" id="typescript" value={% static 'editors/vs/language/typescript/ts.worker.js' %}>
+    <input type="hidden" id="editor_worker" value="{% static 'editors/vs/editor/editor.worker.js' %}">
 </body>
 </html>
 

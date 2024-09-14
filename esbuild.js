@@ -3,6 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+// 原始基礎由微軟 Monaco Editor Opensource 提供
+// 另基於本專案需求進行微幅更動
+
 
 const esbuild = require('esbuild');
 const path = require('path');
@@ -12,7 +15,6 @@ const fs = require('fs');
 removeDir('dist', (entry) => /index.html$/.test(entry));
 
 const workerEntryPoints = [
-	'vs/language/json/json.worker.js',
 	'vs/language/css/css.worker.js',
 	'vs/language/html/html.worker.js',
 	'vs/language/typescript/ts.worker.js',
