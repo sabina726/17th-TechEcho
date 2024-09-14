@@ -1,16 +1,20 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from .forms import BlogForm  # Assume you have a BlogForm instead of ArticleForm
-from .models import Blog  # Assume you have a Blog model instead of Article
+
+from .forms import BlogForm
+from .models import Blog
+
 
 def index(request):
     # Fetch all blog entries ordered by creation date
     blogs = Blog.objects.all().order_by("-created_at")
-    return render(request, "blogs/index.html", {'blogs': blogs})
+    return render(request, "blogs/index.html", {"blogs": blogs})
+
 
 def show(request, pk):
     # Get a specific blog by its primary key (pk)
     blog = get_object_or_404(Blog, pk=pk)
-    return render(request, "blogs/show.html", {'blog': blog})
+    return render(request, "blogs/show.html", {"blog": blog})
+
 
 def new(request):
     if request.method == "POST":
@@ -21,6 +25,7 @@ def new(request):
     else:
         form = BlogForm()
     return render(request, "blogs/new.html", {"form": form})
+
 
 def edit(request, pk):
     # Get a specific blog to edit by its primary key (pk)
@@ -34,10 +39,11 @@ def edit(request, pk):
         form = BlogForm(instance=blog)
     return render(request, "blogs/edit.html", {"form": form})
 
+
 def delete(request, pk):
     # Get a specific blog to delete by its primary key (pk)
     blog = get_object_or_404(Blog, pk=pk)
     if request.method == "POST":
         blog.delete()
         return redirect("blogs:index")
-    return render(request, "blogs/delete.html", {'blog': blog})
+    return render(request, "blogs/delete.html", {"blog": blog})

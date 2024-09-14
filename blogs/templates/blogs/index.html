@@ -4,14 +4,27 @@
 <div class="p-6 max-w-4xl mx-auto relative">
     <div class="flex justify-between items-center p-1">
         <h1 class="text-4xl">文章列表</h1>
-        <a href="{% url 'blogs:new' %}">增新文章</a>
-        <ul>
-            {% for blog in blogs %}
-                <li>
-                    <a href="{% url 'blogs:show' blog.pk %}">{{ blog.title }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+        <a href="{% url 'blogs:new' %}">新增文章</a>
     </div>
+
+    <ul>
+        {% for blog in blogs %}
+            <li class="p-4 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <a href="{% url 'blogs:show' blog.pk %}" class="text-2xl font-bold">{{ blog.title }}</a>
+                        <p>Category: {{ blog.category.name }}</p>
+                        <p>Published on: {{ blog.created_at|date:"Y-m-d" }}</p>
+                        <p>Author: {{ blog.author.username }}</p>
+                    </div>
+                    <div>
+                        <p>Views: {{ blog.views }}</p>
+                        <p>Comments: {{ blog.comments_count }}</p>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
+
