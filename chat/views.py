@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -16,6 +17,16 @@ def index(request):
 @login_required
 def room(request, id):
     chat_group = get_object_or_404(ChatGroup, pk=id)
+
+    # redirect intruders to the teachers show page
+    # while sending them an error message saying they are not allowed to join without a reservation/appointment
+    if chat_group.has_member(request.user):
+        messages.error(
+            request,
+            "這位老師沒有把您加入這個聊天室，或許您沒有預約，或是老師有所疏漏。假如您已經有預約，請稍候幾分鐘再嘗試。",
+        )
+        return redirect("teachers:show", id=chat_group.assigned_teacher.id)
+
     chat_messages = chat_group.messages.all()[:30]
 
     if request.method == "POST":

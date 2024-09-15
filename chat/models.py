@@ -4,9 +4,18 @@ from django.db import models
 
 class ChatGroup(models.Model):
     group_name = models.CharField(max_length=100, unique=True)
+    members = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="chat_group", blank=True
+    )
+
+    def has_member(self, user):
+        return (
+            not getattr(self.assigned_teacher, "user", None) == user
+            and not self.members.filter(pk=user.id).exists()
+        )
 
     def __str__(self):
-        return f"{self.group_name} by {self.assigned_teacher.nickname if self.assigned_teacher else 'Unknown Teacher'}"
+        return f"{self.group_name} by {self.assigned_teacher if self.assigned_teacher else 'Unknown Teacher'}"
 
 
 class GroupMessage(models.Model):
