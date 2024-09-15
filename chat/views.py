@@ -7,13 +7,6 @@ from chat.models import ChatGroup
 from .forms.chat_form import ChatMessageForm
 
 
-# Create your views here.
-@login_required
-def index(request):
-    chat_groups = ChatGroup.objects.all()
-    return render(request, "chat/index.html", {"chat_groups": chat_groups})
-
-
 @login_required
 def room(request, id):
     chat_group = get_object_or_404(ChatGroup, pk=id)
