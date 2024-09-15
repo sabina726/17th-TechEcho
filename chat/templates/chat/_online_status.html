@@ -1,0 +1,10 @@
+<div id="banner" hx-swap-oob="outerHTML" class="relative flex justify-center items-center text-xl bg-vanilla-5 py-2 text-center">
+    {% if online_count|add:'-1' %}
+        <span class="dot green-dot absolute top-1 left-1"></span>
+        <img src="https://via.placeholder.com/40" alt="photo" class="w-12 h-12 rounded-full mr-4">
+        <p>{{ other_user }} 在線</p>
+    {% else %}
+        <span class="dot gray-dot absolute top-1 left-1"></span>
+        <p>無人上線</p>
+    {% endif %}
+</div>

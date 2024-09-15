@@ -19,13 +19,16 @@ class ChatroomConsumer(WebsocketConsumer):
             str(self.chatroom_id), self.channel_name
         )
 
-        event = {"type": "update_members_online", "change": 1}
-        async_to_sync(self.channel_layer.group_send)(str(self.chatroom_id), event)
+        if not self.group.members_online.filter(pk=self.user.id).exists():
+            self.group.members_online.add(self.user)
+            self.update_online_count()
+
         self.accept()
 
     def disconnect(self, code):
-        event = {"type": "update_members_online", "change": -1}
-        async_to_sync(self.channel_layer.group_send)(str(self.chatroom_id), event)
+        if self.group.members_online.filter(pk=self.user.id).exists():
+            self.group.members_online.remove(self.user)
+            self.update_online_count()
 
         async_to_sync(self.channel_layer.group_discard)(
             str(self.chatroom_id), self.channel_name
@@ -51,11 +54,21 @@ class ChatroomConsumer(WebsocketConsumer):
         )
         self.send(text_data=text)
 
-    def update_members_online(self, event):
-        change = event["change"]
-        self.group.members_online = F("members_online") + change
-        self.group.save()
+    def update_online_count(self):
+        online_count = self.group.members_online.count()
+        event = {
+            "type": "online_count_handler",
+            "online_count": online_count,
+        }
+        async_to_sync(self.channel_layer.group_send)(str(self.chatroom_id), event)
 
+    def online_count_handler(self, event):
         text = render_to_string(
             "chat/_online_status.html",
+            {
+                "online_count": event["online_count"],
+                "other_user": self.group.get_other_user(self.user),
+            },
         )
+
+        self.send(text_data=text)

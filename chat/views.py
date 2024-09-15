@@ -21,7 +21,7 @@ def room(request, id):
         return redirect("appointments:appointment")
 
     chat_messages = chat_group.messages.all()[:30]
-    other_user = chat_group.members.exclude(pk=request.user.id).first()
+    other_user = chat_group.get_other_user(request.user)
     form = ChatMessageForm()
 
     return render(
@@ -32,5 +32,6 @@ def room(request, id):
             "form": form,
             "chat_group": chat_group,
             "other_user": other_user,
+            "online_count": chat_group.members_online.count(),
         },
     )

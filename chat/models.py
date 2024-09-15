@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from this import d
 
 
 class ChatGroup(models.Model):
@@ -7,7 +8,12 @@ class ChatGroup(models.Model):
     members = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="chat_group", blank=True
     )
-    members_online = models.PositiveIntegerField(default=0)
+    members_online = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="online_group", blank=True
+    )
+
+    def get_other_user(self, user):
+        return self.members.exclude(pk=user.id).first()
 
     def has_member(self, user):
         # temporarily
