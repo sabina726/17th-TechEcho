@@ -7,12 +7,14 @@ class ChatGroup(models.Model):
     members = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="chat_group", blank=True
     )
+    members_online = models.PositiveIntegerField(default=0)
 
     def has_member(self, user):
-        return (
-            not getattr(self.assigned_teacher, "user", None) == user
-            and not self.members.filter(pk=user.id).exists()
-        )
+        # temporarily
+        if getattr(self.assigned_teacher, "user", None) == user:
+            self.members.add(self.assigned_teacher.user)
+
+        return self.members.filter(pk=user.id).exists()
 
     def __str__(self):
         return f"{self.group_name} by {self.assigned_teacher if self.assigned_teacher else 'Unknown Teacher'}"

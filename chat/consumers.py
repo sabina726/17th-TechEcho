@@ -13,13 +13,16 @@ class ChatroomConsumer(WebsocketConsumer):
         self.user = self.scope["user"]
         self.chatroom_id = self.scope["url_route"]["kwargs"]["chatroom_id"]
         self.group = get_object_or_404(ChatGroup, id=self.chatroom_id)
-
+        self.group.members_online += 1
+        self.group.save()
         async_to_sync(self.channel_layer.group_add)(
             str(self.chatroom_id), self.channel_name
         )
         self.accept()
 
     def disconnect(self, code):
+        self.group.members_online -= 1
+        self.group.save()
         async_to_sync(self.channel_layer.group_discard)(
             str(self.chatroom_id), self.channel_name
         )

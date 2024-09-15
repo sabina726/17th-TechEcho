@@ -7,7 +7,12 @@
             {{message.author.username}}
             <time class="text-xs opacity-50">{{message.created_at}}</time>
         </div>
-        <div class="chat-bubble {% if message|check_author:user %} chat-bubble-success {% endif %}">
+        <div class="chat-bubble
+            {% if message|check_author:user %}
+                chat-bubble-success
+            {% else %}
+                bg-blue-1 text-white
+            {% endif %}">
             {{ message.content }}
         </div>
         <div class="chat-footer opacity-50">Delivered</div>
