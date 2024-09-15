@@ -12,12 +12,15 @@
 
         <ul id="message_list" class="mb-2">
             {% for message in chat_messages %}
-            <li class="chat chat-{{message|check_author:user}}">
+            <li class="chat
+                    chat-{% if message|check_author:user %}end{% else %}start{% endif %}">
                 <div class="chat-header">
                     {{ message.author.username }}
                     <time class="text-xs opacity-50">{{message.created_at}}</time>
                 </div>
-                <div class="chat-bubble">{{ message.content }}</div>
+                <div class="chat-bubble {% if message|check_author:user %} chat-bubble-success {% endif %}">
+                    {{ message.content }}
+                </div>
                 <div class="chat-footer opacity-50">Delivered</div>
             </li>
             {% endfor %}
