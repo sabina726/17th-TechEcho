@@ -40,8 +40,8 @@
           href="#"
           @click="submenuOpen = !submenuOpen"
           class="transition duration-300 ease-in-out hover:text-green-3"
-          >討論</a
-        >
+          >討論
+        </a>
         <ul
           x-show="submenuOpen"
           @click.away="submenuOpen = false"
@@ -52,15 +52,15 @@
             <a
               href="{% url 'questions:new' %}"
               class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
-              >發問題</a
-            >
+              >發問題
+            </a>
           </li>
           <li>
             <a
               href="{% url 'questions:index' %}"
               class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
-              >看問題</a
-            >
+              >看問題
+            </a>
           </li>
         </ul>
       </li>
@@ -69,8 +69,8 @@
           href="#"
           @click="expertOpen = !expertOpen"
           class="transition duration-300 ease-in-out hover:text-green-3"
-          >專家</a
-        >
+          >專家
+        </a>
         <ul
           x-show="expertOpen"
           @click.away="expertOpen = false"
@@ -81,22 +81,22 @@
             <a
               href="{% url 'teachers:index' %}"
               class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
-              >專家清單</a
-            >
+              >專家清單
+            </a>
           </li>
           <li>
             <a
               href="{% url 'teachers:mentor' %}"
               class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
-              >當專家</a
-            >
+              >當專家
+            </a>
           </li>
           <li>
             <a
               href="{% url 'payments:index' %}"
               class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
-              >問專家</a
-            >
+              >問專家
+            </a>
           </li>
         </ul>
       </li>
@@ -105,8 +105,8 @@
           href="#"
           @click="teacherOpen = !teacherOpen"
           class="transition duration-300 ease-in-out hover:text-green-3"
-          >預約</a
-        >
+          >預約
+        </a>
         <ul
           x-show="teacherOpen"
           @click.away="teacherOpen = false"
@@ -117,15 +117,15 @@
             <a
               href="{% url 'appointments:schedule_available' %}"
               class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
-              >專家時間</a
-            >
+              >專家時間
+            </a>
           </li>
           <li>
             <a
               href="{% url 'appointments:schedule' %}"
               class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
-              >授課時間</a
-            >
+              >授課時間
+            </a>
           </li>
         </ul>
       </li>
@@ -137,8 +137,8 @@
       >
         <span
           class="pr-3 transition duration-300 ease-in-out hover:text-green-3 no-underline hover:underline"
-          >{{ user.username }}</span
-        >
+          >{{ user.username }}
+        </span>
         <img
           src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar"
           alt="User Avatar"
@@ -155,15 +155,15 @@
             <a
               href="{% url 'users:profile' %}"
               class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
-              >個人簡介</a
-            >
+              >個人簡介
+            </a>
           </li>
           <li>
             <a
               href="{% url 'users:logout' %}"
               class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4"
-              >登出</a
-            >
+              >登出
+            </a>
           </li>
         </ul>
       </div>
@@ -172,15 +172,15 @@
         <a
           href="{% url 'users:login'%}?next={{ request.path }}"
           class="transition duration-300 ease-in-out hover:text-green-3"
-          >登入</a
-        >
+          >登入
+        </a>
       </li>
       <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
         <a
           href="{% url 'users:register' %}"
           class="transition duration-300 ease-in-out hover:text-green-3"
-          >註冊</a
-        >
+          >註冊
+        </a>
       </li>
       {% endif %}
     </ul>
@@ -196,22 +196,24 @@
       <a
         href="#"
         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
-        >討論</a
-      >
+        >討論
+      </a>
       <ul x-show="submenuOpen" class="mt-2 ml-4">
         <li>
           <a
             href="{% url 'questions:new' %}"
             class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
-            >發問題</a
           >
+            發問題
+          </a>
         </li>
         <li>
           <a
             href="{% url 'questions:index' %}"
             class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
-            >看問題</a
           >
+            看問題
+          </a>
         </li>
       </ul>
     </li>
@@ -219,29 +221,29 @@
       <a
         href="#"
         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
-        >專家</a
-      >
+        >專家
+      </a>
       <ul x-show="expertOpen" class="mt-2 ml-4">
         <li>
           <a
             href="{% url 'teachers:index' %}"
             class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
-            >專家清單</a
-          >
+            >專家清單
+          </a>
         </li>
         <li>
           <a
             href="{% url 'teachers:new' %}"
             class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
-            >當專家</a
-          >
+            >當專家
+          </a>
         </li>
         <li>
           <a
             href="{% url 'teachers:index' %}"
             class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
-            >問專家</a
-          >
+            >問專家
+          </a>
         </li>
       </ul>
     </li>
@@ -249,8 +251,8 @@
       <a
         href="#"
         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
-        >預約</a
-      >
+        >預約
+      </a>
     </li>
     {% if user.is_authenticated %}
 
@@ -258,23 +260,23 @@
       <a
         href="{% url 'users:logout'%}"
         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
-        >登出</a
-      >
+        >登出
+      </a>
     </li>
     {% else %}
     <li>
       <a
         href="{% url 'users:login'%}?next={{ request.path }}"
         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
-        >登入</a
-      >
+        >登入
+      </a>
     </li>
     <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
       <a
         href="{% url 'users:register' %}"
         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4"
-        >註冊</a
-      >
+        >註冊
+      </a>
     </li>
     {% endif %}
   </ul>
