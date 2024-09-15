@@ -1,5 +1,3 @@
-import { javascript } from "@codemirror/lang-javascript"
-
 const default_message = "'Hello World'"
 const default_javascript = `console.log(${default_message})`
 const default_python = `print(${default_message})`
