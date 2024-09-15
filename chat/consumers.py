@@ -25,19 +25,14 @@ class ChatroomConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):
-        try:
-            text_json = json.loads(text_data)
-            content = text_json.get("content", "")
-            if content:
-                message = GroupMessage.objects.create(
-                    content=content, author=self.user, group=self.group
-                )
-                event = {"type": "message_handler", "message_id": message.id}
-                async_to_sync(self.channel_layer.group_send)(
-                    str(self.chatroom_id), event
-                )
-        except Exception:
-            pass
+        text_json = json.loads(text_data)
+        content = text_json.get("content", "").strip()
+        if content:
+            message = GroupMessage.objects.create(
+                content=content, author=self.user, group=self.group
+            )
+            event = {"type": "message_handler", "message_id": message.id}
+            async_to_sync(self.channel_layer.group_send)(str(self.chatroom_id), event)
 
     def message_handler(self, event):
         message_id = event["message_id"]
