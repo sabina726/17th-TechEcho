@@ -83,11 +83,11 @@ def show(request, id):
             return redirect("teachers:show", id=id)
         return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
 
-    questions = Question.objects.filter(user=teacher.user).order_by("-created_at")[:3]
+    questions = Question.objects.filter(user=teacher.user).order_by("-created_at")[:]
     answers = (
         Answer.objects.filter(user=teacher.user)
         .select_related("question", "user")
-        .order_by("-created_at")[:3]
+        .order_by("-created_at")[:]
     )
     context = {
         "teacher": teacher,

@@ -6,11 +6,9 @@
 
 <div class="p-6 m-6 max-w-2xl mx-auto bg-blue-1 mt-8 border border-sky-800 rounded-md">
 
-    <section class="flex justify-center"></section>
     <form action="{% url 'teachers:index' %}" method="POST" autocomplete="off" class="space-y-4">
         {% csrf_token %}
         <div class="grid gap-4">
-
             <p class="text-lg">使用者:</p>
             <p class="text-gray-700 text-lg">{{ request.user.username }}</p>
             {{ form.user.errors }}
@@ -20,17 +18,16 @@
             <p class="text-lg">自我介紹:</p>
             {{ form.introduce }}
             {% if form.introduce.errors %}
-            <p class="text-red-500 text-sm mt-1">
+            <span class="text-red-600 text-sm mt-1">
                 {{ form.introduce.errors }}
-            </p>
+            </span>
             {% endif %}
         </div>
+
         <div class="flex justify-end">
             <button type="submit" class="btn btn-active btn-accent">成為專家</button>
         </div>
     </form>
-    </section>
-
 
 </div>
 

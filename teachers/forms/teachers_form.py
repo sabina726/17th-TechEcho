@@ -9,7 +9,6 @@ class TeacherForm(forms.ModelForm):
         model = Teacher
         exclude = ["user"]
         fields = [
-            "user",
             "introduce",
         ]
         widgets = {
