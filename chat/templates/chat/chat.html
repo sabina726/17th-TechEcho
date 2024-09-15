@@ -3,15 +3,14 @@
 {% comment %} chat-start chat-end {% endcomment %}
 {% load chat %}
 {% block content %}
-
-<div class="my-6 mx-auto w-[60vw] max-w-4xl min-w-xs border-2 shadow-lg rounded-lg">
+<div class="my-8 mx-auto w-[60vw] max-w-2xl min-w-xs border-2 shadow-lg rounded-lg">
     <div class="relative bg-vanilla-5 py-2">
         <span id="online-dot"></span>
         <div id="banner"></div>
     </div>
 
     <ul x-data="scroll"
-        id="message_list" class="w-11/12 mx-auto mb-2 h-[60vh] overflow-auto">
+        id="message_list" class="w-11/12 mx-auto mb-2 h-[55vh] overflow-auto">
         {% for message in chat_messages %}
         <li class="chat
             {% if message|check_author:user %}
