@@ -4,55 +4,54 @@
 {% load chat %}
 {% block content %}
 
-<div class="p-6 max-w-4xl mx-auto">
-    <div class="border-2 mx-auto shadow-lg rounded-lg">
-        <div class="relative bg-vanilla-5 py-2">
-            <span id="online-dot"></span>
-            <div id="banner"></div>
-        </div>
-
-
-        <div class="w-11/12 mb-6 mx-auto">
-            <ul id="message_list" class="mb-2">
-                {% for message in chat_messages %}
-                <li class="chat
-                        chat-{% if message|check_author:user %}end{% else %}start{% endif %}">
-                    <div class="chat-header">
-                        {{ message.author.username }}
-                        <time class="text-xs opacity-50">{{message.created_at}}</time>
-                    </div>
-                    <div class="chat-bubble
-                        {% if message|check_author:user %}
-                            chat-bubble-success
-                        {% else %}
-                            bg-blue-1 text-white
-                        {% endif %}">
-                        {{ message.content }}
-                    </div>
-                    <div class="chat-footer opacity-50">Delivered</div>
-                </li>
-                {% endfor %}
-            </ul>
-
-            <form class="py-2 flex flex-row gap-2"
-                hx-ext="ws"
-                ws-connect="/ws/chatroom/{{ chat_group.id }}/"
-                ws-send
-                hx-on="htmx:wsAfterSend: this.reset()">
-                {% csrf_token %}
-
-                {% for field in form %}
-                <div class="form-control w-full">
-                    {{ field }}
-                    {% if field.errors %}
-                    <span class="text-red-500">{{ field.errors }}</span>
-                    {% endif %}
-                </div>
-                {% endfor%}
-                <button class="btn btn-md bg-green-3 text-white">發送</button>
-            </form>
-        </div>
+<div class="my-6 mx-auto w-[60vw] max-w-4xl min-w-xs border-2 shadow-lg rounded-lg">
+    <div class="relative bg-vanilla-5 py-2">
+        <span id="online-dot"></span>
+        <div id="banner"></div>
     </div>
-</div>
 
+    <ul x-data="scroll"
+        id="message_list" class="w-11/12 mx-auto mb-2 h-[60vh] overflow-auto">
+        {% for message in chat_messages %}
+        <li class="chat
+            {% if message|check_author:user %}
+                chat-end
+            {% else %}
+                chat-start
+            {% endif %}">
+            <div class="chat-header">
+                {{ message.author.username }}
+                <time class="text-xs opacity-50">{{message.created_at}}</time>
+            </div>
+            <div class="chat-bubble
+                {% if message|check_author:user %}
+                    chat-bubble-success
+                {% else %}
+                    bg-blue-1 text-white
+                {% endif %}">
+                {{ message.content }}
+            </div>
+            <div class="chat-footer opacity-50">Delivered</div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <form class="w-11/12 mb-6 mx-auto py-2 flex flex-row gap-2"
+        hx-ext="ws"
+        ws-connect="/ws/chatroom/{{ chat_group.id }}/"
+        ws-send
+        hx-on="htmx:wsAfterSend: this.reset()">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="form-control w-full">
+            {{ field }}
+            {% if field.errors %}
+            <span class="text-red-500">{{ field.errors }}</span>
+            {% endif %}
+        </div>
+        {% endfor%}
+        <button class="btn btn-md bg-green-3 text-white">發送</button>
+    </form>
+</div>
 {% endblock %}
