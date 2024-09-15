@@ -7,7 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render, reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from users.forms import UserProfileForm, UsersForm
+from users.forms import UserPhotoForm, UserProfileForm, UsersForm
 
 from .helper import send_forget_password_mail
 from .models import PasswordReset, User
@@ -122,8 +122,9 @@ def change_password(request, token):
 
 @login_required
 def profile(request):
-    context = {"user": request.user}
-    return render(request, "layouts/profile.html", context)
+    # context = {"user": request.user}
+    form = UserPhotoForm(instance=request.user)
+    return render(request, "layouts/profile.html", {"form": form})
 
 
 @login_required
@@ -140,3 +141,27 @@ def profile_edit(request):
         form = UserProfileForm(instance=request.user)
 
     return render(request, "layouts/profile_edit.html", {"form": form})
+
+
+@login_required
+def upload_profile_picture(request):
+    if request.method == "POST":
+        form = UserPhotoForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            try:
+                form.save()  # 儲存用戶表單（包括圖片上傳到S3）
+                return redirect("users:profile")
+            except (BotoCoreError, ClientError) as e:
+                # 打印S3的錯誤信息到伺服器日誌
+                logging.error(f"S3 上傳失敗: {e}")
+                return render(
+                    request,
+                    "layouts/upload_picture.html",
+                    {"form": form, "error": "上傳照片失敗，請稍後再試。"},
+                )
+    else:
+        form = UserPhotoForm(instance=request.user)
+
+    return render(
+        request, "layouts/upload_picture.html", {"form": form, "user": request.user}
+    )

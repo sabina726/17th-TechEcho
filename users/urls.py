@@ -14,4 +14,9 @@ urlpatterns = [
     ),
     path("profile/", views.profile, name="profile"),
     path("profile/edit", views.profile_edit, name="profile_edit"),
+    path(
+        "upload_profile_picture/",
+        views.upload_profile_picture,
+        name="upload_profile_picture",
+    ),
 ]

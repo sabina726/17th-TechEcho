@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
+from storages.backends.s3boto3 import S3Boto3Storage
 
 
 class User(AbstractUser):
@@ -11,6 +12,12 @@ class User(AbstractUser):
     slug = models.SlugField(unique=True, blank=True, null=True)
     email = models.EmailField(unique=True)
     nickname = models.CharField(max_length=30, null=True)
+    profile_picture = models.ImageField(
+        upload_to="profile_pictures/",
+        blank=True,
+        null=True,
+        storage=S3Boto3Storage,
+    )
 
     def get_display_name(self):
         return self.nickname or self.username
