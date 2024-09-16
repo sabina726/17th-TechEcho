@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 
 from answers.forms import AnswerForm
 from answers.utils.answers_sort import get_ordered_answers
@@ -22,7 +22,7 @@ from .utils.sort import order_is_valid
 
 def index(request):
     # partial rendering only
-    if request.htmx and request.htmx.request.method == "GET":
+    if request.htmx:
         order = request.GET.get("order")
         questions = Question.objects.order_by(order if order_is_valid(order) else "-id")
         questions = paginate(request, questions)
@@ -61,10 +61,12 @@ def index(request):
     return render(request, "questions/index.html", {"questions": questions})
 
 
+@require_GET
 def new(request):
     if request.user.is_anonymous:
         messages.error(request, "只有登入過使用者才能發問喔")
         return redirect("users:login")
+
     form = QuestionForm()
     return render(request, "questions/new.html", {"form": form})
 
@@ -117,6 +119,7 @@ def show(request, id):
 
 
 @login_required
+@require_GET
 def edit(request, id):
     question = get_object_or_404(Question, pk=id, user=request.user)
     form = QuestionForm(instance=question)
