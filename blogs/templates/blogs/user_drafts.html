@@ -1,0 +1,29 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-8 p-6">
+    <h1 class="text-3xl mb-6">我的草稿</h1>
+    <ul>
+        {% for draft in drafts %}
+            <li class="p-4 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <a href="{% url 'blogs:edit' draft.pk %}" class="text-xl font-bold">{{ draft.title }}</a>
+                        <p>Category: {{ draft.category.name }}</p>
+                        <p>Last updated on: {{ draft.updated_at|date:"Y-m-d H:i" }}</p>
+                    </div>
+                    <div>
+                        <a href="{% url 'blogs:edit' draft.pk %}" class="text-blue-500">編輯</a>
+                        <form method="post" action="{% url 'blogs:delete' draft.pk %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="text-red-500">刪除</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+        {% empty %}
+            <li>目前沒有草稿。</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

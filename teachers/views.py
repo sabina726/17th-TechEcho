@@ -1,10 +1,11 @@
-from datetime import time
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
+from answers.models import Answer
+from lib.utils.labels import parse_labels
 from lib.utils.pagination import paginate
+from questions.models import Question
 
 from .forms import TeacherForm
 from .models import Teacher
@@ -15,6 +16,8 @@ def mentor(request):
 
 
 def index(request):
+    label_filter = request.GET.get("label", None)
+
     if request.method == "POST":
         # 檢查是否該使用者已經是專家
         if Teacher.objects.filter(user=request.user).exists():
@@ -22,18 +25,38 @@ def index(request):
             return redirect("teachers:index")
 
         form = TeacherForm(request.POST)
+        labels = parse_labels(request.POST)
+
+        if not labels:
+            messages.error(request, "標籤至少要一個，且是認可的程式語言")
+            return render(request, "teachers/new.html", {"form": form})
+
         if form.is_valid():
             teacher_info = form.save(commit=False)
             teacher_info.user = request.user
             teacher_info.save()
+            teacher_info.labels.set(labels)
             messages.success(request, "歡迎加入")
             return redirect("teachers:index")
 
         return render(request, "teachers/new.html", {"form": form})
 
-    teachers = Teacher.objects.all()
+    teachers = Teacher.objects.all().prefetch_related("labels").order_by("-updated_at")
+
+    if label_filter:
+        teachers = teachers.filter(labels__name__icontains=label_filter)
+
+    all_labels = set(teachers.values_list("labels__name", flat=True).distinct())
+
     teachers = paginate(request, teachers, items_count=8)
-    return render(request, "teachers/index.html", {"teachers": teachers})
+    return render(
+        request,
+        "teachers/index.html",
+        {
+            "teachers": teachers,
+            "all_labels": all_labels,
+        },
+    )
 
 
 @login_required
@@ -50,22 +73,27 @@ def show(request, id):
     chat_group = teacher.chat_group
     if request.method == "POST":
         form = TeacherForm(request.POST, instance=teacher)
+        labels = parse_labels(request.POST)
         if form.is_valid():
-            form.save()
+            teacher_info = form.save(commit=False)  # 暫存資料，避免直接提交
+            if labels:
+                teacher_info.labels.set(labels)
+            teacher_info.save()
             messages.success(request, "更新成功")
             return redirect("teachers:show", id=id)
         return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
 
-    questions = teacher.get_questions().order_by("-created_at")[:3]
-    answers = teacher.get_answers().order_by("-created_at")[:3]
-
+    questions = Question.objects.filter(user=teacher.user).order_by("-created_at")[:3]
+    answers = (
+        Answer.objects.filter(user=teacher.user)
+        .select_related("question", "user")
+        .order_by("-created_at")[:3]
+    )
     context = {
         "teacher": teacher,
         "questions": questions,
         "answers": answers,
         "chat_group": chat_group,
-        "teacher_schedule_start": teacher.schedule_start,
-        "teacher_schedule_end": teacher.schedule_end,
     }
 
     return render(request, "teachers/show.html", context)
@@ -75,12 +103,18 @@ def show(request, id):
 def edit(request, id):
     teacher = get_object_or_404(Teacher, id=id, user=request.user)
     form = TeacherForm(instance=teacher)
-    return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
+    return render(
+        request,
+        "teachers/edit.html",
+        {"teacher": teacher, "form": form, "labels": teacher.labels.all()},
+    )
 
 
 @login_required
 def delete(request, id):
     teacher = get_object_or_404(Teacher, id=id, user=request.user)
+    teacher.user.is_teacher = False
+    teacher.user.save()
     teacher.delete()
     messages.success(request, "刪除成功")
     return redirect("teachers:index")

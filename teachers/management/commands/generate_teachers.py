@@ -42,18 +42,7 @@ class Command(BaseCommand):
             "週日下午 1:00 - 3:00",
         ]
 
-        introduce_templates = [
-            "我是{expertise}專家，擁有豐富的開發經驗和教學背景。",
-            "作為{expertise}的專家，我致力於教授學生掌握該領域的關鍵技能。",
-            "我有多年的{expertise}教學經驗，能幫助你快速入門並精通該語言。",
-            "我的專長是{expertise}，我將幫助你深入理解並實踐這項技術。",
-            "作為{expertise}領域的專家，我的教學方法實用且有效。",
-            "我在{expertise}方面有多年的實戰經驗，將帶你從基礎到進階。",
-            "我的{expertise}課程將幫助你掌握從理論到實踐的所有技能。",
-            "學習{expertise}是一項挑戰，但我會幫助你輕鬆應對。",
-            "我專注於{expertise}的實踐應用，讓你快速掌握該技術。",
-            "作為{expertise}的資深開發者，我的教學內容將直擊重點。",
-        ]
+        introduce_templates = []
 
         teachers = User.objects.filter(is_teacher=True)
         for user in teachers:
@@ -61,11 +50,6 @@ class Command(BaseCommand):
                 # 隨機選擇 1 到 3 個程式語言
                 selected_languages = random.sample(
                     programming_languages, random.randint(1, 3)
-                )
-                expertise = ", ".join(selected_languages)
-
-                introduce = random.choice(introduce_templates).format(
-                    expertise=expertise
                 )
 
                 # 生成三個字的姓名作為 nickname
@@ -77,7 +61,6 @@ class Command(BaseCommand):
 
                 Teacher.objects.create(
                     user=user,
-                    expertise=expertise,
                     introduce=introduce,
                     nickname=nickname,
                     schedule=schedule,

@@ -2,27 +2,32 @@
 
 {% block content %}
 
-<h1 class="text-center text-3xl font-bold text-gray-900 mb-6">專家檔案</h1>
+<h1 class="text-center text-5xl font-bold text-blue-2 p-3">專家檔案</h1>
 
-<div class="p-6 max-w-2xl mx-auto bg-white shadow-lg rounded-lg mt-8">
+<div class="p-6 mb-4 max-w-2xl mx-auto bg-blue-1 border border-sky-800 rounded-md">
 
 
     <section class="flex justify-center">
         <form action="{% url 'teachers:show' teacher.id %}" method="POST" autocomplete="off" class="space-y-4">
             {% csrf_token %}
-            {{ form.user.as_hidden }}
             <div class="grid gap-4">
-                <p>暱稱:{{ form.nickname }}</p>
-                <p>專業能力:{{ form.expertise }}</p>
-                <p>自我介紹:{{ form.introduce }}</p>
+
+                <p class="text-lg">使用者:</p>
+                <p class="text-gray-700 text-lg">{{ request.user.username }}</p>
+                {{ form.user.errors }}
+
+                {% include "teachers/partials/_labels.html" with teacher=teacher only %}
+
+                <p class="text-lg">自我介紹:</p>
+                {{ form.introduce }}
+                {% if form.introduce.errors %}
+                <p class="text-red-500 text-sm mt-1">
+                    {{ form.introduce.errors }}
+                </p>
+                {% endif %}
             </div>
 
-            <div class="flex">
-                <p>開始時間:{{ form.schedule_start }}</p>
-                <p>結束時間:{{ form.schedule_end }}</p>
-            </div>
-
-            <button type="submit" class="btn btn-active btn-accent">編輯檔案</button>
+            <button type="submit" class="btn btn-active btn-accent">修改</button>
         </form>
     </section>
 
