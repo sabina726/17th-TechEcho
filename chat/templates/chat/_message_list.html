@@ -1,4 +1,4 @@
-{% load chat %}
+{% load chat home %}
 
 {% for message in chat_messages %}
     {% if forloop.first and chat_messages.has_previous %}
@@ -20,17 +20,17 @@
     >
         <div class="chat-header">
             {{ message.author }}
-            <time class="text-xs opacity-50">{{message.created_at}}</time>
+            <time class="text-xs opacity-50">{{message.created_at|standard_date}}</time>
         </div>
-        <div class="chat-bubble
+        <article class="chat-bubble text-white break-all
             {% if message|check_author:user %}
                 chat-bubble-success
             {% else %}
-                bg-blue-1 text-white
+                bg-blue-1
             {% endif %}"
         >
-            {{ message.content }}
-        </div>
+            {{ message.content|linebreaksbr }}
+        </article>
         <div class="chat-footer opacity-50">Delivered</div>
     </li>
 {% endfor %}

@@ -1,4 +1,4 @@
-{% load chat %}
+{% load chat home %}
 
 <ul id="message_list" hx-swap-oob="beforeend">
     <li class="fade-up chat
@@ -8,17 +8,18 @@
             chat-start
         {% endif %}">
         <div class="chat-header">
-            {{message.author.username}}
-            <time class="text-xs opacity-50">{{message.created_at}}</time>
+            {{message.author}}
+            <time class="text-xs opacity-50">{{message.created_at|standard_date}}</time>
         </div>
-        <div class="chat-bubble
+        <p class="chat-bubble text-white break-all
             {% if message|check_author:user %}
                 chat-bubble-success
             {% else %}
-                bg-blue-1 text-white
-            {% endif %}">
-            {{ message.content }}
-        </div>
+                bg-blue-1
+            {% endif %}"
+        >
+            {{ message.content|linebreaksbr }}
+        </p>
         <div class="chat-footer opacity-50">Delivered</div>
     </li>
 
