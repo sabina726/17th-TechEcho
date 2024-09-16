@@ -7,13 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_rename_profile_passwordreset_user_nickname'),
+        ("users", "0002_rename_profile_passwordreset_user_nickname"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='profile_picture',
-            field=models.ImageField(blank=True, null=True, storage=storages.backends.s3.S3Storage, upload_to='profile_pictures/'),
+            model_name="user",
+            name="profile_picture",
+            field=models.ImageField(
+                blank=True,
+                null=True,
+                storage=storages.backends.s3.S3Storage,
+                upload_to="profile_pictures/",
+            ),
         ),
     ]

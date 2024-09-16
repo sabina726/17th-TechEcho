@@ -122,9 +122,16 @@ def change_password(request, token):
 
 @login_required
 def profile(request):
-    # context = {"user": request.user}
-    form = UserPhotoForm(instance=request.user)
-    return render(request, "layouts/profile.html", {"form": form})
+    if request.method == "POST":
+        photo_form = UserPhotoForm(request.POST, request.FILES, instance=request.user)
+        if photo_form.is_valid():
+            photo_form.save()
+            return redirect("users:profile")
+    else:
+        photo_form = UserPhotoForm(instance=request.user)
+
+    context = {"photo_form": photo_form, "user": request.user}
+    return render(request, "layouts/profile.html", context)
 
 
 @login_required
@@ -141,27 +148,3 @@ def profile_edit(request):
         form = UserProfileForm(instance=request.user)
 
     return render(request, "layouts/profile_edit.html", {"form": form})
-
-
-@login_required
-def upload_profile_picture(request):
-    if request.method == "POST":
-        form = UserPhotoForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            try:
-                form.save()  # 儲存用戶表單（包括圖片上傳到S3）
-                return redirect("users:profile")
-            except (BotoCoreError, ClientError) as e:
-                # 打印S3的錯誤信息到伺服器日誌
-                logging.error(f"S3 上傳失敗: {e}")
-                return render(
-                    request,
-                    "layouts/upload_picture.html",
-                    {"form": form, "error": "上傳照片失敗，請稍後再試。"},
-                )
-    else:
-        form = UserPhotoForm(instance=request.user)
-
-    return render(
-        request, "layouts/upload_picture.html", {"form": form, "user": request.user}
-    )
