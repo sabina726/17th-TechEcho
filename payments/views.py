@@ -38,7 +38,7 @@ def check_premium_status(user):
 def index(request):
     if request.user.is_authenticated:
         if check_premium_status(request.user):
-            messages.success(request, "vip客戶歡迎回來")
+            messages.success(request, "Premium用戶歡迎回來")
             return render(request, "teachers/index.html")
         else:
             messages.warning(request, "您尚未升級Premium")
