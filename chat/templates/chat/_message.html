@@ -1,7 +1,7 @@
 {% load chat %}
 
 <ul id="message_list" hx-swap-oob="beforeend">
-    <li {% if message|check_author:user %} x-data="scroll" {% endif %}
+    <li {% if message|check_author:user %} x-data="wsScroll" {% endif %}
         class="fade-up chat
         {% if message|check_author:user %}
             chat-end

@@ -57,7 +57,7 @@ def index(request):
         return render(request, "questions/new.html", {"form": form})
 
     questions = Question.objects.prefetch_related("labels").order_by("-id")
-    questions = paginate(request, questions, items_count=5)
+    questions = paginate(request, questions)
     return render(request, "questions/index.html", {"questions": questions})
 
 
@@ -100,7 +100,7 @@ def show(request, id):
     question = get_object_or_404(Question, pk=id)
     vote = upvoted_or_downvoted_or_neither(request, question)
     order_type = request.GET.get("order")
-    answers, order = get_ordered_answers(question, order_type)
+    answers, _ = get_ordered_answers(question, order_type)
     answers = paginate(request, answers, items_count=6)
     form = AnswerForm()
     return render(

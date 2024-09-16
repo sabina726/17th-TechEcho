@@ -9,30 +9,8 @@
         <div id="banner"></div>
     </div>
 
-    <ul x-data="scroll"
-        id="message_list" class="w-11/12 mx-auto mb-2 h-[55vh] overflow-auto">
-        {% for message in chat_messages %}
-        <li class="chat
-            {% if message|check_author:user %}
-                chat-end
-            {% else %}
-                chat-start
-            {% endif %}">
-            <div class="chat-header">
-                {{ message.author.username }}
-                <time class="text-xs opacity-50">{{message.created_at}}</time>
-            </div>
-            <div class="chat-bubble
-                {% if message|check_author:user %}
-                    chat-bubble-success
-                {% else %}
-                    bg-blue-1 text-white
-                {% endif %}">
-                {{ message.content }}
-            </div>
-            <div class="chat-footer opacity-50">Delivered</div>
-        </li>
-        {% endfor %}
+    <ul x-data="scroll" id="message_list" class="w-11/12 mx-auto mb-2 h-[55vh] overflow-auto">
+        {% include "chat/_message_list.html" with chat_messages=chat_messages user=user chat_group_id=chat_group.id%}
     </ul>
 
     <form class="w-11/12 mb-6 mx-auto py-2 flex flex-row gap-2"
