@@ -1,4 +1,4 @@
-const programmingLanguages = [
+export default programmingLanguages = [
     "python",
     "javascript",
     "java",

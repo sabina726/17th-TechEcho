@@ -9,7 +9,7 @@
         <div>
             <span>標籤：</span>
             {% for label in question.labels.all %}
-            <span>{{label}},</span>
+            <span>{{label}}, </span>
             {% endfor %}
         </div>
         <p>內文: {{question.details|striptags|truncatechars:20}}</p>

@@ -19,7 +19,6 @@ const getDefaultSnippets = (language) => {
         return default_cpp
     }
     return ""
-    // why can't this work ?? globalThis[`default_${language}`]
 }
 
 
