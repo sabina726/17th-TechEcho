@@ -1,0 +1,47 @@
+<div id="banner" hx-swap-oob="outerHTML" class="fade-in flex text-green-3 justify-center items-center text-xl">
+    {% if online_count|add:'-1' %}
+        <img src="https://via.placeholder.com/40" alt="photo" class="w-6 h-6 rounded-full mr-4">
+        <p>
+            {{ other_user }}
+            {% if other_user.is_teacher %}
+            老師
+            {% endif %}
+            在線
+        </p>
+    {% else %}
+        <p>無人在線</p>
+    {% endif %}
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0px); }
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease;
+        }
+    </style>
+</div>
+
+{% if online_count|add:'-1' %}
+    <span id="online-dot" class="ligth-up dot green-dot absolute top-1 left-1"></span>
+{% else %}
+    <span id="online-dot" class="dim-down dot gray-dot absolute top-1 left-1"></span>
+{% endif %}
+
+<style>
+    @keyframes lightUp {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    .light-up {
+        animation: lightUp 1s ease;
+    }
+    @keyframes dimDown {
+        from { opacity: 1; }
+        to { opacity: 0.7; }
+    }
+    .dim-down {
+        animation: dimDown 1s ease;
+    }
+</style>
