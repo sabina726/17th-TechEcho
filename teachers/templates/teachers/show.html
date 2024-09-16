@@ -2,83 +2,81 @@
 {% load custom_filters %}
 {% block content %}
 
-<div class="flex items-center justify-around mb-2">
+<div class="flex items-center justify-around mb-6">
     <h1 class="p-6 mb-6 text-5xl font-bold text-center text-blue-2">專家檔案</h1>
-    <a href="{% url 'chat:room' chat_group.id %}" class="btn btn-info btn-lg hover:text-white">進入聊天室</a>
+    <a href="{% url 'chat:room' chat_group.id %}" class="btn">進入聊天室</a>
 </div>
 
+<div class="w-full max-w-3xl mb-6 p-6 mx-auto rounded-lg bg-gray-600">
+    <div class="p-2 m-2 rounded-lg">
+        <h2 class="mb-2 pb-2 text-3xl font-semibold text-white">
+            {{ teacher.user }}
+        </h2>
+        <article class="text-white break-words">{{ teacher.introduce }}</article>
+    </div>
 
-<div class="flex mb-6">
+    <div class="flex p-2 m-2 indent-2 bg-gray-600">
+        <p class="m-2 text-white">專業能力:
+            {% if teacher.labels.all %}
+            {% for label in teacher.labels.all %}
+            <span>{{ label.name }}</span>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            {% else %}
+            無標籤
+            {% endif %}
+        </p>
+    </div>
 
-    <div class="w-1/5 p-2 m-2 rounded-lg bg-blue-1">
-        <h3 class="p-3 text-center text-2xl font-semibold text-pink-900">曾經的提問</h3>
+    <div>
+        <a href="{% url 'appointments:schedule' %}" class="p-2 m-2 btn btn-sm">我的可預約時段</a>
+    </div>
+
+    <div class="flex items-center justify-between mt-6">
+        {% if request.user == teacher.user %}
+        <a href="{% url 'teachers:edit' teacher.id %}" class="px-4 py-2 btn btn-primary">
+            修改基本資訊
+        </a>
+
+        <a href="{% url 'teachers:delete' teacher.id %}" class="btn btn-error"
+            onclick="return confirm('Want to delete?')">
+            刪除資訊
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="w-full max-w-3xl mb-6 p-6 mx-auto rounded-lg bg-gray-600">
+    <div class="p-2">
+        <h3 class="text-2xl font-semibold text-white">提過的問題</h3>
         <ul class="mt-4">
             {% for question in questions %}
             <li class="mb-2 text-center">
-                <a href="{% url 'questions:show' question.id %}" class="text-xl text-pink-900 hover:text-blue-700">
-                    {{ question.title|truncatechars:20 }}
+                <a href="{% url 'questions:show' question.id %}" class="text-xl font-semibold text-white hover:text-gray-900">
+                    {{ question.title|truncatechars:10 }}
                 </a>
             </li>
             {% empty %}
-            <li class="text-center text-pink-900">無提問記錄</li>
+            <li class="text-white">無提問記錄</li>
             {% endfor %}
         </ul>
     </div>
+</div>
 
-    <div class="w-full max-w-3xl p-2 m-2 mx-auto rounded-lg bg-blue-1">
-        <div class="p-2 m-2 rounded-lg">
-            <h2 class="mb-3 p-2 text-3xl font-semibold text-zinc-50">
-                {{ teacher.user }}
-            </h2>
-            <article class="text-xl text-zinc-50 break-words leading-normal">{{ teacher.introduce }}</article>
-        </div>
-
-        <div class="flex p-2 m-2 indent-2 bg-blue-2">
-            <p class="m-2 text-white">專業能力:
-                {% if teacher.labels.all %}
-                {% for label in teacher.labels.all %}
-                <span>{{ label.name }}</span>{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-                {% else %}
-                無標籤
-                {% endif %}
-            </p>
-        </div>
-
-        <div>
-            <a href="{% url 'appointments:schedule' %}" class="p-2 m-2 btn btn-sm">我的可預約時段</a>
-        </div>
-
-        <div class="flex items-center justify-between mt-6 m-2">
-            {% if request.user == teacher.user %}
-            <a href="{% url 'teachers:edit' teacher.id %}" class="px-4 py-2 btn btn-accent">
-                修改基本資訊
-            </a>
-
-            <a href="{% url 'teachers:delete' teacher.id %}" class="btn btn-error m-2"
-                onclick="return confirm('Want to delete?')">
-                刪除資訊
-            </a>
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="w-1/5 p-2 m-2 rounded-lg bg-blue-1">
-        <h3 class="p-3 text-center text-2xl font-semibold text-pink-900">曾經的回答</h3>
+<div class="w-full max-w-3xl mb-6 p-6 mx-auto rounded-lg bg-gray-600">
+    <div class="p-2">
+        <h3 class="text-2xl font-semibold text-white">回答過的問題</h3>
         <ul class="mt-4">
             {% for answer in answers %}
             <li class="mb-2 text-center">
-                <a href="{% url 'questions:show' answer.question.id %}"
-                    class="text-xl text-pink-900 hover:text-blue-700">
-                    {{ answer.content|truncatechars:20 }}
+                <a href="{% url 'questions:show' answer.question.id %}" class="text-xl font-semibold text-white hover:text-gray-900">
+                    {{ answer.content|truncatechars:10 }}
                 </a>
             </li>
             {% empty %}
-            <li class="text-center text-pink-900">無回答記錄</li>
+            <li class="text-white">無回答記錄</li>
             {% endfor %}
         </ul>
     </div>
-
 </div>
 
 {% endblock %}

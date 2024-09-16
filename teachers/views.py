@@ -1,3 +1,5 @@
+from urllib.parse import unquote
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
@@ -70,7 +72,7 @@ def new(request):
 
 def show(request, id):
     teacher = get_object_or_404(Teacher, id=id)
-    chat_group = teacher.chat_group
+    chat_group = getattr(teacher, "chat_group", None)
     if request.method == "POST":
         form = TeacherForm(request.POST, instance=teacher)
         labels = parse_labels(request.POST)

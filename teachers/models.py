@@ -26,23 +26,20 @@ class Teacher(models.Model):
         ordering = ["-updated_at"]
 
     def save(self, *args, **kwargs):
-        if not self.pk:
-            super().save(*args, **kwargs)
-            self.user.is_teacher = True
-            self.user.save()
-
-        if self.user.is_teacher and not self.chat_group:
-            group_name = f"{self.user.username}_group_{self.id or ''}"
-            try:
-                self.chat_group = ChatGroup.objects.create(group_name=group_name)
-            except IntegrityError:
-                self.chat_group = ChatGroup.objects.get(group_name=group_name)
-
+        is_new = self.pk is None
         super().save(*args, **kwargs)
 
-        if self.chat_group and not self.chat_group_id:
-            self.chat_group_id = self.chat_group.id
-            super().save(update_fields=["chat_group_id"])
+        if is_new:
+            self.user.is_teacher = True
+            self.user.save()
+            group_name = f"{self.user.username}"
+            self.chat_group = ChatGroup.objects.create(group_name=group_name)
+            super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.chat_group:
+            self.chat_group.delete()
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return f"{self.user.username}"

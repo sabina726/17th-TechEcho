@@ -21,7 +21,7 @@
 
         <!-- 動態生成篩選按鈕 -->
         {% for label in all_labels %}
-        <a href="?label={{ label|lower }}"
+        <a href="?label={{ label|lower|urlencode }}"
             class="btn btn-outline m-2{% if label_filter == label|lower %} active{% endif %}">
             {{ label }}
         </a>
@@ -34,9 +34,9 @@
             {% for teacher in teachers %}
             <a href="{% url 'teachers:show' teacher.id %}" class="block mb-4 p-4 shadow-md hover:bg-gray-100">
                 <div class="flex flex-col">
-                    <h3 class="text-2xl font-semibold text-blue-2">專家:{{ teacher.user }}</h3>
-                    <p class="m-2 text-xl">專業能力:
-                        {% if teacher.labels.all %}
+                    <h3 class="text-2xl font-semibold leading-normal text-blue-2">專家:{{ teacher.user }}</h3>
+                    <p class="m-2 text-xl leading-normal">專業能力:
+                        {% if teacher.labels.all.exists %}
                         {% for label in teacher.labels.all %}
                         <span>{{ label.name }}</span>{% if not forloop.last %}, {% endif %}
                         {% endfor %}
@@ -44,7 +44,7 @@
                         無標籤
                         {% endif %}
                     </p>
-                    <p class="text-gray-600 mt-1 text-xl">{{ teacher.introduce|truncatechars:50 }}</p>
+                    <p class="text-gray-600 mt-1 text-xl leading-relaxed">{{ teacher.introduce|truncatechars:50 }}</p>
                 </div>
             </a>
             {% endfor %}
