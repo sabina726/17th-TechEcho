@@ -79,5 +79,11 @@ class UserProfileForm(forms.ModelForm):
         ]
 
 
+class UserPhotoForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["profile_picture"]
+
+
 class ForgotPasswordForm(forms.Form):
     email = forms.EmailField(label="信箱", required=True)

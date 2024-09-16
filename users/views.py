@@ -7,7 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render, reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from users.forms import UserProfileForm, UsersForm
+from users.forms import UserPhotoForm, UserProfileForm, UsersForm
 
 from .helper import send_forget_password_mail
 from .models import PasswordReset, User
@@ -122,7 +122,15 @@ def change_password(request, token):
 
 @login_required
 def profile(request):
-    context = {"user": request.user}
+    if request.method == "POST":
+        photo_form = UserPhotoForm(request.POST, request.FILES, instance=request.user)
+        if photo_form.is_valid():
+            photo_form.save()
+            return redirect("users:profile")
+    else:
+        photo_form = UserPhotoForm(instance=request.user)
+
+    context = {"photo_form": photo_form, "user": request.user}
     return render(request, "layouts/profile.html", context)
 
 
