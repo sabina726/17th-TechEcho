@@ -1,25 +1,28 @@
 import Alpine from "alpinejs"
 
 Alpine.data("scroll", _ => ({
+    prevScrollHeight: 0,
+    messageSender: false,
+
     init() {
         this.scrollBottom();
-        document.body.addEventListener("htmx:afterOnLoad", (event) => {
-            console.log("hi")
-            console.log(event)
-            // if (event.detail.target.id === 'load-older-messages') {
-            //     document.getElementById('chat-container').scrollTop = 1;
-            // }
+        this.prevScrollHeight = this.$refs.scrollHeight
+        this.$el.addEventListener("htmx:afterOnLoad", () => {
+            this.$refs.list.scrollTop = this.prevScrollHeight;
+            this.prevScrollHeight = this.$refs.list.scrollHeight
         });
+        this.$el.addEventListener("htmx:wsAfterSend", () => {
+            this.messageSender = true;
+        })
+        this.$el.addEventListener("htmx:wsAfterMessage", () => {
+            if (this.messageSender) {
+                this.scrollBottom()
+                this.messageSender = false;
+            }
+        })
     },
 
     scrollBottom() {
-        this.$el.scrollTop = this.$el.scrollHeight;
+        this.$refs.list.scrollTop = this.$refs.list.scrollHeight;
     }
-}))
-
-Alpine.data("wsScroll", _ => ({
-    init() {
-        list = this.$el.closest('ul')
-        list.scrollTop = list.scrollHeight
-    },
 }))
