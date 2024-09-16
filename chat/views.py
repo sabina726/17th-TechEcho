@@ -20,8 +20,8 @@ def room(request, id):
         )
         return redirect("appointments:appointment")
 
+    chat_messages = chat_group.messages.select_related("author")
     if request.htmx:
-        chat_messages = chat_group.messages.all()
         chat_messages = paginate(request, chat_messages, items_count=30)
         return render(
             request,
@@ -29,9 +29,7 @@ def room(request, id):
             {"chat_messages": chat_messages, "chat_group_id": chat_group.id},
         )
 
-    chat_messages = chat_group.messages.all()
     chat_messages = paginate(request, chat_messages, items_count=30, default_page=-1)
-
     return render(
         request,
         "chat/chat.html",

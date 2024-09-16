@@ -19,7 +19,6 @@
         {% endif %}"
     >
         <div class="chat-header">
-            {% comment %} N+1 {% endcomment %}
             {{ message.author }}
             <time class="text-xs opacity-50">{{message.created_at}}</time>
         </div>
