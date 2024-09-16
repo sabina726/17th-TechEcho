@@ -80,13 +80,9 @@ def forget_password(request):
         password_reset.forget_password_token = uuid.uuid4()
         password_reset.save()
 
-        send_forget_password_mail(user.email, profile.forget_password_token)
+        send_forget_password_mail(user.email, password_reset.forget_password_token)
         messages.success(request, "重設密碼的郵件已發送。")
-    else:
-        messages.error(request, "找不到此帳號。")
-
         return redirect("users:forget_password")
-
     return render(request, "layouts/forget_password.html")
 
 
