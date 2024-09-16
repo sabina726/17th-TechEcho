@@ -5,7 +5,7 @@
     <h1 class="text-2xl font-bold mb-4 text-gray-800">
         新增文章
     </h1>
-    <form method="post" class="space-y-4">
+    <form method="post" enctype="multipart/form-data" class="space-y-4">
         {% csrf_token %}
         {{ form.as_p }}
 
@@ -21,4 +21,13 @@
         </button>
     </form>
 </div>
+
+<!-- Include EasyMDE CSS and JS -->
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+
+<!-- Initialize EasyMDE -->
+<script>
+    // CSRF token function and EasyMDE initialization (as above)
+</script>
 {% endblock %}
