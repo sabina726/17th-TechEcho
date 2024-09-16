@@ -8,6 +8,7 @@ import uuid
 from datetime import datetime
 
 import requests
+from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -37,45 +38,58 @@ def check_premium_status(user):
 def index(request):
     if request.user.is_authenticated:
         if check_premium_status(request.user):
-            return render(request, "payments/after_pay.html")
-    return render(request, "payments/index.html")
+            messages.success(request, "Premium用戶歡迎回來")
+            return render(request, "teachers/index.html")
+        else:
+            messages.warning(request, "您尚未升級Premium")
+            return render(request, "payments/index.html")
 
 
 ###  EC-pay use only
 @login_required
 def ecpay_create_payment(request):
     if check_premium_status(request.user):
-        return render(request, "payments/after_pay.html")
+        messages.info(request, "您已是Premium")
+        return render(request, "teachers/index.html")
+
     request_user = request.user.username
     system_user = get_object_or_404(User, username=request_user)
     print(system_user.id)
-    order = Order.objects.create(
-        user_id=system_user.id,
-        order_id=uuid.uuid4().hex[:20],  # 訂單號碼
-        amount=600,  # 訂單金額
-        status="pending",  # 訂單狀態
-        payment_method="ecpay",  # 支付方式
-        created_at=timezone.now(),
-    )
 
-    order_params = {
-        "MerchantTradeNo": order.order_id,
-        "MerchantTradeDate": order.created_at.strftime("%Y/%m/%d %H:%M:%S"),
-        "PaymentType": "aio",
-        "TotalAmount": order.amount,
-        "TradeDesc": "TechEcho Premium",
-        "ItemName": "升級成TechEcho Premium月訂閱用戶",
-        "ReturnURL": "https://techecho.tonytests.com/payments/ecpay_return/",
-        "ChoosePayment": "Credit",
-        "ClientBackURL": "https://techecho.tonytests.com/payments/ecpay_after_pay/",
-        "OrderResultURL": "https://techecho.tonytests.com/payments/ecpay_after_pay/",
-        "CustomField1": str(system_user.id),
-        "CustomField2": "",
-        "EncryptType": 1,
-    }
+    try:
+        order = Order.objects.create(
+            user_id=system_user.id,
+            order_id=uuid.uuid4().hex[:20],
+            amount=600,
+            status="pending",
+            payment_method="ecpay",
+            created_at=timezone.now(),
+        )
 
-    print(f"{order.order_id}")
-    return HttpResponse(ecpay_api(order_params))
+        messages.success(request, "準備跳轉到付款頁面")
+
+        order_params = {
+            "MerchantTradeNo": order.order_id,
+            "MerchantTradeDate": order.created_at.strftime("%Y/%m/%d %H:%M:%S"),
+            "PaymentType": "aio",
+            "TotalAmount": order.amount,
+            "TradeDesc": "TechEcho Premium",
+            "ItemName": "升級成TechEcho Premium月訂閱用戶",
+            "ReturnURL": "https://techecho.tonytests.com/payments/ecpay_return/",
+            "ChoosePayment": "Credit",
+            "ClientBackURL": "https://techecho.tonytests.com/payments/ecpay_after_pay/",
+            "OrderResultURL": "https://techecho.tonytests.com/payments/ecpay_after_pay/",
+            "CustomField1": str(system_user.id),
+            "CustomField2": "",
+            "EncryptType": 1,
+        }
+
+        print(f"{order.order_id}")
+        return HttpResponse(ecpay_api(order_params))
+
+    except Exception as e:
+        messages.error(request, f"訂單發生錯誤：{str(e)}")
+        return render(request, "payments/index.html")
 
 
 @csrf_exempt
@@ -122,16 +136,18 @@ def ecpay_return(request):
 @csrf_exempt
 def ecpay_after_pay(request):
     if request.method == "POST":
+        messages.success(request, "付款成功")
         return redirect("payments:ecpay_after_pay")
     else:
-        return render(request, "payments/after_pay.html")
+        return render(request, "teachers/index.html")
 
 
 ###  Line-pay use only
 @login_required
 def linepay_create_payment(request):
     if check_premium_status(request.user):
-        return render(request, "payments/after_pay.html")
+        messages.info(request, "您已是Premium")
+        return render(request, "teachers/index.html")
     request_user = request.user.username
     system_user = get_object_or_404(User, username=request_user)
     order = Order.objects.create(
@@ -189,17 +205,21 @@ def linepay_create_payment(request):
             order.transaction_id = response["info"]["transactionId"]
             # order.order_id = response["info"]["orderId"]
             order.save()
-
+            messages.success(request, "正在跳轉到LINE Pay付款頁面")
             # Redirect the user to the LINE Pay payment page
             return redirect(response["info"]["paymentUrl"]["web"])
         else:
             order.status = "failed"
+            order.save()
+            messages.error(request, f"付款創建失敗：{response['returnMessage']}")
+
             return render(
                 request,
                 "payments/payment_error.html",
                 {"error": response["returnMessage"]},
             )
     except Exception as e:
+        messages.error(request, f"發生錯誤：{str(e)}")
         return render(request, "payments/payment_error.html", {"error": str(e)})
 
 
@@ -232,8 +252,8 @@ def linepay_confirm_payment(request):
 
     uri = f"{os.getenv('LINE_PAY_API_ENDPOINT')}/v3/payments/{transaction_id}/confirm"
     payload = {
-        "amount": 600,  # 需確保這與創建訂單時的金額一致
-        "currency": "TWD",  # 需確保這與創建訂單時的貨幣一致
+        "amount": 600,
+        "currency": "TWD",
     }
     signature_uri = f"/v3/payments/{transaction_id}/confirm"
     headers = create_line_pay_headers(payload, signature_uri)
@@ -249,17 +269,20 @@ def linepay_confirm_payment(request):
 
     print(order_id)
     print(order.order_id)
+
     if response.status_code == 200 and result.get("returnCode") == "0000":
-        # 更新訂單狀態，例如：
         order.status = "paid"
         order.save()
+
         User.objects.filter(id=order.user_id).update(is_student="True")
+        messages.success(request, "付款成功")
     else:
         order.status = "failed"
         order.save()
-        print("Line Payment confirmation failed.")
 
-    return render(request, "payments/after_pay.html")
+        messages.error(request, "付款失敗，請稍後再試！")
+
+    return render(request, "teachers/index.html")
 
 
 def linepay_cancel_payment(request):
