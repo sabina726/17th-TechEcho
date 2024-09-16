@@ -4,6 +4,7 @@ __pycache__/
 node_modules/
 static/styles/
 static/scripts/
+static/editors/
 .env
 .vscode/
 .DS_Store
