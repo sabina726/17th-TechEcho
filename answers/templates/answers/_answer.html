@@ -1,64 +1,99 @@
-<section x-data="{ edit: false }" class="container mx-auto border px-6 py-4 my-4 rounded-lg">
-    <div class="flex justify-between">
-        <div class="flex items-center mb-4">
-            <img src="https://via.placeholder.com/40" alt="photo" class="w-12 h-12 rounded-full mr-4">
-            <div>
-                <p class="text-lg font-medium text-gray-800">{{ answer.user }}</p>
-                <p class="text-gray-500">建立時間: {{ answer.created_at|date:'Y/m/d H:i' }}</p>
-                <p class="text-gray-500">更新時間: {{ answer.updated_at|date:'Y/m/d H:i' }}</p>
-            </div>
-        </div>
-
-        {% if user.is_authenticated and user == answer.user %}
-            <div class="flex items-center">
-                <button @click="edit = !edit" class="btn btn-sm bg-blue-600 text-white">編輯</button>
-                <form action="{% url 'answers:delete' answer.id%}" method="POST" onSubmit="return confirm('確定要刪除嗎？')">
-                    {% csrf_token %}
-                    <button class="btn btn-sm bg-red-600 text-white">刪除</button>
-                </form>
-            </div>
-        {% endif %}
+<section
+  x-data="{ edit: false }"
+  class="container mx-auto border px-6 py-4 my-4 rounded-lg"
+>
+  <div class="flex justify-between">
+    <div class="flex items-center mb-4">
+      <img
+        src="https://via.placeholder.com/40"
+        alt="photo"
+        class="w-12 h-12 rounded-full mr-4"
+      />
+      <div>
+        <p class="text-lg font-medium text-gray-800">
+          {{ answer.user.get_display_name }}
+        </p>
+        <p class="text-gray-500">
+          建立時間: {{ answer.created_at|date:'Y/m/d H:i' }}
+        </p>
+        <p class="text-gray-500">
+          更新時間: {{ answer.updated_at|date:'Y/m/d H:i' }}
+        </p>
+      </div>
     </div>
 
-    <div x-show="!edit" id="answer-content" class="text-lg leading-relaxed mb-4">
-        {{ answer.content|linebreaksbr }}
+    {% if user.is_authenticated and user == answer.user %}
+    <div class="flex items-center">
+      <button @click="edit = !edit" class="btn btn-sm bg-blue-600 text-white">
+        編輯
+      </button>
+      <form
+        action="{% url 'answers:delete' answer.id%}"
+        method="POST"
+        onSubmit="return confirm('確定要刪除嗎？')"
+      >
+        {% csrf_token %}
+        <button class="btn btn-sm bg-red-600 text-white">刪除</button>
+      </form>
     </div>
+    {% endif %}
+  </div>
 
-    <div x-show="edit" id="edit-form">
-        <form
-            hx-post="{% url 'answers:edit' answer.id %}"
-            hx-target="#answer-content"
-            hx-swap="innerHTML"
-            @submit.prevent="edit = false"
-        >
-            {% csrf_token %}
-            <textarea name="content" rows="10" class="w-full p-2 border rounded" required>{{ answer.content }}</textarea>
-            <button type="submit" class="btn btn-sm bg-green-600 text-white mt-4">保存</button>
-        </form>
-    </div>
+  <div x-show="!edit" id="answer-content" class="text-lg leading-relaxed mb-4">
+    {{ answer.content|linebreaksbr }}
+  </div>
 
+  <div x-show="edit" id="edit-form">
+    <form
+      hx-post="{% url 'answers:edit' answer.id %}"
+      hx-target="#answer-content"
+      hx-swap="innerHTML"
+      @submit.prevent="edit = false"
+    >
+      {% csrf_token %}
+      <textarea
+        name="content"
+        rows="10"
+        class="w-full p-2 border rounded"
+        required
+      >
+        {{ answer.content }}
+      </textarea>
+      <button type="submit" class="btn btn-sm bg-green-600 text-white mt-4">
+        保存
+      </button>
+    </form>
+  </div>
 
-    <div class="p-2 flex gap-2">
-        {% if user.is_authenticated %}
-            <form hx-post="{% url 'answers:vote' answer.id 'upvote' %}" hx-target="#votes-count-{{ answer.id }}" hx-swap="innerHTML">
-                {% csrf_token %}
-                <button type="submit">
-                    <i class="fa-solid fa-arrow-up text-gray-500 text-lg font-bold"></i>
-                </button>
-            </form>
+  <div class="p-2 flex gap-2">
+    {% if user.is_authenticated %}
+    <form
+      hx-post="{% url 'answers:vote' answer.id 'upvote' %}"
+      hx-target="#votes-count-{{ answer.id }}"
+      hx-swap="innerHTML"
+    >
+      {% csrf_token %}
+      <button type="submit">
+        <i class="fa-solid fa-arrow-up text-gray-500 text-lg font-bold"></i>
+      </button>
+    </form>
 
-            <span id="votes-count-{{ answer.id }}">{{ answer.votes_count }}</span>
+    <span id="votes-count-{{ answer.id }}">{{ answer.votes_count }}</span>
 
-            <form hx-post="{% url 'answers:vote' answer.id 'downvote' %}" hx-target="#votes-count-{{ answer.id }}" hx-swap="innerHTML">
-                {% csrf_token %}
-                <button>
-                    <i class="fa-solid fa-arrow-down text-gray-500 text-lg font-bold"></i>
-                </button>
-            </form>
-        {% else %}
-            <i class="fa-solid fa-arrow-up text-gray-500 text-lg font-bold"></i>
-            <span class="text-gray-500">{{ answer.votes_count }}</span>
-            <i class="fa-solid fa-arrow-down text-gray-500 text-lg font-bold"></i>
-        {% endif %}
-    </div>
+    <form
+      hx-post="{% url 'answers:vote' answer.id 'downvote' %}"
+      hx-target="#votes-count-{{ answer.id }}"
+      hx-swap="innerHTML"
+    >
+      {% csrf_token %}
+      <button>
+        <i class="fa-solid fa-arrow-down text-gray-500 text-lg font-bold"></i>
+      </button>
+    </form>
+    {% else %}
+    <i class="fa-solid fa-arrow-up text-gray-500 text-lg font-bold"></i>
+    <span class="text-gray-500">{{ answer.votes_count }}</span>
+    <i class="fa-solid fa-arrow-down text-gray-500 text-lg font-bold"></i>
+    {% endif %}
+  </div>
 </section>
