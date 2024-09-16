@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     "appointments",
     "notifications",
     "blogs",
+    "editors",
 ]
 
 

@@ -8,11 +8,11 @@ from django.views.decorators.http import require_POST
 
 from answers.forms import AnswerForm
 from answers.utils.answers_sort import get_ordered_answers
+from lib.utils.labels import parse_labels
 from lib.utils.pagination import paginate
 
 from .forms import QuestionForm
 from .models import Question, QuestionUserVotes
-from .utils.labels import parse_labels
 from .utils.question_user_votes import (
     upvoted_or_downvoted_or_neither,
     validate_votes_input,

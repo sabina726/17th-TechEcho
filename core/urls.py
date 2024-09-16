@@ -13,4 +13,5 @@ urlpatterns = [
     path("chat/", include("chat.urls")),
     path("appointments/", include("appointments.urls")),
     path("blogs/", include("blogs.urls")),
+    path("editors/", include("editors.urls")),
 ]
