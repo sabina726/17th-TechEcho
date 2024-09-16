@@ -223,9 +223,9 @@ django==5.1.1 ; python_version >= "3.12" and python_version < "4.0" \
 hyperlink==21.0.0 ; python_version >= "3.12" and python_version < "4.0" \
     --hash=sha256:427af957daa58bc909471c6c40f74c5450fa123dd093fc53efd2e91d2705a56b \
     --hash=sha256:e6b14c37ecb73e89c77d78cdb4c2cc8f3fb59a885c5b3f819ff4ed80f25af1b4
-idna==3.8 ; python_version >= "3.12" and python_version < "4.0" \
-    --hash=sha256:050b4e5baadcd44d760cedbd2b8e639f2ff89bbc7a5730fcc662954303377aac \
-    --hash=sha256:d838c2c0ed6fced7693d5e8ab8e734d5f8fda53a039c0164afb0b82e771e3603
+idna==3.9 ; python_version >= "3.12" and python_version < "4.0" \
+    --hash=sha256:69297d5da0cc9281c77efffb4e730254dd45943f45bbfb461de5991713989b1e \
+    --hash=sha256:e5c5dafde284f26e9e0f28f6ea2d6400abd5ca099864a67f576f3981c6476124
 incremental==24.7.2 ; python_version >= "3.12" and python_version < "4.0" \
     --hash=sha256:8cb2c3431530bec48ad70513931a760f446ad6c25e8333ca5d95e24b0ed7b8fe \
     --hash=sha256:fb4f1d47ee60efe87d4f6f0ebb5f70b9760db2b2574c59c8e8912be4ebd464c9
@@ -358,9 +358,9 @@ typing-extensions==4.12.2 ; python_version >= "3.12" and python_version < "4.0" 
 tzdata==2024.1 ; python_version >= "3.12" and python_version < "4.0" and sys_platform == "win32" \
     --hash=sha256:2674120f8d891909751c38abcdfd386ac0a5a1127954fbc332af6b5ceae07efd \
     --hash=sha256:9068bc196136463f5245e51efda838afa15aaeca9903f49050dfa2679db4d252
-urllib3==2.2.2 ; python_version >= "3.12" and python_version < "4.0" \
-    --hash=sha256:a448b2f64d686155468037e1ace9f2d2199776e17f0a46610480d311f73e3472 \
-    --hash=sha256:dd505485549a7a552833da5e6063639d0d177c04f23bc3864e41e5dc5f612168
+urllib3==2.2.3 ; python_version >= "3.12" and python_version < "4.0" \
+    --hash=sha256:ca899ca043dcb1bafa3e262d73aa25c465bfb49e0bd9dd5d59f1d0acba2f8fac \
+    --hash=sha256:e7d814a81dad81e6caf2ec9fdedb284ecc9c73076b62654547cc64ccdcae26e9
 zope-interface==7.0.3 ; python_version >= "3.12" and python_version < "4.0" \
     --hash=sha256:01e6e58078ad2799130c14a1d34ec89044ada0e1495329d72ee0407b9ae5100d \
     --hash=sha256:064ade95cb54c840647205987c7b557f75d2b2f7d1a84bfab4cf81822ef6e7d1 \
