@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-
+{% load home %}
 {% block content %}
 <div class="p-6 max-w-4xl mx-auto">
     <div class="flex justify-between items-center p-1">
@@ -14,7 +14,7 @@
                     <div>
                         <a href="{% url 'blogs:show' blog.pk %}" class="text-2xl font-bold">{{ blog.title }}</a>
                         <p>Category: {{ blog.category.name }}</p>
-                        <p>Published on: {{ blog.created_at|date:"Y-m-d H:i" }}</p>
+                        <p>Published on: {{ blog.created_at|standard_date }}</p>
                         <p>Author: {{ blog.author.username }}</p>
                     </div>
                     <div>

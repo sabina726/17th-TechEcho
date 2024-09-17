@@ -8,5 +8,5 @@ register = template.Library()
 def teacher_icon(user):
     if user and user.is_teacher:
         return mark_safe("<i class='fa-solid fa-glasses'></i>")
-    
+
     return ""
