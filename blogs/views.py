@@ -63,14 +63,9 @@ def new(request):
 
             action = request.POST.get("action")
 
-            if action == "save_draft":
-                blog.is_draft = True
-                blog.save()
-                return redirect("blogs:index")
-
-            elif action == "preview":
-
-                raw_html = markdown.markdown(blog.content)
+            if action == "preview":
+                # Generate preview content for display on the same page
+                raw_html = markdown.markdown(form.cleaned_data["content"])
 
                 allowed_tags = ALLOWED_TAGS.union(
                     {"img", "p", "div", "span", "h1", "h2", "h3", "h4", "h5", "h6"}
@@ -80,16 +75,22 @@ def new(request):
                     raw_html, tags=allowed_tags, attributes=allowed_attributes
                 )
 
+                # Render the new page with preview content
                 return render(
                     request,
-                    "blogs/preview.html",
-                    {"blog": blog, "form": form, "content_html": content_html},
+                    "blogs/new.html",
+                    {"form": form, "blog": blog, "content_html": content_html},
                 )
 
             elif action == "publish":
                 blog.is_draft = False
                 blog.save()
                 return redirect("blogs:index")
+
+            # Save as draft if no specific action
+            blog.is_draft = True
+            blog.save()
+            return redirect("blogs:index")
 
         return render(request, "blogs/new.html", {"form": form})
 
@@ -99,9 +100,11 @@ def new(request):
 
 
 def show(request, pk):
+    # Retrieve the blog object or return a 404 error if not found
     blog = get_object_or_404(Blog, pk=pk)
 
-    content_html = markdown.markdown(
+    # Convert the blog content from Markdown to HTML
+    raw_html = markdown.markdown(
         blog.content,
         extensions=[
             "markdown.extensions.extra",
@@ -111,10 +114,46 @@ def show(request, pk):
         ],
     )
 
-    Blog.objects.filter(pk=pk).update(views=blog.views + 1)
+    # Convert ALLOWED_TAGS frozenset to a list and add custom tags
+    allowed_tags = list(bleach.ALLOWED_TAGS) + [
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "p",
+        "ul",
+        "ol",
+        "li",
+        "a",
+        "img",
+        "pre",
+        "code",
+        "blockquote",
+        "hr",
+        "em",
+        "strong",
+        "br",
+    ]
+    allowed_attributes = {
+        "a": ["href", "title"],
+        "img": ["src", "alt", "title"],
+        "code": ["class"],  # Allow classes for syntax highlighting
+    }
+    # Sanitize the HTML using bleach to allow only safe tags and attributes
+    content_html = bleach.clean(
+        raw_html, tags=allowed_tags, attributes=allowed_attributes
+    )
 
+    # Update the views count efficiently
+    blog.views += 1
+    blog.save(update_fields=["views"])
+
+    # Get the display name of the author
     author_display_name = blog.author.get_display_name()
 
+    # Render the template with the required context
     return render(
         request,
         "blogs/show.html",
@@ -136,10 +175,24 @@ def edit(request, pk):
     if request.method == "POST":
         form = BlogForm(request.POST, instance=blog)
         if form.is_valid():
-            form.save()
-            return redirect("blogs:show", pk=blog.pk)
+            action = request.POST.get("action")
+
+            if action == "update":
+                # Save and redirect to the blog's detail page
+                blog = form.save()
+                return redirect("blogs:show", pk=blog.pk)
+
+            elif action == "save_draft":
+                # Save as draft and redirect to user drafts page
+                blog = form.save(commit=False)
+                blog.is_draft = True  # Set the blog post as a draft
+                blog.save()
+                return redirect("blogs:user_drafts")  # Redirect to user drafts page
+
     else:
         form = BlogForm(instance=blog)
+
+    # Initial rendering of the edit page
     return render(request, "blogs/edit.html", {"form": form, "blog": blog})
 
 

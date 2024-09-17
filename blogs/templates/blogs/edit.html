@@ -1,27 +1,80 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
+<div class="flex flex-col md:flex-row max-w-6xl mx-auto bg-white p-6 mt-8 rounded-md shadow-md">
+    <!-- Left Column: Editor -->
+    <div class="w-full md:w-1/2 pr-0 md:pr-4 mb-4 md:mb-0">
+        <h1 class="text-2xl font-bold mb-4 text-gray-800">編輯文章</h1>
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
 
-<div class="max-w-2xl mx-auto bg-white p-6 mt-8 rounded-md shadow-md">
-    <h1 class="text-2xl font-bold mb-4 text-gray-800">編輯文章</h1>
-    <form method="post" enctype="multipart/form-data" class="space-y-4">
-        {% csrf_token %}
-        {{ form.as_p }}
+            <!-- Render form fields manually, excluding the 'is_draft' checkbox -->
+            <div class="mb-4">
+                {{ form.title.label_tag }}
+                {{ form.title }}
+            </div>
 
-        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">
-            更新文章
-        </button>
-    </form>
-    <a href="{% url 'blogs:show' blog.pk %}" class="text-blue-500 hover:underline">取消</a>
+            <div class="mb-4">
+                {{ form.content.label_tag }}
+                {{ form.content }}
+            </div>
+
+            <div class="mb-4">
+                {{ form.category.label_tag }}
+                {{ form.category }}
+            </div>
+
+            <!-- Update Button -->
+            <button type="submit" name="action" value="update" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">
+                更新文章
+            </button>
+
+            <!-- Preview Button -->
+            <button type="button" id="preview-button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md">
+                預覽文章
+            </button>
+
+            <!-- Save as Draft Button -->
+            <button type="submit" name="action" value="save_draft" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-md">
+                儲存草稿
+            </button>
+        </form>
+        <a href="{% url 'blogs:show' blog.pk %}" class="text-blue-500 hover:underline">取消</a>
+    </div>
+
+    <!-- Right Column: Preview -->
+    <div class="w-full md:w-1/2 pl-0 md:pl-4">
+        <h2 class="text-xl font-bold mb-4 text-gray-800">預覽文章</h2>
+        <div id="preview-content" class="prose max-w-full break-words overflow-hidden"></div>
+    </div>
 </div>
 
 <!-- Include EasyMDE CSS and JS -->
 <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
 <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
 
-<!-- Initialize EasyMDE -->
+<!-- Initialize EasyMDE and Preview Functionality -->
 <script>
-    // CSRF token function and EasyMDE initialization (as above)
-</script>
+    // Initialize EasyMDE editor
+    var easyMDE = new EasyMDE({
+        element: document.querySelector("textarea[name='content']"),
+        autoDownloadFontAwesome: false,
+        renderingConfig: {
+            codeSyntaxHighlighting: true,
+        }
+    });
 
+    // Preview Button Click Event
+    document.getElementById("preview-button").addEventListener("click", function() {
+        var previewContent = easyMDE.value();
+        document.getElementById("preview-content").innerHTML = easyMDE.options.previewRender(previewContent);
+    });
+
+    // Initial Preview Render
+    easyMDE.codemirror.on("change", function() {
+        var previewContent = easyMDE.value();
+        document.getElementById("preview-content").innerHTML = easyMDE.options.previewRender(previewContent);
+    });
+</script>
 {% endblock %}
+
