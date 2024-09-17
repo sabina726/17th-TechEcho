@@ -14,21 +14,34 @@ self.MonacoEnvironment = {
 	}
 };
 
-const ydoc = new Y.Doc();
-const provider = new WebsocketProvider('ws://localhost:8000/ws/editor/','test/', ydoc);
-
-// const provider = new WebsocketProvider('ws://localhost:8000/ws/editor/{{ room_name }}/', ydoc);
-
 let language = 'javascript';
 const editor = monaco.editor.create(document.getElementById('editor'), {
-	value: getDefaultSnippets(language),
+	value: '',
 	language: language,
 	theme: 'vs-light',
 	fontSize: 12
 });
 
-const monacoBinding = new MonacoBinding(ydoc.getText('monaco'), editor.getModel(), new Set([editor]));
+const ydoc = new Y.Doc();
+const editorId = document.getElementById("editor-id").value;
+const URL = `/ws/editor/${editorId}/`;
+const provider = new WebsocketProvider('/ws/editor/',`${editorId}/`, ydoc);
+const yText = ydoc.getText();
+new MonacoBinding(yText, editor.getModel(), new Set([editor]), provider.awareness);
 
+// const socket = new WebSocket('/ws/editor/')
+
+
+// const socket = new WebSocket(wsUrl);
+
+// socket.onmessage = function(event) {
+// const data = JSON.parse(event.data);
+
+// // If the message is a code result, display it
+// if (data.type === 'code_result') {
+// 	displayResult(data.result);
+// }
+// };
 
 const languageSelect = document.getElementById('language-select');
 languageSelect.value = language;

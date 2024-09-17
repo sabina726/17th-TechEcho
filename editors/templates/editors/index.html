@@ -1,33 +1,16 @@
+{% extends 'layouts/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        .editor-container {
-            width: 80%;
-            margin: auto
-        }
-        #editor {
-            width: full;
-            height: 50vh;
-            border: 1px solid #ddd;
-        }
-    </style>
-</head>
-<body>
-    <link rel="stylesheet" href="{% static 'editors/editors.css' %}" />
+
+{% block content %}
+<div>
+    <link href="{% static 'editors/editors.css' %}" rel="stylesheet" />
     <script src="{% static 'editors/editors.js' %}" type="module"></script>
-    <div class="editor-container">
+    <div class="w-fit mx-auto">
         <h1>簡易編輯器</h1>
         <label for="language-select">選擇程式語言：</label>
         <select id="language-select">
             <option value="javascript" selected>JavaScript</option>
             <option value="python">Python</option>
-            <option value="cpp">C++</option>
         </select>
         <label for="theme-select">選擇背景顏色：</label>
         <select id="theme-select">
@@ -43,8 +26,12 @@
             {% endfor %}
         </select>
 
-        <div id="editor"></div>
+        <div id="editor" class="w-full h-[50vh] border-2"></div>
         <button id="eval">執行程式</button>
+    </div>
+
+    <div id="result-containter">
+        result here
     </div>
 
 
@@ -52,7 +39,9 @@
     <input type="hidden" id="typescript" value={% static 'editors/vs/language/typescript/ts.worker.js' %}>
     <input type="hidden" id="editor-worker" value="{% static 'editors/vs/editor/editor.worker.js' %}">
     <input type="hidden" id="eval-url" value="{% url "editors:index" %}">
-</body>
-</html>
+    <input type="hidden" id="editor-id" value="1">
+</div>
+{% endblock  %}
+
 
 
