@@ -40,6 +40,11 @@ def index(request):
             teacher_info.user = request.user
             teacher_info.save()
             teacher_info.labels.set(labels)
+            form.save_m2m()
+
+            request.user.nickname = unquote(nickname)
+            request.user.save()
+
             messages.success(request, "歡迎加入")
             return redirect("teachers:index")
 
