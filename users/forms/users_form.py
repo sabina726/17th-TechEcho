@@ -24,13 +24,15 @@ class UsersForm(UserCreationForm):
         self.fields["password2"].error_messages = {
             "password_mismatch": "兩次輸入的密碼不一致"
         }
+        if self.instance.pk:
+            self.fields["username"].disabled = True
 
     def clean_username(self):
         username = self.cleaned_data.get("username")
         if len(username) < 4:
             raise ValidationError("帳號需要4個字")
-        if len(username) > 10:
-            raise ValidationError("帳號不能超過10個字")
+        if len(username) > 15:
+            raise ValidationError("帳號不能超過15個字")
         return username
 
     def clean_email(self):
@@ -65,6 +67,22 @@ class UsersForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class UserProfileForm(forms.ModelForm):
+    nickname = forms.CharField(required=False, label="暱稱")
+
+    class Meta:
+        model = User
+        fields = [
+            "nickname",
+        ]
+
+
+class UserPhotoForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["profile_picture"]
 
 
 class ForgotPasswordForm(forms.Form):

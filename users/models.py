@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
+from storages.backends.s3boto3 import S3Boto3Storage
 
 
 class User(AbstractUser):
@@ -10,6 +11,16 @@ class User(AbstractUser):
     name = models.CharField(max_length=255, default="default_value")
     slug = models.SlugField(unique=True, blank=True, null=True)
     email = models.EmailField(unique=True)
+    nickname = models.CharField(max_length=30, null=True)
+    profile_picture = models.ImageField(
+        upload_to="profile_pictures/",
+        blank=True,
+        null=True,
+        storage=S3Boto3Storage,
+    )
+
+    def get_display_name(self):
+        return self.nickname or self.username
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -17,14 +28,11 @@ class User(AbstractUser):
             self.slug = f"{base_slug}-{get_random_string(10)}"
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.username
 
-
-class Profile(models.Model):
+class PasswordReset(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     forget_password_token = models.UUIDField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username}'s profile"
+        return f"密碼重置{self.user.username}"
