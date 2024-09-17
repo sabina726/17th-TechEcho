@@ -5,11 +5,7 @@
 {% block content %}
 
 <div class="flex gap-2 my-8 mx-auto max-w-5xl min-w-xs">
-    <div class="w-3/5">
-        {% include "editors/index.html" with id=chat_group.id %}
-    </div>
-
-    <div x-data="scroll" class="w-2/5 border-2 shadow-lg rounded-lg">
+    <div x-data="scroll" class="w-2/5 border-10 shadow-lg rounded-lg">
         <div class="relative bg-vanilla-5 py-2">
             <span id="online-dot"></span>
             <div id="banner"></div>
@@ -36,6 +32,10 @@
             {% endfor%}
             <button class="btn btn-md bg-green-3 text-white">發送</button>
         </form>
+    </div>
+
+    <div class="w-3/5 border-10 shadow-lg rounded-lg px-2 bg-vanilla-5">
+        {% include "editors/index.html" with id=chat_group.id %}
     </div>
 </div>
 

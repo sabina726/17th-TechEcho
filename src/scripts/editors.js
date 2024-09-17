@@ -14,42 +14,45 @@ self.MonacoEnvironment = {
 	}
 };
 
-let language = 'javascript';
+const languageSelect = document.getElementById('language-select');
+languageSelect.value = "javascript";
 const editor = monaco.editor.create(document.getElementById('editor'), {
 	value: '',
-	language: language,
+	language: languageSelect.value,
 	theme: 'vs-light',
 	fontSize: 12
 });
 
 const ydoc = new Y.Doc();
 const editorId = document.getElementById("editor-id").value;
-const URL = `/ws/editor/${editorId}/`;
 const provider = new WebsocketProvider('/ws/editor/',`${editorId}/`, ydoc);
+const awareness = provider.awareness
 const yText = ydoc.getText();
-new MonacoBinding(yText, editor.getModel(), new Set([editor]), provider.awareness);
+new MonacoBinding(yText, editor.getModel(), new Set([editor]), awareness);
 
-// const socket = new WebSocket('/ws/editor/')
+const userId = document.getElementById("user-id").value;
+function changeLanguage(newLanguage) {
+	monaco.editor.setModelLanguage(editor.getModel(), newLanguage);
+	awareness.setLocalStateField('language', { language: newLanguage, sender: userId});
+}
 
-
-// const socket = new WebSocket(wsUrl);
-
-// socket.onmessage = function(event) {
-// const data = JSON.parse(event.data);
-
-// // If the message is a code result, display it
-// if (data.type === 'code_result') {
-// 	displayResult(data.result);
-// }
-// };
-
-const languageSelect = document.getElementById('language-select');
-languageSelect.value = language;
-languageSelect.addEventListener('change', (event) => {
-	language = event.target.value;
-	editor.setValue(getDefaultSnippets(language))
-	monaco.editor.setModelLanguage(editor.getModel(), language);
+languageSelect.addEventListener('change', _ => {
+	console.log("change: ", languageSelect.value)
+	changeLanguage(languageSelect.value);
+	editor.setValue(getDefaultSnippets(languageSelect.value));
 });
+
+awareness.on('change', _ => {
+	const states = awareness.getStates();
+	states.forEach(ele => {
+		if (ele.language && ele.language.language !== languageSelect.value) {
+			languageSelect.value = ele.language.language;
+			console.log("awareness: ", languageSelect.value);
+			monaco.editor.setModelLanguage(editor.getModel(), languageSelect.value);
+		}
+	})
+});
+
 
 const themeSelect = document.getElementById('theme-select');
 themeSelect.addEventListener('change', (event) => {
@@ -68,7 +71,7 @@ const evalBtn = document.getElementById('eval');
 evalBtn.addEventListener('click', async () => {
 	const params = new URLSearchParams();
 	params.append('code', editor.getValue());
-	params.append('language', language);
+	params.append('language', languageSelect.value);
 	try {
 		const response = await fetch(document.getElementById('eval-url').value, {
 			method: 'POST',
@@ -80,11 +83,23 @@ evalBtn.addEventListener('click', async () => {
 		})
 
 		const data = await response.json();
-
-		alert(data.result)
-
+		const show = document.getElementById("result")
+		show.innerHTML = data.result;
 	} catch (error) {
 		alert('An error occurred during the request.');
 	}
 })
 
+// const socket = new WebSocket('/ws/editor/')
+
+
+// const socket = new WebSocket(wsUrl);
+
+// socket.onmessage = function(event) {
+// const data = JSON.parse(event.data);
+
+// // If the message is a code result, display it
+// if (data.type === 'code_result') {
+// 	displayResult(data.result);
+// }
+// };

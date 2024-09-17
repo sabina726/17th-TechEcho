@@ -3,8 +3,8 @@
 <link href="{% static 'editors/editors.css' %}" rel="stylesheet" />
 <script src="{% static 'editors/editors.js' %}" type="module"></script>
 
-<div>
-    <div class="relative">
+<div class="flex flex-col justify-between py-1">
+    <div class="relative mb-6">
         <label for="language-select">選擇程式語言：</label>
         <select id="language-select">
             <option value="javascript" selected>JavaScript</option>
@@ -28,8 +28,7 @@
         <button id="eval" class="btn btn-sm text-white bg-green-3 absolute right-4 bottom-1 z-20">執行程式</button>
     </div>
 
-    <div>
-
+    <div id="result" class="w-full bg-white h-[12vh] border-10 border-rose-500 rounded-lg shadow-lg overflow-auto py-1 px-2">
     </div>
 </div>
 
