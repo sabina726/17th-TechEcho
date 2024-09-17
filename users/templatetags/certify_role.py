@@ -1,9 +1,12 @@
 from django import template
-from django.template.defaultfilters import date as date_filter
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
 
-@register.filter(name="standard_date")
-def standard_date(value):
-    return date_filter(value, "Y/m/d H:i")
+@register.filter(name="teacher_icon")
+def teacher_icon(user):
+    if user and user.is_teacher:
+        return mark_safe("<i class='fa-solid fa-glasses'></i>")
+    
+    return ""
