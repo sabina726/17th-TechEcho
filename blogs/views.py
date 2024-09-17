@@ -14,24 +14,20 @@ from .forms import BlogForm
 from .models import Blog
 
 
-@login_required  # Ensure only authenticated users can upload images
+@login_required
 def image_upload(request):
     if request.method == "POST" and request.FILES.get("image"):
         image = request.FILES["image"]
 
-        # Validate file size (e.g., max 2MB)
         if image.size > 2 * 1024 * 1024:
             return JsonResponse({"error": "File too large (max 2MB)."}, status=400)
 
-        # Validate file type
         if not image.content_type.startswith("image/"):
             return JsonResponse({"error": "Invalid file type."}, status=400)
 
-        # Generate a unique filename
         extension = image.name.split(".")[-1]
         unique_filename = f"{uuid.uuid4()}.{extension}"
 
-        # Save the image to MEDIA_ROOT/uploads/
         save_path = default_storage.save(
             "uploads/" + unique_filename, ContentFile(image.read())
         )
@@ -44,6 +40,8 @@ def image_upload(request):
 
 def index(request):
     blogs = Blog.objects.filter(is_draft=False).order_by("-created_at")
+    for blog in blogs:
+        blog.author_display_name = blog.author.get_display_name()
     return render(request, "blogs/index.html", {"blogs": blogs})
 
 
@@ -71,10 +69,9 @@ def new(request):
                 return redirect("blogs:index")
 
             elif action == "preview":
-                # Convert and sanitize content for preview
+
                 raw_html = markdown.markdown(blog.content)
 
-                # Corrected line
                 allowed_tags = ALLOWED_TAGS.union(
                     {"img", "p", "div", "span", "h1", "h2", "h3", "h4", "h5", "h6"}
                 )
@@ -104,22 +101,28 @@ def new(request):
 def show(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
 
-    # Convert Markdown to HTML with useful extensions
     content_html = markdown.markdown(
         blog.content,
         extensions=[
-            "markdown.extensions.extra",  # Provides extra features like footnotes, tables, etc.
-            "markdown.extensions.codehilite",  # Syntax highlighting for code blocks
-            "markdown.extensions.toc",  # Table of Contents support
-            "markdown.extensions.sane_lists",  # Improved list handling
+            "markdown.extensions.extra",
+            "markdown.extensions.codehilite",
+            "markdown.extensions.toc",
+            "markdown.extensions.sane_lists",
         ],
     )
 
-    # Increment view count safely
     Blog.objects.filter(pk=pk).update(views=blog.views + 1)
 
+    author_display_name = blog.author.get_display_name()
+
     return render(
-        request, "blogs/show.html", {"blog": blog, "content_html": content_html}
+        request,
+        "blogs/show.html",
+        {
+            "blog": blog,
+            "content_html": content_html,
+            "author_display_name": author_display_name,
+        },
     )
 
 
@@ -127,7 +130,6 @@ def show(request, pk):
 def edit(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
 
-    # Authorization check
     if blog.author != request.user:
         return HttpResponseForbidden("You are not allowed to edit this blog post.")
 
@@ -145,7 +147,6 @@ def edit(request, pk):
 def delete(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
 
-    # Authorization check
     if blog.author != request.user:
         return HttpResponseForbidden("You are not allowed to delete this blog post.")
 

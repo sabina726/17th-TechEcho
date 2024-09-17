@@ -6,6 +6,10 @@
 
     <div class="mb-6">
         <h1 class="text-2xl font-bold mb-4">{{ blog.title }}</h1>
+        <p class="text-sm text-gray-600 mb-2">
+            作者: {{ author_display_name }} |
+            發表時間: {{ blog.created_at|date:"Y-m-d H:i" }}
+        </p>
         <div class="max-w-full">
             {{ content_html|safe }}
         </div>
