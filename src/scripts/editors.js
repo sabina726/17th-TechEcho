@@ -1,16 +1,12 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.main.js';
-import Cookies from 'js-cookie'
-import getDefaultSnippets from '../constants/editorDefaultSnippets'
-let language = 'javascript';
+import Cookies from 'js-cookie';
+import getDefaultSnippets from '../constants/editorDefaultSnippets';
+import * as Y from 'yjs';
+import { WebsocketProvider } from 'y-websocket';
+import { MonacoBinding } from 'y-monaco';
 
 self.MonacoEnvironment = {
 	getWorkerUrl: function (_, label) {
-		if (label === 'css' || label === 'scss' || label === 'less') {
-			return document.getElementById('css').value;
-		}
-		if (label === 'html' || label === 'handlebars' || label === 'razor') {
-			return document.getElementById('html').value;
-		}
 		if (label === 'typescript' || label === 'javascript') {
 			return document.getElementById('typescript').value;
 		}
@@ -18,12 +14,21 @@ self.MonacoEnvironment = {
 	}
 };
 
+const ydoc = new Y.Doc();
+const provider = new WebsocketProvider('ws://localhost:8000/ws/editor/','test/', ydoc);
+
+// const provider = new WebsocketProvider('ws://localhost:8000/ws/editor/{{ room_name }}/', ydoc);
+
+let language = 'javascript';
 const editor = monaco.editor.create(document.getElementById('editor'), {
 	value: getDefaultSnippets(language),
 	language: language,
 	theme: 'vs-light',
 	fontSize: 12
 });
+
+const monacoBinding = new MonacoBinding(ydoc.getText('monaco'), editor.getModel(), new Set([editor]));
+
 
 const languageSelect = document.getElementById('language-select');
 languageSelect.value = language;

@@ -20,6 +20,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django_asgi_app = get_asgi_application()
 
 from chat import routing as crouting
+from editors import routing as erouting
 from notifications import routing as nrouting
 
 application = ProtocolTypeRouter(
@@ -28,7 +29,9 @@ application = ProtocolTypeRouter(
         "websocket": AllowedHostsOriginValidator(
             AuthMiddlewareStack(
                 URLRouter(
-                    crouting.websocket_urlpatterns + nrouting.websocket_urlpatterns
+                    crouting.websocket_urlpatterns
+                    + nrouting.websocket_urlpatterns
+                    + erouting.websocket_urlpatterns
                 )
             )
         ),
