@@ -1,12 +1,10 @@
-{% extends 'layouts/base.html' %}
 {% load static %}
 
-{% block content %}
+<link href="{% static 'editors/editors.css' %}" rel="stylesheet" />
+<script src="{% static 'editors/editors.js' %}" type="module"></script>
+
 <div>
-    <link href="{% static 'editors/editors.css' %}" rel="stylesheet" />
-    <script src="{% static 'editors/editors.js' %}" type="module"></script>
-    <div class="w-fit mx-auto">
-        <h1>簡易編輯器</h1>
+    <div class="relative">
         <label for="language-select">選擇程式語言：</label>
         <select id="language-select">
             <option value="javascript" selected>JavaScript</option>
@@ -26,22 +24,22 @@
             {% endfor %}
         </select>
 
-        <div id="editor" class="w-full h-[50vh] border-2"></div>
-        <button id="eval">執行程式</button>
+        <div id="editor" class="h-[50vh] border-2"></div>
+        <button id="eval" class="btn btn-sm text-white bg-green-3 absolute right-4 bottom-1 z-20">執行程式</button>
     </div>
 
-    <div id="result-containter">
-        result here
+    <div>
+
     </div>
-
-
-    {% csrf_token %}
-    <input type="hidden" id="typescript" value={% static 'editors/vs/language/typescript/ts.worker.js' %}>
-    <input type="hidden" id="editor-worker" value="{% static 'editors/vs/editor/editor.worker.js' %}">
-    <input type="hidden" id="eval-url" value="{% url "editors:index" %}">
-    <input type="hidden" id="editor-id" value="1">
 </div>
-{% endblock  %}
+
+{% csrf_token %}
+<input type="hidden" id="typescript" value={% static 'editors/vs/language/typescript/ts.worker.js' %}>
+<input type="hidden" id="editor-worker" value="{% static 'editors/vs/editor/editor.worker.js' %}">
+<input type="hidden" id="eval-url" value="{% url "editors:index" %}">
+<input type="hidden" id="user-id" value="{{user.id}}">
+<input type="hidden" id="editor-id" value="{{id}}">
+
 
 
 
