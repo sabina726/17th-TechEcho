@@ -18,9 +18,9 @@
     <div class="flex p-2 m-2 indent-2 bg-gray-600">
         <p class="m-2 text-white">專業能力:
             {% if teacher.labels.all %}
-            {% for label in teacher.labels.all %}
-            <span>{{ label.name }}</span>{% if not forloop.last %}, {% endif %}
-            {% endfor %}
+                {% for label in teacher.labels.all %}
+                <span>{{ label.name }}</span>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
             {% else %}
             無標籤
             {% endif %}
@@ -36,11 +36,12 @@
         <a href="{% url 'teachers:edit' teacher.id %}" class="px-4 py-2 btn btn-primary">
             修改基本資訊
         </a>
-
-        <a href="{% url 'teachers:delete' teacher.id %}" class="btn btn-error"
-            onclick="return confirm('Want to delete?')">
-            刪除資訊
-        </a>
+        <form action="{% url 'teachers:delete' teacher.id %}"
+                method="POST"
+                autocomplete="off">
+                {% csrf_token %}
+                <button class="btn btn-error" onclick="return confirm('確定刪除?')">刪除資訊</button>
+        </form>
         {% endif %}
     </div>
 </div>
