@@ -48,7 +48,7 @@ class ChatroomConsumer(WebsocketConsumer):
         message = GroupMessage.objects.get(pk=message_id)
 
         text = render_to_string(
-            "chat/_message.html",
+            "chat/partials/_message.html",
             {"message": message, "user": self.user},
         )
         self.send(text_data=text)
@@ -63,7 +63,7 @@ class ChatroomConsumer(WebsocketConsumer):
 
     def online_count_handler(self, event):
         text = render_to_string(
-            "chat/_online_status.html",
+            "chat/partials/_online_status.html",
             {
                 "online_count": event["online_count"],
                 "other_user": self.group.get_other_user(self.user),

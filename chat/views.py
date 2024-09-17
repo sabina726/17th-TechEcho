@@ -25,7 +25,7 @@ def room(request, id):
         chat_messages = paginate(request, chat_messages, items_count=30)
         return render(
             request,
-            "chat/_message_list.html",
+            "chat/partials/_message_list.html",
             {"chat_messages": chat_messages, "chat_group_id": chat_group.id},
         )
 

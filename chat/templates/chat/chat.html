@@ -10,7 +10,7 @@
     </div>
 
     <ul x-ref="list" id="message_list" class="w-11/12 mx-auto mb-2 h-[55vh] overflow-auto">
-        {% include "chat/_message_list.html" with chat_messages=chat_messages user=user chat_group_id=chat_group.id%}
+        {% include "chat/partials/_message_list.html" with chat_messages=chat_messages user=user chat_group_id=chat_group.id%}
     </ul>
 
     <form class="w-11/12 mb-6 mx-auto py-2 flex flex-row gap-2"
