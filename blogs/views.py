@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.core.paginator import Paginator
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -39,9 +40,12 @@ def image_upload(request):
 
 
 def index(request):
-    blogs = Blog.objects.filter(is_draft=False).order_by("-created_at")
-    for blog in blogs:
-        blog.author_display_name = blog.author.get_display_name()
+    blog_list = Blog.objects.filter(is_draft=False).order_by("-created_at")
+    paginator = Paginator(blog_list, 5)  # Show 5 blogs per page.
+
+    page_number = request.GET.get("page")
+    blogs = paginator.get_page(page_number)
+
     return render(request, "blogs/index.html", {"blogs": blogs})
 
 
@@ -64,7 +68,6 @@ def new(request):
             action = request.POST.get("action")
 
             if action == "preview":
-                # Generate preview content for display on the same page
                 raw_html = markdown.markdown(form.cleaned_data["content"])
 
                 allowed_tags = ALLOWED_TAGS.union(
@@ -75,7 +78,6 @@ def new(request):
                     raw_html, tags=allowed_tags, attributes=allowed_attributes
                 )
 
-                # Render the new page with preview content
                 return render(
                     request,
                     "blogs/new.html",
@@ -87,7 +89,6 @@ def new(request):
                 blog.save()
                 return redirect("blogs:index")
 
-            # Save as draft if no specific action
             blog.is_draft = True
             blog.save()
             return redirect("blogs:index")
@@ -100,10 +101,9 @@ def new(request):
 
 
 def show(request, pk):
-    # Retrieve the blog object or return a 404 error if not found
+
     blog = get_object_or_404(Blog, pk=pk)
 
-    # Convert the blog content from Markdown to HTML
     raw_html = markdown.markdown(
         blog.content,
         extensions=[
@@ -114,7 +114,6 @@ def show(request, pk):
         ],
     )
 
-    # Convert ALLOWED_TAGS frozenset to a list and add custom tags
     allowed_tags = list(bleach.ALLOWED_TAGS) + [
         "h1",
         "h2",
@@ -139,21 +138,18 @@ def show(request, pk):
     allowed_attributes = {
         "a": ["href", "title"],
         "img": ["src", "alt", "title"],
-        "code": ["class"],  # Allow classes for syntax highlighting
+        "code": ["class"],
     }
-    # Sanitize the HTML using bleach to allow only safe tags and attributes
+
     content_html = bleach.clean(
         raw_html, tags=allowed_tags, attributes=allowed_attributes
     )
 
-    # Update the views count efficiently
     blog.views += 1
     blog.save(update_fields=["views"])
 
-    # Get the display name of the author
     author_display_name = blog.author.get_display_name()
 
-    # Render the template with the required context
     return render(
         request,
         "blogs/show.html",
@@ -178,21 +174,18 @@ def edit(request, pk):
             action = request.POST.get("action")
 
             if action == "update":
-                # Save and redirect to the blog's detail page
                 blog = form.save()
                 return redirect("blogs:show", pk=blog.pk)
 
             elif action == "save_draft":
-                # Save as draft and redirect to user drafts page
                 blog = form.save(commit=False)
-                blog.is_draft = True  # Set the blog post as a draft
+                blog.is_draft = True
                 blog.save()
-                return redirect("blogs:user_drafts")  # Redirect to user drafts page
+                return redirect("blogs:user_drafts")
 
     else:
         form = BlogForm(instance=blog)
 
-    # Initial rendering of the edit page
     return render(request, "blogs/edit.html", {"form": form, "blog": blog})
 
 
