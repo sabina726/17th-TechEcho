@@ -46,7 +46,7 @@ def index(request):
     teachers = Teacher.objects.all().prefetch_related("labels").order_by("-updated_at")
 
     if label_filter:
-        teachers = teachers.filter(labels__name__icontains=label_filter)
+        teachers = teachers.filter(labels__name__exact=label_filter)
 
     all_labels = set(teachers.values_list("labels__name", flat=True).distinct())
 

@@ -1,60 +1,64 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-
-<div class="p-6 max-w-4xl mx-auto">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-5xl font-bold text-blue-2">專家列表</h2>
-        {% if user.is_authenticated %}
-        {% if not user.is_student %}
-        <a href="{% url 'payments:index' %}" class="btn btn-neutral">
-            升級成為TechEcho Premium用戶以發起線上指導
-        </a>
-        {% endif %}
-        {% endif %}
+    <div class="flex justify-center w-full p-6">
+        <div class="flex justify-between items-center w-full max-w-4xl">
+            <h2 class="text-5xl font-bold text-blue-2">專家列表</h2>
+            {% if user.is_authenticated and not user.is_student %}
+                <a href="{% url 'payments:index' %}" class="btn btn-neutral ml-4">
+                升級成為TechEcho Premium用戶以發起線上指導
+                </a>
+            {% endif %}
+        </div>
     </div>
 
-    <div class="mb-6">
-        <!-- 全部的篩選 -->
-        <a href="{% url 'teachers:index' %}"
-            class="btn btn-outline m-2{% if not label_filter %} active{% endif %}">全部</a>
+    <div class="flex">
+        <section class="max-w-full m-2 w-1/4" x-data="{ showLabels: true, selectedLabel: localStorage.getItem('selectedLabel') || '' }">
+            <div class="m-2 flex flex-wrap justify-center">
+                <a href="{% url 'teachers:index' %}"
+                class="btn btn-outline m-2 flex items-center justify-center w-1/4 whitespace-nowrap text-center"
+                @click="selectedLabel = ''; localStorage.removeItem('selectedLabel')">尋找所有語言</a>
 
-        <!-- 動態生成篩選按鈕 -->
-        {% for label in all_labels %}
-        <a href="?label={{ label|lower|urlencode }}"
-            class="btn btn-outline m-2{% if label_filter == label|lower %} active{% endif %}">
-            {{ label }}
-        </a>
-        {% endfor %}
-    </div>
+                {% for label in all_labels %}
+                    <a href="?label={{ label|lower|urlencode }}"
+                        class="btn btn-outline m-2 flex items-center justify-center w-1/4 {% if label_filter == label|lower %} active{% endif %}"
+                        :class="{ 'bg-blue-500 text-white': selectedLabel === '{{ label|lower }}' }"
+                        x-show="showLabels || selectedLabel === '{{ label|lower }}'"
+                        @click="selectedLabel = '{{ label|lower }}'; showLabels = false; localStorage.setItem('selectedLabel', '{{ label|lower }}')">
+                        {{ label }}
+                    </a>
+                {% endfor %}
 
-
-    <div class="p-6 max-w-4xl mx-auto">
-        <section>
-            {% for teacher in teachers %}
-            <a href="{% url 'teachers:show' teacher.id %}" class="block mb-4 p-4 shadow-md hover:bg-gray-100">
-                <div class="flex flex-col">
-                    <h3 class="text-2xl font-semibold leading-normal text-blue-2">專家:{{ teacher.user }}</h3>
-                    <p class="m-2 text-xl leading-normal">專業能力:
-                        {% if teacher.labels.all.exists %}
-                        {% for label in teacher.labels.all %}
-                        <span>{{ label.name }}</span>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                        {% else %}
-                        無標籤
-                        {% endif %}
-                    </p>
-                    <p class="text-gray-600 mt-1 text-xl leading-relaxed">{{ teacher.introduce|truncatechars:50 }}</p>
-                </div>
-            </a>
-            {% endfor %}
+                <button @click="showLabels = true" x-show="!showLabels && !selectedLabel" class="btn btn-outline m-2">顯示所有標籤</button>
+            </div>
         </section>
+
+        <div class="max-w-full mx-auto w-3/4">
+            <div class="p-6 max-w-4xl mx-auto">
+                <section>
+                    {% for teacher in teachers %}
+                    <a href="{% url 'teachers:show' teacher.id %}"
+                    class="block mb-4 p-4 shadow-md hover:bg-gray-100"
+                    x-show="!selectedLabel || teacher.labels.all.some(label => label.name.toLowerCase() === selectedLabel)">
+                        <div class="flex flex-col">
+                            <h3 class="text-2xl font-semibold leading-normal text-blue-2">專家:{{ teacher.user }}</h3>
+                            <p class="m-2 text-xl leading-normal">專業能力:
+                                {% if teacher.labels.all.exists %}
+                                    {% for label in teacher.labels.all %}
+                                    <span>{{ label.name }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                            </p>
+                            <p class="text-gray-600 mt-1 text-xl leading-relaxed">{{ teacher.introduce|truncatechars:50 }}</p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </section>
+            </div>
+        </div>
     </div>
 
     <div>
         {% include "shared/pagination.html" with pages=teachers only %}
     </div>
-
-</div>
-
 {% endblock %}
