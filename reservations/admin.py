@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from reservations.models import StudentReservation, TeacherSchedule
+
+admin.site.register(TeacherSchedule)
+admin.site.register(StudentReservation)

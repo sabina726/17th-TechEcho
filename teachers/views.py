@@ -79,7 +79,6 @@ def new(request):
 
 def show(request, id):
     teacher = get_object_or_404(Teacher, id=id)
-    chat_group = teacher.chat_group
     if request.method == "POST":
         if request.user.is_anonymous or request.user.teacher.id != teacher.id:
             messages.error(request, "你沒有權限")
@@ -116,7 +115,6 @@ def show(request, id):
         "teacher": teacher,
         "questions": questions,
         "answers": answers,
-        "chat_group": chat_group,
     }
 
     return render(request, "teachers/show.html", context)
