@@ -4,19 +4,19 @@
 
 <h1 class="text-center text-5xl font-bold text-blue-2 p-3">專家檔案</h1>
 
-<div class="p-6 m-6 max-w-2xl mx-auto bg-gray-600 mt-8 rounded-md">
+<div class="p-6 m-6 max-w-2xl mx-auto bg-vanilla-5 mt-8 rounded-md">
 
 
     <form action="{% url 'teachers:show' teacher.id %}" method="POST" autocomplete="off" class="space-y-4">
         {% csrf_token %}
         <div class="grid gap-4">
-            <p class="text-xl text-lg text-white">使用者:</p>
-            <p class="text-white text-lg">{{ request.user.username }}</p>
-            <label for="nickname" class="text-cyan-400">可以自訂暱稱</label>
+            <p class="text-xl text-lg">使用者:</p>
+            <p class="text-lg">{{ request.user.username }}</p>
+            <label for="nickname" class="text-red-600">可以自訂暱稱</label>
             <input required type="text" name="nickname" value="{{ user.get_display_name }}">
             {{ form.user.errors }}
             {% include "teachers/partials/_labels.html" with teacher=teacher only %}
-            <p class="text-xl text-lg text-white">自我介紹:</p>
+            <p class="text-xl text-lg">自我介紹:</p>
             {{ form.introduce }}
             {% if form.introduce.errors %}
             <span class="text-red-600 text-sm mt-1">
@@ -24,7 +24,7 @@
             </span>
             {% endif %}
         </div>
-        <button class="btn btn-active btn-primary btn-block text-lg">更新</button>
+        <button class="btn btn-block text-lg bg-yellow-400 hover:bg-amber-400">更新</button>
     </form>
 
 </div>

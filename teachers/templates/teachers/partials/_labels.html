@@ -1,6 +1,6 @@
 {% load questions %}
 <div class="my-2">
-    <label for="labels" class="block mb-2 text-xl text-white">標籤:</label>
+    <label for="labels" class="block mb-2 text-xl">標籤:</label>
     <input required
         x-data="label_input"
         type="text"
@@ -12,6 +12,6 @@
                 {% for label in teacher.labels.all %}
                     {{label}},
                 {% endfor %}"
-            {% endif %}
+        {% endif %}
     />
 </div>

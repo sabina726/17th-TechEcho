@@ -2,15 +2,15 @@
 
 {% block content %}
 
-<div class="flex max-w-full mx-auto">
-    <section class="max-w-full m-2 w-1/5" x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
-        <div class="m-2 flex flex-wrap justify-center w-full">
+<div class="flex flex-wrap max-w-full mx-auto">
+    <section class="w-full sm:w-1/5 m-2" x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
+        <div class="m-2 flex flex-wrap justify-center max-w-full">
             <a href="{% url 'teachers:index' %}"
-            class="btn btn-outline m-2 flex items-center justify-center max-w-full"
+            class="btn btn-outline m-2 flex items-center justify-center max-w-full sm:w-auto"
             @click="selectedLabel = ''; localStorage.removeItem('selectedLabel')">尋找所有語言</a>
             {% for label in all_labels %}
                 <a href="?label={{ label|lower|urlencode }}"
-                    class="btn btn-outline m-2 flex items-center justify-center w-1/3"
+                    class="btn btn-outline m-2 flex items-center justify-center w-full sm:w-1/3"
                     :class="{ 'bg-blue-500 text-white': selectedLabel === '{{ label|lower }}' }"
                     @click="selectedLabel = '{{ label|lower }}'; localStorage.setItem('selectedLabel', '{{ label|lower }}')">
                     {{ label }}
@@ -20,8 +20,8 @@
     </section>
 
     <div class="flex-1 max-w-4xl mx-auto m-3">
-        <div class="flex justify-between w-full m-2">
-            <h2 class="text-5xl font-bold text-blue-2 ml-5">專家列表</h2>
+        <div class="flex flex-wrap justify-between w-full m-2">
+            <h2 class="text-3xl sm:text-5xl font-bold text-blue-2 ml-5">專家列表</h2>
             {% if user.is_authenticated and not user.is_student %}
                 <a href="{% url 'payments:index' %}" class="btn btn-neutral ml-4">
                 升級成為TechEcho Premium用戶以發起線上指導
