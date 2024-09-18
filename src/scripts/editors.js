@@ -1,5 +1,4 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.main.js';
-import Cookies from 'js-cookie';
 import getDefaultSnippets from '../constants/editorDefaultSnippets';
 import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
@@ -73,56 +72,14 @@ evalBtn.addEventListener('click', () => {
 		code: editor.getValue(),
 		language: languageSelect.value
 	}
-	// const params = new URLSearchParams();
-	// params.append('code', editor.getValue());
-	// params.append('language', languageSelect.value);
-	const string = JSON.stringify(params);
-	console.log(string);
-	resultWebSocket.send(string);
-
-
-	// try {
-	// 	const response = await fetch(document.getElementById('eval-url').value, {
-	// 		method: 'POST',
-	// 		headers: {
-	// 			'X-CSRFToken': Cookies.get('csrftoken'),
-	// 			'Content-Type': 'application/x-www-form-urlencoded',
-	// 		},
-	// 		body: params.toString(),
-	// 	})
-
-	// 	const data = await response.json();
-	// 	const show = document.getElementById("result")
-	// 	show.innerHTML = data.result;
-	// } catch (error) {
-	// 	alert('An error occurred during the request.');
-	// }
+	resultWebSocket.send(JSON.stringify(params));
 })
 
 resultWebSocket.onmessage = event => {
-	console.log(event.data)
 	const show = document.getElementById("result")
-	show.innerHTML = event.data;
-    // const data = JSON.parse(event.data);
-    // console.log("Message received from server:", data);
+	show.innerText = JSON.parse(event.data);
 };
 
 
 
 
-
-//
-
-// const socket = new WebSocket('/ws/editor/')
-
-
-// const socket = new WebSocket(wsUrl);
-
-// socket.onmessage = function(event) {
-// const data = JSON.parse(event.data);
-
-// // If the message is a code result, display it
-// if (data.type === 'code_result') {
-// 	displayResult(data.result);
-// }
-// };

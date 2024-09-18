@@ -28,15 +28,14 @@
     </div>
 
 
-    <div id="result" class="relative w-full bg-white h-[15vh] border-10 rounded-b-lg shadow-lg overflow-auto p-2">
+    <div class="relative w-full bg-white h-[15vh] border-10 rounded-b-lg shadow-lg overflow-auto p-2">
+        <article id="result"></article>
         <button id="eval" class="btn btn-sm text-white bg-green-3 absolute right-1 bottom-1 z-20">執行程式</button>
     </div>
 </div>
 
-{% csrf_token %}
 <input type="hidden" id="typescript" value={% static 'editors/vs/language/typescript/ts.worker.js' %}>
 <input type="hidden" id="editor-worker" value="{% static 'editors/vs/editor/editor.worker.js' %}">
-<input type="hidden" id="eval-url" value="{% url "editors:index" %}">
 {% comment %} <input type="hidden" id="user-id" value="{{user.id}}"> {% endcomment %}
 <input type="hidden" id="editor-id" value="{{id}}">
 
