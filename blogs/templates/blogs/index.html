@@ -13,13 +13,13 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <a href="{% url 'blogs:show' blog.pk %}" class="text-2xl font-bold hover:underline">{{ blog.title }}</a>
-                        <p class="text-sm text-gray-600">Category: {{ blog.category.name }}</p>
-                        <p class="text-sm text-gray-600">Published on: {{ blog.created_at|date:"Y-m-d H:i" }}</p>
-                        <p class="text-sm text-gray-600">Author: {{ blog.author_display_name }}</p>
+                        <p class="text-sm text-gray-600">標籤: {{ blog.category.name }}</p>
+                        <p class="text-sm text-gray-600">發佈時間: {{ blog.created_at|date:"Y-m-d H:i" }}</p>
+                        <p class="text-sm text-gray-600">作者: {{ blog.author_display_name }}</p>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm text-gray-600">Views: {{ blog.views }}</p>
-                        <p class="text-sm text-gray-600">Comments: {{ blog.comments_count }}</p>
+                        <p class="text-sm text-gray-600">遊覽: {{ blog.views }}</p>
+                        <p class="text-sm text-gray-600">留言: {{ blog.comments_count }}</p>
                     </div>
                 </div>
             </li>
