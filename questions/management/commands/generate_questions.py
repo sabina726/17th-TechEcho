@@ -167,15 +167,13 @@ class Command(BaseCommand):
             # 隨機生成 votes_count、answers_count 和 follows_count
             votes_count = random.randint(0, 3)
             answers_count = random.randint(0, 3)
-            follows_count = random.randint(0, 3)
 
-            question = Question.objects.create(
+            Question.objects.create(
                 title=title,
                 details=fake.text(max_nb_chars=200),
                 user=user,
                 votes_count=votes_count,  # 確保 Question 模型中有這個字段
                 answers_count=answers_count,  # 確保 Question 模型中有這個字段
-                follows_count=follows_count,  # 確保 Question 模型中有這個字段
             )
             created_count += 1
             self.stdout.write(self.style.SUCCESS(f"已創建問題：{title}"))
