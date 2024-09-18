@@ -15,17 +15,17 @@
     <aside class="w-64 flex-shrink-0">
       <div class="mb-6">
         {% if user.profile_picture %}
-        <img
-          src="{{ user.profile_picture.url }}"
-          alt="Profile Picture"
-          class="w-32 h-32 rounded-full mb-4"
-        />
+          <img
+            src="{{ user.profile_picture.url }}"
+            alt="Profile Picture"
+            class="w-32 h-32 rounded-full mb-4"
+          />
         {% else %}
-        <img
-          src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar"
-          alt="User Avatar"
-          class="w-32 h-32 rounded-full mb-4"
-        />
+          <img
+            src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar"
+            alt="User Avatar"
+            class="w-32 h-32 rounded-full mb-4"
+          />
         {% endif %}
         <h2 class="text-lg font-semibold pl-8">{{ user.username }}</h2>
       </div>

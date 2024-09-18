@@ -36,7 +36,7 @@ def register(request):
 
     else:
         form = UsersForm()
-    return render(request, "layouts/register.html", {"form": form})
+    return render(request, "users/register.html", {"form": form})
 
 
 def log_in(request):
@@ -60,7 +60,7 @@ def log_in(request):
                 messages.error(request, "登入失敗，帳號密碼錯誤或尚未註冊")
     else:
         form = AuthenticationForm()
-    return render(request, "layouts/login.html", {"form": form, "next": next_url})
+    return render(request, "users/login.html", {"form": form, "next": next_url})
 
 
 def log_out(request):
@@ -89,7 +89,7 @@ def forget_password(request):
 
         return redirect("users:forget_password")
 
-    return render(request, "layouts/forget_password.html")
+    return render(request, "users/forget_password.html")
 
 
 def change_password(request, token):
@@ -119,13 +119,13 @@ def change_password(request, token):
             return redirect("users:change_password", token=token)
 
     context = {"token": token, "user_id": user.id}
-    return render(request, "layouts/change_password.html", context)
+    return render(request, "users/change_password.html", context)
 
 
 @login_required
 def profile(request):
     context = {"user": request.user}
-    return render(request, "layouts/profile.html", context)
+    return render(request, "users/profile.html", context)
 
 
 @login_required
@@ -145,7 +145,7 @@ def profile_edit(request):
         else:
             if "HX-Request" in request.headers:
                 html = render_to_string(
-                    "layouts/profile_edit.html",
+                    "users/profile_edit.html",
                     {"form": form, "photo_form": photo_form},
                     request,
                 )
@@ -157,5 +157,5 @@ def profile_edit(request):
         photo_form = UserPhotoForm(instance=request.user)
 
     return render(
-        request, "layouts/profile_edit.html", {"form": form, "photo_form": photo_form}
+        request, "users/profile_edit.html", {"form": form, "photo_form": photo_form}
     )
