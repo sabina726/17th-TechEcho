@@ -14,7 +14,7 @@ class TeacherForm(forms.ModelForm):
             "introduce": forms.Textarea(
                 attrs={
                     "placeholder": "文字內容最少50~最多500",
-                    "class": "block w-full p-2 border border-sky-800 rounded-lg indent-2",
+                    "class": "block w-full p-2 input-bordered border border-sky-800 rounded-lg indent-2",
                 }
             ),
         }

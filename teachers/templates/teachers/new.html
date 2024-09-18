@@ -4,15 +4,15 @@
 
 <h1 class="p-3 text-5xl font-bold text-blue-2 text-center">成為專家</h1>
 
-<div class="p-6 m-6 max-w-2xl mx-auto bg-vanilla-5 mt-8 border border-sky-800 rounded-md">
+<div class="p-6 m-6 max-w-full mx-auto mt-8 rounded-md">
 
-    <form action="{% url 'teachers:index' %}" method="POST" autocomplete="off" class="space-y-4 shadow-amber-200">
+    <form action="{% url 'teachers:index' %}" method="POST" autocomplete="off" class="space-y-4 border border-gray-900 rounded-lg p-3 max-w-full">
         {% csrf_token %}
         <div class="grid gap-4">
             <p class="text-lg">使用者:</p>
             <p class="text-gray-700 text-lg">{{ request.user.username }}</p>
-            <label for="nickname" class="text-red-600">可以自訂暱稱</label>
-            <input type="text" name="nickname" value="{{ user.get_display_name }}">
+            <label for="nickname" class="text-red-600">可以自訂暱稱(隨時可以調整)</label>
+            <input class="p-2 border input-bordered w-full rounded-lg indent-2" required type="text" name="nickname" value="{{ user.get_display_name }}">
             {{ form.user.errors }}
             {% include "teachers/partials/_labels.html" with teacher=teacher only %}
             <p class="text-lg">自我介紹:</p>
@@ -25,7 +25,7 @@
         </div>
 
         <div class="flex justify-end">
-            <button type="submit" class="btn btn-block text-lg bg-yellow-400 hover:bg-amber-400">成為專家</button>
+            <button type="submit" class="btn btn-block text-lg bg-cyan-500 hover:bg-amber-700">成為專家</button>
         </div>
     </form>
 
