@@ -2,7 +2,7 @@
     {% if online_count|add:'-1' %}
         <img src="https://via.placeholder.com/40" alt="photo" class="w-6 h-6 rounded-full mr-4">
         <p>
-            {{ other_user }}
+            {{ other_user.get_display_name }}
             {% if other_user.is_teacher %}
             老師
             {% endif %}
