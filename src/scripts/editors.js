@@ -25,19 +25,17 @@ const editor = monaco.editor.create(document.getElementById('editor'), {
 
 const ydoc = new Y.Doc();
 const editorId = document.getElementById("editor-id").value;
-const provider = new WebsocketProvider('/ws/editor/',`${editorId}/`, ydoc);
+const provider = new WebsocketProvider('/ws/editor/collab/',`${editorId}/`, ydoc);
 const awareness = provider.awareness
 const yText = ydoc.getText();
 new MonacoBinding(yText, editor.getModel(), new Set([editor]), awareness);
 
-const userId = document.getElementById("user-id").value;
 function changeLanguage(newLanguage) {
 	monaco.editor.setModelLanguage(editor.getModel(), newLanguage);
-	awareness.setLocalStateField('language', { language: newLanguage, sender: userId});
+	awareness.setLocalStateField('language', { language: newLanguage});
 }
 
 languageSelect.addEventListener('change', _ => {
-	console.log("change: ", languageSelect.value)
 	changeLanguage(languageSelect.value);
 	editor.setValue(getDefaultSnippets(languageSelect.value));
 });
@@ -47,7 +45,7 @@ awareness.on('change', _ => {
 	states.forEach(ele => {
 		if (ele.language && ele.language.language !== languageSelect.value) {
 			languageSelect.value = ele.language.language;
-			console.log("awareness: ", languageSelect.value);
+			// console.log("awareness: ", languageSelect.value);
 			monaco.editor.setModelLanguage(editor.getModel(), languageSelect.value);
 		}
 	})
@@ -89,6 +87,12 @@ evalBtn.addEventListener('click', async () => {
 		alert('An error occurred during the request.');
 	}
 })
+
+
+const resultWebSocket = new WebSocket(`/ws/editor/result/${editorId}/`)
+console.log(resultWebSocket)
+
+//
 
 // const socket = new WebSocket('/ws/editor/')
 

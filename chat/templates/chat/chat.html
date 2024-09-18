@@ -6,13 +6,13 @@
 
 <div class="flex gap-2 my-8 mx-auto max-w-5xl min-w-xs">
     <div x-data="scroll" class="w-2/5 border-10 shadow-lg rounded-lg">
-        <div class="relative bg-vanilla-5 py-2">
+        <div class="relative bg-vanilla-5 py-2 rounded-t-lg">
             <span id="online-dot"></span>
             <div id="banner"></div>
         </div>
 
         <ul x-ref="list" id="message_list" class="w-11/12 mx-auto mb-2 h-[55vh] overflow-auto">
-            {% include "chat/partials/_message_list.html" with chat_messages=chat_messages user=user chat_group_id=chat_group.id%}
+            {% include "chat/partials/_message_list.html" with chat_messages=chat_messages user=user chat_group_id=chat_group.id only %}
         </ul>
 
         <form class="mx-auto p-2 flex flex-row gap-2"
@@ -35,7 +35,7 @@
     </div>
 
     <div class="w-3/5 border-10 shadow-lg rounded-lg px-2 bg-vanilla-5">
-        {% include "editors/index.html" with id=chat_group.id %}
+        {% include "editors/editors.html" with id=chat_group.id %}
     </div>
 </div>
 

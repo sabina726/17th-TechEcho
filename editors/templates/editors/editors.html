@@ -3,8 +3,8 @@
 <link href="{% static 'editors/editors.css' %}" rel="stylesheet" />
 <script src="{% static 'editors/editors.js' %}" type="module"></script>
 
-<div class="flex flex-col justify-between py-1">
-    <div class="relative mb-6">
+<div class="flex flex-col justify-between pt-5 pb-1">
+    <div class="relative mb-1">
         <label for="language-select">選擇程式語言：</label>
         <select id="language-select">
             <option value="javascript" selected>JavaScript</option>
@@ -24,11 +24,11 @@
             {% endfor %}
         </select>
 
-        <div id="editor" class="h-[50vh] border-2"></div>
+        <div id="editor" class="h-[50vh] border-0"></div>
         <button id="eval" class="btn btn-sm text-white bg-green-3 absolute right-4 bottom-1 z-20">執行程式</button>
     </div>
 
-    <div id="result" class="w-full bg-white h-[12vh] border-10 border-rose-500 rounded-lg shadow-lg overflow-auto py-1 px-2">
+    <div id="result" class="w-full bg-white h-[15vh] border-10 rounded-b-lg shadow-lg overflow-auto p-2">
     </div>
 </div>
 
@@ -36,7 +36,7 @@
 <input type="hidden" id="typescript" value={% static 'editors/vs/language/typescript/ts.worker.js' %}>
 <input type="hidden" id="editor-worker" value="{% static 'editors/vs/editor/editor.worker.js' %}">
 <input type="hidden" id="eval-url" value="{% url "editors:index" %}">
-<input type="hidden" id="user-id" value="{{user.id}}">
+{% comment %} <input type="hidden" id="user-id" value="{{user.id}}"> {% endcomment %}
 <input type="hidden" id="editor-id" value="{{id}}">
 
 
