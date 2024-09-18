@@ -1,9 +1,14 @@
 from django.conf import settings
 from django.db import models
-from taggit.managers import TaggableManager
 
 
 class EditorGroup(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     code = models.TextField()
-    language = TaggableManager()
+    language = models.CharField(default="javascript")
+    chooser = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="editor_language_choice",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
