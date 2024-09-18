@@ -39,7 +39,7 @@
         <select id="font-size-select">
             <option value="12" selected>12</option>
             {% for i in '0123456789'|make_list %}
-                <option value="{{ forloop.counter|add:13 }}">{{ forloop.counter|add:11 }}</option>
+                <option value="{{ forloop.counter|add:12 }}">{{ forloop.counter|add:12 }}</option>
             {% endfor %}
         </select>
 
@@ -49,8 +49,6 @@
 
 
     {% csrf_token %}
-    <input type="hidden" id="css" value={% static 'editors/vs/language/css/css.worker.js' %}>
-    <input type="hidden" id="html" value={% static 'editors/vs/language/html/html.worker.js' %}>
     <input type="hidden" id="typescript" value={% static 'editors/vs/language/typescript/ts.worker.js' %}>
     <input type="hidden" id="editor-worker" value="{% static 'editors/vs/editor/editor.worker.js' %}">
     <input type="hidden" id="eval-url" value="{% url "editors:index" %}">

@@ -11,7 +11,7 @@ from notifications.models import Notification
 class NotificationConsumer(WebsocketConsumer):
     def connect(self):
         self.user = self.scope["user"]
-        if not self.user.is_authenticated:
+        if self.user.is_anonymous:
             self.close()
             return
 
@@ -59,7 +59,7 @@ class NotificationConsumer(WebsocketConsumer):
 
     def send_notification(self, event):
         html = render_to_string(
-            "notifications/_new_notification.html",
+            "notifications/_notification.html",
             {
                 "message": event["message"],
                 "created_at": event["created_at"],

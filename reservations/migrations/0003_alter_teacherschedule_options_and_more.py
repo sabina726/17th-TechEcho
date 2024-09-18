@@ -8,23 +8,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('reservations', '0002_rename_appointment_studentreservation_and_more'),
+        ("reservations", "0002_rename_appointment_studentreservation_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='teacherschedule',
-            options={'ordering': ['teacher', 'start_time']},
+            name="teacherschedule",
+            options={"ordering": ["teacher", "start_time"]},
         ),
         migrations.AlterField(
-            model_name='studentreservation',
-            name='student',
-            field=models.ForeignKey(limit_choices_to={'user__is_student': True}, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="studentreservation",
+            name="student",
+            field=models.ForeignKey(
+                limit_choices_to={"user__is_student": True},
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='teacherschedule',
-            name='teacher',
-            field=models.ForeignKey(limit_choices_to={'user__is_teacher': True}, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="teacherschedule",
+            name="teacher",
+            field=models.ForeignKey(
+                limit_choices_to={"user__is_teacher": True},
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

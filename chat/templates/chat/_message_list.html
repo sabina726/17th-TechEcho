@@ -1,17 +1,28 @@
 {% load chat home %}
 
-<ul id="message_list" hx-swap-oob="beforeend">
-    <li class="fade-up chat
+{% for message in chat_messages %}
+    {% if forloop.first and chat_messages.has_previous %}
+    <div
+        hx-get="{% url "chat:room" chat_group_id %}?page={{chat_messages.previous_page_number}}"
+        hx-trigger="intersect once"
+        hx-swap="outerHTML"
+        class="text-center">
+        載入更多訊息中...
+    </div>
+    {% endif %}
+
+    <li class="message chat
         {% if message|check_author:user %}
             chat-end
         {% else %}
             chat-start
-        {% endif %}">
+        {% endif %}"
+    >
         <div class="chat-header">
-            {{message.author}}
+            {{ message.author }}
             <time class="text-xs opacity-50">{{message.created_at|standard_date}}</time>
         </div>
-        <p class="chat-bubble text-white break-all
+        <article class="chat-bubble text-white break-all
             {% if message|check_author:user %}
                 chat-bubble-success
             {% else %}
@@ -19,17 +30,7 @@
             {% endif %}"
         >
             {{ message.content|linebreaksbr }}
-        </p>
+        </article>
         <div class="chat-footer opacity-50">Delivered</div>
     </li>
-
-    <style>
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0px); }
-        }
-        .fade-up {
-            animation: fadeUp 0.6s ease;
-        }
-    </style>
-</ul>
+{% endfor %}

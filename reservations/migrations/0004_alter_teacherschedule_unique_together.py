@@ -7,13 +7,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('reservations', '0003_alter_teacherschedule_options_and_more'),
+        ("reservations", "0003_alter_teacherschedule_options_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='teacherschedule',
-            unique_together={('teacher', 'start_time')},
+            name="teacherschedule",
+            unique_together={("teacher", "start_time")},
         ),
     ]
