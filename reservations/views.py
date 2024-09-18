@@ -115,6 +115,10 @@ def student_index(request):
 def student_new(request, id):
     schedule = get_object_or_404(TeacherSchedule, id=id)
     if request.method == "POST":
+        if StudentReservation.objects.filter(schedule=schedule).exists():
+            messages.error(request, "不能預約重複時間")
+            return redirect("reservations:student_new", id=id)
+
         StudentReservation.objects.create(schedule=schedule, student=request.user)
         messages.success(request, "預約成功")
         return redirect("reservations:student_index")

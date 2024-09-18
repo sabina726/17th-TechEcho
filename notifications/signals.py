@@ -9,7 +9,7 @@ from .models import Notification
 
 
 @receiver(post_save, sender=Answer)
-def update_answers_count(sender, instance, created, **kwargs):
+def update_answers_count(_, instance, created):
     if created:
         question = instance.question
         question.answers_count = question.answer_set.count()
@@ -56,7 +56,7 @@ def update_answers_count(sender, instance, created, **kwargs):
 
 
 @receiver(post_delete, sender=Answer)
-def update_answers_count(sender, instance, **kwargs):
+def update_answers_count(_, instance):
     question = instance.question
     question.answer_count = question.answer_set.count()
     question.save()

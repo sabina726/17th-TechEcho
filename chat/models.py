@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
 
+from reservations.models import StudentReservation
+
 
 class ChatGroup(models.Model):
     group_name = models.CharField(max_length=100, unique=True)
@@ -9,6 +11,13 @@ class ChatGroup(models.Model):
     )
     members_online = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="online_group", blank=True
+    )
+    reservation = models.OneToOneField(
+        StudentReservation,
+        related_name="chat_group",
+        on_delete=models.CASCADE,
+        default=None,
+        null=True,
     )
 
     def get_other_user(self, user):
