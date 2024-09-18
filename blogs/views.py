@@ -1,8 +1,6 @@
 import uuid
 
-import bleach
 import markdown
-from bleach.sanitizer import ALLOWED_TAGS
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
@@ -68,15 +66,7 @@ def new(request):
             action = request.POST.get("action")
 
             if action == "preview":
-                raw_html = markdown.markdown(form.cleaned_data["content"])
-
-                allowed_tags = ALLOWED_TAGS.union(
-                    {"img", "p", "div", "span", "h1", "h2", "h3", "h4", "h5", "h6"}
-                )
-                allowed_attributes = {"img": ["src", "alt", "title"]}
-                content_html = bleach.clean(
-                    raw_html, tags=allowed_tags, attributes=allowed_attributes
-                )
+                content_html = markdown.markdown(form.cleaned_data["content"])
 
                 return render(
                     request,
@@ -101,10 +91,9 @@ def new(request):
 
 
 def show(request, pk):
-
     blog = get_object_or_404(Blog, pk=pk)
 
-    raw_html = markdown.markdown(
+    content_html = markdown.markdown(
         blog.content,
         extensions=[
             "markdown.extensions.extra",
@@ -112,37 +101,6 @@ def show(request, pk):
             "markdown.extensions.toc",
             "markdown.extensions.sane_lists",
         ],
-    )
-
-    allowed_tags = list(bleach.ALLOWED_TAGS) + [
-        "h1",
-        "h2",
-        "h3",
-        "h4",
-        "h5",
-        "h6",
-        "p",
-        "ul",
-        "ol",
-        "li",
-        "a",
-        "img",
-        "pre",
-        "code",
-        "blockquote",
-        "hr",
-        "em",
-        "strong",
-        "br",
-    ]
-    allowed_attributes = {
-        "a": ["href", "title"],
-        "img": ["src", "alt", "title"],
-        "code": ["class"],
-    }
-
-    content_html = bleach.clean(
-        raw_html, tags=allowed_tags, attributes=allowed_attributes
     )
 
     blog.views += 1
