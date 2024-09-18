@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('reservations', '0004_alter_teacherschedule_unique_together'),
+        ("reservations", "0004_alter_teacherschedule_unique_together"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='studentreservation',
-            options={'ordering': ['schedule__teacher', 'schedule__start_time']},
+            name="studentreservation",
+            options={"ordering": ["schedule__teacher", "schedule__start_time"]},
         ),
     ]

@@ -2,14 +2,12 @@ from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from django.views.decorators.http import require_GET
 
+from chat.models import ChatGroup
 from lib.utils.student_required import student_required
 from lib.utils.teacher_required import teacher_required
-from teachers.models import Teacher
 
 from .forms import TeacherScheduleForm
 from .models import StudentReservation, TeacherSchedule
@@ -39,7 +37,11 @@ def teacher_index(request):
         "studentreservation_set__student"
     )
     return render(
-        request, "reservations/teacher/teacher_index.html", {"schedules": schedules}
+        request,
+        "reservations/teacher/teacher_index.html",
+        {
+            "schedules": schedules,
+        },
     )
 
 
@@ -119,7 +121,8 @@ def student_new(request, id):
             messages.error(request, "不能預約重複時間")
             return redirect("reservations:student_new", id=id)
 
-        StudentReservation.objects.create(schedule=schedule, student=request.user)
+        s = StudentReservation.objects.create(schedule=schedule, student=request.user)
+        print("created: ", s)
         messages.success(request, "預約成功")
         return redirect("reservations:student_index")
     return render(

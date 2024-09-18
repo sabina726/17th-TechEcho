@@ -20,7 +20,7 @@
                                         <div>
                                             已被<span class="text-green-600 px-2 py-1">{{ reservation.student.get_display_name }}</span>學生預約
                                         </div>
-                                        <a href="{% url 'chat:room' 1 %}" class="btn btn-sm">進入聊天室</a>
+                                        <a href="{% url 'chat:room' reservation.chat_group.id %}" class="btn btn-sm">進入聊天室</a>
                                     </li>
                                 {% endfor %}
                             {% else %}

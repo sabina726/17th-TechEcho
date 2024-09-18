@@ -7,14 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat', '0004_remove_chatgroup_members_online_and_more'),
-        ('reservations', '0005_alter_studentreservation_options'),
+        ("chat", "0004_remove_chatgroup_members_online_and_more"),
+        ("reservations", "0005_alter_studentreservation_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='chatgroup',
-            name='reservation',
-            field=models.OneToOneField(default=None, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='chat_group', to='reservations.studentreservation'),
+            model_name="chatgroup",
+            name="reservation",
+            field=models.OneToOneField(
+                default=None,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="chat_group",
+                to="reservations.studentreservation",
+            ),
         ),
     ]

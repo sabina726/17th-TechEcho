@@ -18,7 +18,7 @@ def room(request, id):
             request,
             "您沒有權限進入這個聊天室。",
         )
-        return redirect("appointments:appointment")
+        return redirect("teachers:index")
 
     chat_messages = chat_group.messages.select_related("author")
     if request.htmx:

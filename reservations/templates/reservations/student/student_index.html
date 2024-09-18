@@ -14,7 +14,7 @@
                         <p>{{ reservation.schedule.start_time|date:'Y/m/d H:i' }} - {{ reservation.schedule.end_time|date:'Y/m/d H:i' }}</p>
                     </div>
                     <div class="flex items-center gap-1">
-                        <a href="{% url 'chat:room' 1 %}" class="btn btn-sm">進入聊天室</a>
+                        <a href="{% url 'chat:room' reservation.chat_group.id %}" class="btn btn-sm">進入聊天室</a>
                         {% if reservation.can_edit %}
                             <a href="{% url 'reservations:student_edit' reservation.id %}" class="btn btn-sm bg-blue-600 text-white">編輯</a>
                             <form method="POST" action="{% url 'reservations:student_delete' reservation.id %}" onsubmit="return confirm('確定要刪除嗎？')">
