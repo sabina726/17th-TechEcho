@@ -44,10 +44,15 @@ def index(request):
             messages.warning(request, "您尚未升級Premium")
             return render(request, "payments/index.html")
 
+    return render(request, "payments/index.html")
+
 
 ###  EC-pay use only
-@login_required
+# @login_required
 def ecpay_create_payment(request):
+    if not request.user.is_authenticated:
+        messages.info(request, "請先登入再進行帳號升級")
+        return redirect("users:login")
     if check_premium_status(request.user):
         messages.info(request, "您已是Premium")
         return render(request, "teachers/index.html")
@@ -75,10 +80,10 @@ def ecpay_create_payment(request):
             "TotalAmount": order.amount,
             "TradeDesc": "TechEcho Premium",
             "ItemName": "升級成TechEcho Premium月訂閱用戶",
-            "ReturnURL": "https://techecho.tonytests.com/payments/ecpay_return/",
+            "ReturnURL": "https://www.tech-echo.dev/payments/ecpay_return/",
             "ChoosePayment": "Credit",
-            "ClientBackURL": "https://techecho.tonytests.com/payments/ecpay_after_pay/",
-            "OrderResultURL": "https://techecho.tonytests.com/payments/ecpay_after_pay/",
+            "ClientBackURL": "https://www.tech-echo.dev/payments/ecpay_after_pay/",
+            "OrderResultURL": "https://www.tech-echo.dev/payments/ecpay_after_pay/",
             "CustomField1": str(system_user.id),
             "CustomField2": "",
             "EncryptType": 1,
@@ -135,6 +140,7 @@ def ecpay_return(request):
 
 @csrf_exempt
 def ecpay_after_pay(request):
+    print(request.user)
     if request.method == "POST":
         messages.success(request, "付款成功")
         return redirect("payments:ecpay_after_pay")
@@ -145,6 +151,9 @@ def ecpay_after_pay(request):
 ###  Line-pay use only
 @login_required
 def linepay_create_payment(request):
+    # print(request.user)
+    # if not request.user.is_authenticated:
+    #     messages.info(request, "請先登入再進行帳號升級")
     if check_premium_status(request.user):
         messages.info(request, "您已是Premium")
         return render(request, "teachers/index.html")
