@@ -4,6 +4,21 @@ from django.db import models
 
 class ChatGroup(models.Model):
     group_name = models.CharField(max_length=100, unique=True)
+    members = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="chat_group", blank=True
+    )
+    members_online = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="online_group", blank=True
+    )
+
+    def get_other_user(self, user):
+        return self.members.exclude(pk=user.id).first()
+
+    def has_member(self, user):
+        return self.members.filter(pk=user.id).exists()
+
+    def __str__(self) -> str:
+        return f"chat_group {self.group_name}"
 
 
 class GroupMessage(models.Model):
