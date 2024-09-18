@@ -131,7 +131,22 @@ def edit(request, pk):
         if form.is_valid():
             action = request.POST.get("action")
 
-            if action == "update":
+            if action == "preview":
+                content_html = markdown.markdown(
+                    form.cleaned_data["content"],
+                    extensions=[
+                        "markdown.extensions.extra",
+                        "markdown.extensions.codehilite",
+                        "markdown.extensions.toc",
+                    ],
+                )
+                return render(
+                    request,
+                    "blogs/edit.html",
+                    {"form": form, "blog": blog, "content_html": content_html},
+                )
+
+            elif action == "update":
                 blog = form.save()
                 return redirect("blogs:show", pk=blog.pk)
 

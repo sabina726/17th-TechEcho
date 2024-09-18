@@ -9,7 +9,6 @@
             作者: {{ author_display_name }} |
             發表時間: {{ blog.created_at|date:"Y-m-d H:i" }}
         </p>
-        <!-- Content Wrapper with text wrapping and overflow control -->
         <div class="markdown-body max-w-full overflow-x-auto break-all p-5">
             {{ content_html|safe }}
         </div>
