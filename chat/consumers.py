@@ -2,7 +2,6 @@ import json
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-from django.db.models import F
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 
@@ -12,26 +11,24 @@ from chat.models import ChatGroup, GroupMessage
 class ChatroomConsumer(WebsocketConsumer):
     def connect(self):
         self.user = self.scope["user"]
-        self.chatroom_id = self.scope["url_route"]["kwargs"]["chatroom_id"]
-        self.group = get_object_or_404(ChatGroup, id=self.chatroom_id)
+        chatroom_id = self.scope["url_route"]["kwargs"]["chatroom_id"]
+        self.chat_group = get_object_or_404(ChatGroup, id=chatroom_id)
+        self.group_name = f"chatroom_{chatroom_id}"
+        async_to_sync(self.channel_layer.group_add)(self.group_name, self.channel_name)
 
-        async_to_sync(self.channel_layer.group_add)(
-            str(self.chatroom_id), self.channel_name
-        )
-
-        if not self.group.members_online.filter(pk=self.user.id).exists():
-            self.group.members_online.add(self.user)
+        if not self.chat_group.members_online.filter(pk=self.user.id).exists():
+            self.chat_group.members_online.add(self.user)
             self.update_online_count()
 
         self.accept()
 
     def disconnect(self, code):
-        if self.group.members_online.filter(pk=self.user.id).exists():
-            self.group.members_online.remove(self.user)
+        if self.chat_group.members_online.filter(pk=self.user.id).exists():
+            self.chat_group.members_online.remove(self.user)
             self.update_online_count()
 
         async_to_sync(self.channel_layer.group_discard)(
-            str(self.chatroom_id), self.channel_name
+            self.group_name, self.channel_name
         )
 
     def receive(self, text_data):
@@ -39,10 +36,10 @@ class ChatroomConsumer(WebsocketConsumer):
         content = text_json.get("content", "").strip()
         if content:
             message = GroupMessage.objects.create(
-                content=content, author=self.user, group=self.group
+                content=content, author=self.user, group=self.chat_group
             )
             event = {"type": "message_handler", "message_id": message.id}
-            async_to_sync(self.channel_layer.group_send)(str(self.chatroom_id), event)
+            async_to_sync(self.channel_layer.group_send)(self.group_name, event)
 
     def message_handler(self, event):
         message_id = event["message_id"]
@@ -55,19 +52,19 @@ class ChatroomConsumer(WebsocketConsumer):
         self.send(text_data=text)
 
     def update_online_count(self):
-        online_count = self.group.members_online.count()
+        online_count = self.chat_group.members_online.count()
         event = {
             "type": "online_count_handler",
             "online_count": online_count,
         }
-        async_to_sync(self.channel_layer.group_send)(str(self.chatroom_id), event)
+        async_to_sync(self.channel_layer.group_send)(self.group_name, event)
 
     def online_count_handler(self, event):
         text = render_to_string(
             "chat/_online_status.html",
             {
                 "online_count": event["online_count"],
-                "other_user": self.group.get_other_user(self.user),
+                "other_user": self.chat_group.get_other_user(self.user),
             },
         )
 
