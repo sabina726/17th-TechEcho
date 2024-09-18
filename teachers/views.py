@@ -79,7 +79,7 @@ def new(request):
 
 def show(request, id):
     teacher = get_object_or_404(Teacher, id=id)
-    chat_group = getattr(teacher, "chat_group", None)
+    chat_group = teacher.chat_group
     if request.method == "POST":
         if request.user.is_anonymous or request.user.teacher.id != teacher.id:
             messages.error(request, "你沒有權限")

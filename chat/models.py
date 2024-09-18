@@ -5,9 +5,6 @@ from django.db import models
 class ChatGroup(models.Model):
     group_name = models.CharField(max_length=100, unique=True)
 
-    def __str__(self):
-        return f"{self.group_name} by {self.assigned_teacher.user if self.assigned_teacher else 'Unknown Teacher'}"
-
 
 class GroupMessage(models.Model):
     group = models.ForeignKey(

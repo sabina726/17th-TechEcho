@@ -3,7 +3,6 @@
 {% block content %}
 
 <div class="flex max-w-full mx-auto">
-    <!-- 類別區塊 -->
     <section class="max-w-full m-2 w-1/5" x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
         <div class="m-2 flex flex-wrap justify-center w-full">
             <a href="{% url 'teachers:index' %}"
@@ -20,7 +19,6 @@
         </div>
     </section>
 
-    <!-- 文章和專家列表區塊 -->
     <div class="flex-1 max-w-4xl mx-auto m-3">
         <div class="flex justify-between w-full m-2">
             <h2 class="text-5xl font-bold text-blue-2 ml-5">專家列表</h2>
