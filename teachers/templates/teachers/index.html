@@ -2,58 +2,60 @@
 
 {% block content %}
 
-<div class="p-6 max-w-4xl mx-auto">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-4xl font-bold text-blue-2">專家列表</h2>
-        {% if user.is_authenticated %}
-        {% if not user.is_student %}
-        <a href="{% url 'payments:index' %}" class="btn btn-neutral">
-            升級成為TechEcho Premium用戶以發起線上指導
-        </a>
-        {% endif %}
-        {% endif %}
-    </div>
-
-    <div class="mb-6">
-        <!-- 全部的篩選 -->
-        <a href="{% url 'teachers:index' %}" class="btn btn-outline{% if not label_filter %} active{% endif %}">全部</a>
-
-        <!-- 動態生成篩選按鈕 -->
-        {% for label in all_labels %}
-        <a href="?label={{ label|lower }}"
-            class="btn btn-outline{% if label_filter == label|lower %} active{% endif %}">
-            {{ label }}
-        </a>
-        {% endfor %}
-    </div>
-
-
-    <div class="p-6 max-w-4xl mx-auto">
-        <section>
-            {% for teacher in teachers %}
-            <a href="{% url 'teachers:show' teacher.id %}" class="block mb-4 p-4 shadow-md hover:bg-gray-100">
-                <div class="flex flex-col">
-                    <h3 class="text-xl font-semibold text-gray-900">{{ teacher.user }}</h3>
-                    <p class="m-2">專業能力:
-                        {% if teacher.labels.all %}
-                        {% for label in teacher.labels.all %}
-                        <span>{{ label.name }}</span>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                        {% else %}
-                        無標籤
-                        {% endif %}
-                    </p>
-                    <p class="text-gray-600 mt-1">{{ teacher.introduce|truncatechars:50 }}</p>
-                </div>
-            </a>
+<div class="flex max-w-full mx-auto">
+    <section class="max-w-full m-2 w-1/5" x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
+        <div class="m-2 flex flex-wrap justify-center w-full">
+            <a href="{% url 'teachers:index' %}"
+            class="btn btn-outline m-2 flex items-center justify-center max-w-full"
+            @click="selectedLabel = ''; localStorage.removeItem('selectedLabel')">尋找所有語言</a>
+            {% for label in all_labels %}
+                <a href="?label={{ label|lower|urlencode }}"
+                    class="btn btn-outline m-2 flex items-center justify-center w-1/3"
+                    :class="{ 'bg-blue-500 text-white': selectedLabel === '{{ label|lower }}' }"
+                    @click="selectedLabel = '{{ label|lower }}'; localStorage.setItem('selectedLabel', '{{ label|lower }}')">
+                    {{ label }}
+                </a>
             {% endfor %}
-        </section>
-    </div>
+        </div>
+    </section>
 
-    <div>
-        {% include "shared/pagination.html" with pages=teachers only %}
+    <div class="flex-1 max-w-4xl mx-auto m-3">
+        <div class="flex justify-between w-full m-2">
+            <h2 class="text-5xl font-bold text-blue-2 ml-5">專家列表</h2>
+            {% if user.is_authenticated and not user.is_student %}
+                <a href="{% url 'payments:index' %}" class="btn btn-neutral ml-4">
+                升級成為TechEcho Premium用戶以發起線上指導
+                </a>
+            {% endif %}
+        </div>
+        <div class="max-w-4xl m-auto p-2">
+            <section>
+                {% for teacher in teachers %}
+                <a href="{% url 'teachers:show' teacher.id %}"
+                    class="block mb-4 p-4 shadow-md hover:bg-gray-100"
+                    x-show="!selectedLabel || teacher.labels.all.some(label => label.name.toLowerCase() === selectedLabel)">
+                    <div class="flex flex-col">
+                        <h3 class="text-2xl font-semibold leading-normal text-blue-2">專家:{{ teacher.user.get_display_name }}</h3>
+                        <p class="m-2 text-xl leading-normal">專業能力:
+                            {% if teacher.labels.all.exists %}
+                                {% for label in teacher.labels.all %}
+                                <span>{{ label.name }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </p>
+                        <p class="text-gray-600 mt-1 text-xl leading-relaxed"
+                            style="word-break: break-all; overflow-wrap: break-word;">
+                            {{ teacher.introduce|truncatechars:100 }}
+                        </p>
+                    </div>
+                </a>
+                {% endfor %}
+            </section>
+        </div>
+        <div>
+            {% include "shared/pagination.html" with pages=teachers only %}
+        </div>
     </div>
-
 </div>
 
 {% endblock %}
