@@ -64,7 +64,6 @@ fontSizeSelect.addEventListener('change', (event) => {
 
 
 const resultWebSocket = new WebSocket(`/ws/editor/result/${editorId}/`)
-
 const evalBtn = document.getElementById('eval');
 evalBtn.addEventListener('click', () => {
 	const params = {

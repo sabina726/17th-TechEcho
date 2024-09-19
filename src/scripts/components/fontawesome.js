@@ -6,15 +6,28 @@ import {
     faArrowUp,
     faArrowDown,
     faBell,
-    faGlasses
+    faGlasses,
+    faUser,
+    faCalendarCheck,
+    faClockRotateLeft,
+    faPen
 } from "@fortawesome/free-solid-svg-icons"
+
+import {
+    faCalendar
+} from "@fortawesome/free-regular-svg-icons"
 
 library.add(
     faMagnifyingGlass,
     faArrowUp,
     faArrowDown,
     faBell,
-    faGlasses
+    faGlasses,
+    faUser,
+    faCalendarCheck,
+    faCalendar,
+    faClockRotateLeft,
+    faPen
 )
 
 dom.i2svg()

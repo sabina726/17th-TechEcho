@@ -1,5 +1,4 @@
 {% load static %}
-
 <link href="{% static 'editors/editors.css' %}" rel="stylesheet" />
 <script src="{% static 'editors/editors.js' %}" type="module"></script>
 
@@ -36,7 +35,6 @@
 
 <input type="hidden" id="typescript" value={% static 'editors/vs/language/typescript/ts.worker.js' %}>
 <input type="hidden" id="editor-worker" value="{% static 'editors/vs/editor/editor.worker.js' %}">
-{% comment %} <input type="hidden" id="user-id" value="{{user.id}}"> {% endcomment %}
 <input type="hidden" id="editor-id" value="{{id}}">
 
 

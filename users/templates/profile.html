@@ -35,17 +35,17 @@
             <a
               href="#"
               class="flex items-center"
-              @click.prevent="setView('profile')"
-              ><i class="fa-solid fa-user mr-2"></i>我的個人資料</a
-            >
+              @click.prevent="setView('profile')">
+            <i class="fa-solid fa-user mr-2"></i>我的個人資料
+            </a>
           </li>
           <li>
             <a
               href="#"
               class="flex items-center"
-              @click.prevent="setView('notifications')"
-              ><i class="fas fa-bell mr-2"></i>通知總覽</a
-            >
+              @click.prevent="setView('notifications')">
+              <i class="fa-solid fa-bell mr-2"></i>通知總覽
+            </a>
           </li>
           <li>
             <a
@@ -53,24 +53,25 @@
             class="flex items-center"
             @click.prevent="showSubMenu1 = !showSubMenu1"
             >
-            <i class="fa-solid fa-calendar-check mr-2"></i>我的預約
+              <i class="fa-solid fa-calendar-check mr-2"></i>
+              我的預約
             </a>
             <ul x-show="showSubMenu1" class="pl-6 mt-2 space-y-2">
                 <li>
-                    <a
-                    href="#"
-                    class="flex items-center text-gray-700"
-                    @click.prevent="setView('reservations_student')"
-                  ><i class="fa-regular fa-calendar"></i>
+                  <a
+                  href="#"
+                  class="flex items-center text-gray-700"
+                  @click.prevent="setView('reservations_student')">
+                    <i class="fa-regular fa-calendar"></i>
                     我的課程
                   </a>
                 </li>
                 <li>
-                    <a
-                    href="#"
-                    class="flex items-center text-gray-700"
-                    @click.prevent="setView('reservations_teacher')"
-                  ><i class="fa-regular fa-calendar"></i>
+                  <a
+                  href="#"
+                  class="flex items-center text-gray-700"
+                  @click.prevent="setView('reservations_teacher')">
+                    <i class="fa-regular fa-calendar"></i>
                     我的授課時間
                   </a>
                 </li>
@@ -80,8 +81,7 @@
             <a
             href="#"
             class="flex items-center"
-            @click.prevent="showSubMenu = !showSubMenu"
-            >
+            @click.prevent="showSubMenu = !showSubMenu">
             <i class="fa-solid fa-clock-rotate-left mr-2"></i>
             我的足跡
             </a>
