@@ -6,7 +6,7 @@ def upvoted_or_downvoted_or_neither(request, question) -> str:
     if not question.voted_by(request.user):
         return "neither"
 
-    return question.uestionuservotes_set.get(user=request.user).vote_status
+    return question.questionuservotes_set.get(user=request.user).vote_status
 
 
 # only three states of (upvote, downvote) allowed
