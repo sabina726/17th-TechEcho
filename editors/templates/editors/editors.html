@@ -1,0 +1,44 @@
+{% load static %}
+
+<link href="{% static 'editors/editors.css' %}" rel="stylesheet" />
+<script src="{% static 'editors/editors.js' %}" type="module"></script>
+
+<div class="flex flex-col justify-between pt-5 pb-1">
+    <div class="relative mb-1">
+        <label for="language-select">選擇程式語言：</label>
+        <select id="language-select">
+            <option value="javascript" selected>JavaScript</option>
+            <option value="python">Python</option>
+        </select>
+        <label for="theme-select">選擇背景顏色：</label>
+        <select id="theme-select">
+            <option value="vs-light" selected>亮色系</option>
+            <option value="vs-dark">暗色系</option>
+            <option value="hc-black">高對比</option>
+        </select>
+        <label for="font-size-select">選擇字體大小：</label>
+        <select id="font-size-select">
+            <option value="12" selected>12</option>
+            {% for i in '0123456789'|make_list %}
+                <option value="{{ forloop.counter|add:12 }}">{{ forloop.counter|add:12 }}</option>
+            {% endfor %}
+        </select>
+
+        <div id="editor" class="h-[50vh] border-0"></div>
+    </div>
+
+
+    <div class="relative w-full bg-white h-[15vh] border-10 rounded-b-lg shadow-lg overflow-auto p-2">
+        <article id="result"></article>
+        <button id="eval" class="btn btn-sm text-white bg-green-3 absolute right-1 bottom-1 z-20">執行程式</button>
+    </div>
+</div>
+
+<input type="hidden" id="typescript" value={% static 'editors/vs/language/typescript/ts.worker.js' %}>
+<input type="hidden" id="editor-worker" value="{% static 'editors/vs/editor/editor.worker.js' %}">
+{% comment %} <input type="hidden" id="user-id" value="{{user.id}}"> {% endcomment %}
+<input type="hidden" id="editor-id" value="{{id}}">
+
+
+
+

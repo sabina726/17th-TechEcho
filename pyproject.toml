@@ -2,7 +2,15 @@
 name = "techecho"
 version = "0.1.0"
 description = ""
-authors = ["chen weichen <newsforcwc@gmail.com>"]
+authors = [
+    "alex <alexyongxinlin@gmail.com>",
+    "buding <buding033171@gmail.com>",
+    "chen weichen <newsforcwc@gmail.com>",
+    "chi <a27976566@gmail.com>",
+    "Eudora <eudoralin.tw@gmail.com>",
+    "hong <sabina880731@gmail.com>",
+    "tony <tony.t0705@gmail.com>"
+]
 readme = "README.md"
 package-mode = false
 

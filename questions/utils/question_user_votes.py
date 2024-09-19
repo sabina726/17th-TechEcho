@@ -3,10 +3,10 @@ def upvoted_or_downvoted_or_neither(request, question) -> str:
     if not request.user.is_authenticated:
         return "neither"
 
-    if not question.has_voted(request.user):
+    if not question.voted_by(request.user):
         return "neither"
 
-    return question.questionuservotes_set.get(user=request.user).vote_status
+    return question.uestionuservotes_set.get(user=request.user).vote_status
 
 
 # only three states of (upvote, downvote) allowed

@@ -40,7 +40,7 @@ def register(request):
 
     else:
         form = UsersForm()
-    return render(request, "users/register.html", {"form": form})
+    return render(request, "register.html", {"form": form})
 
 
 def log_in(request):
