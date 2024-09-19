@@ -60,7 +60,7 @@ def log_in(request):
                 messages.error(request, "登入失敗，帳號密碼錯誤或尚未註冊")
     else:
         form = AuthenticationForm()
-    return render(request, "login.html", {"form": form, "next": next_url})
+    return render(request, "users/login.html", {"form": form, "next": next_url})
 
 
 def log_out(request):
@@ -78,7 +78,7 @@ def forget_password(request):
             messages.error(request, "找不到此帳號。")
             return redirect("users:forget_password")
 
-        password_reset, created = PasswordReset.objects.get_or_create(user=user)
+        password_reset, _ = PasswordReset.objects.get_or_create(user=user)
         password_reset.forget_password_token = uuid.uuid4()
         password_reset.save()
 
@@ -89,7 +89,7 @@ def forget_password(request):
 
         return redirect("users:forget_password")
 
-    return render(request, "forget_password.html")
+    return render(request, "users/forget_password.html")
 
 
 def change_password(request, token):
@@ -119,7 +119,7 @@ def change_password(request, token):
             return redirect("users:change_password", token=token)
 
     context = {"token": token, "user_id": user.id}
-    return render(request, "change_password.html", context)
+    return render(request, "users/change_password.html", context)
 
 
 @login_required
@@ -153,7 +153,7 @@ def profile(request):
         "reservations": reservations,
         "schedules": schedules,
     }
-    return render(request, "profile.html", context)
+    return render(request, "users/profile.html", context)
 
 
 @login_required
@@ -173,7 +173,7 @@ def profile_edit(request):
         else:
             if "HX-Request" in request.headers:
                 html = render_to_string(
-                    "profile_edit.html",
+                    "users/profile_edit.html",
                     {"form": form, "photo_form": photo_form},
                     request,
                 )
@@ -185,5 +185,5 @@ def profile_edit(request):
         photo_form = UserPhotoForm(instance=request.user)
 
     return render(
-        request, "profile_edit.html", {"form": form, "photo_form": photo_form}
+        request, "users/profile_edit.html", {"form": form, "photo_form": photo_form}
     )

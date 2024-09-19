@@ -1,3 +1,4 @@
+{% load home %}
 <section
   x-data="{ edit: false }"
   class="container mx-auto border px-6 py-4 my-4 rounded-lg"
@@ -14,10 +15,10 @@
           {{ answer.user.get_display_name }}
         </p>
         <p class="text-gray-500">
-          建立時間: {{ answer.created_at|date:'Y/m/d H:i' }}
+          建立時間: {{ answer.created_at|standard_date }}
         </p>
         <p class="text-gray-500">
-          更新時間: {{ answer.updated_at|date:'Y/m/d H:i' }}
+          更新時間: {{ answer.updated_at|standard_date }}
         </p>
       </div>
     </div>

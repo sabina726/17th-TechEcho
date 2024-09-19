@@ -35,7 +35,7 @@ class Question(SoftDeleteModel):
     def followed_by(self, user) -> bool:
         return self.followers.filter(id=user.id).exists()
 
-    def has_voted(self, user) -> bool:
+    def voted_by(self, user) -> bool:
         return self.voters.filter(id=user.id).exists()
 
 

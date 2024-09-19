@@ -1,4 +1,12 @@
 export default programmingLanguages = [
+    "vue",
+    "react",
+    "css",
+    "html",
+    "aws",
+    "docker",
+    "linux",
+    "angular",
     "python",
     "javascript",
     "java",

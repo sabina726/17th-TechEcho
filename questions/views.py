@@ -143,7 +143,7 @@ def delete(request, id):
 def votes(request, id):
     question = get_object_or_404(Question, pk=id)
 
-    if not question.has_voted(request.user):
+    if not question.voted_by(request.user):
         record = QuestionUserVotes.objects.create(question=question, user=request.user)
     else:
         record = question.questionuservotes_set.get(user=request.user)
