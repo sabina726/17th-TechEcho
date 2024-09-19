@@ -3,10 +3,16 @@
 {% block content %}
 
 <div class="flex flex-wrap max-w-full mx-auto">
-    <section class="w-full sm:w-1/5 m-2" x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
+    <section class="flex justify-center items-center flex-col w-full sm:w-1/5 m-2" x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
+
+        <form method="get" action="{% url 'teachers:index' %}">
+            <input type="text" name="search" placeholder="搜尋暱稱或專家名" class="input border border-blue-400">
+            <button type="submit" class="btn btn-primary">搜尋</button>
+        </form>
+
         <div class="m-2 flex flex-wrap justify-center max-w-full">
             <a href="{% url 'teachers:index' %}"
-            class="btn btn-outline m-2 flex items-center justify-center max-w-full sm:w-auto"
+            class="btn btn-outline m-2 flex items-center justify-center w-full max-w-full sm:w-auto"
             @click="selectedLabel = ''; localStorage.removeItem('selectedLabel')">尋找所有語言</a>
             {% for label in all_labels %}
                 <a href="?label={{ label|lower|urlencode }}"
@@ -32,17 +38,27 @@
             <section>
                 {% for teacher in teachers %}
                 <a href="{% url 'teachers:show' teacher.id %}"
-                    class="block mb-4 p-4 shadow-md hover:bg-gray-100"
+                    class="w-full max-w-full block mb-4 p-4 shadow-md hover:bg-gray-100"
                     x-show="!selectedLabel || teacher.labels.all.some(label => label.name.toLowerCase() === selectedLabel)">
-                    <div class="flex flex-col">
-                        <h3 class="text-2xl font-semibold leading-normal text-blue-2">專家:{{ teacher.user.get_display_name }}</h3>
-                        <p class="m-2 text-xl leading-normal">專業能力:
+                    <div class="flex items-center justify-around w-full max-w-full">
+                        {% if teacher.user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="p-2 w-32 h-32 object-cover rounded-full">
+                        {% else %}
+                            <img src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar" alt="User Avatar" class="p-2 w-32 h-32 object-cover rounded-full" />
+                        {% endif %}
+                        <div class="flex flex-col ml-4 w-full max-w-full">
+                            <h3 class="text-2xl text-center font-semibold leading-normal text-blue-2">{{ teacher.user.get_display_name }}</h3>
+                            <p class="m-2 text-xl text-center leading-normal">
+                            專業能力:
                             {% if teacher.labels.all.exists %}
                                 {% for label in teacher.labels.all %}
                                 <span>{{ label.name }}</span>
                                 {% endfor %}
                             {% endif %}
-                        </p>
+                            </p>
+                        </div>
+                    </div>
+                    <div>
                         <p class="text-gray-600 mt-1 text-xl leading-relaxed"
                             style="word-break: break-all; overflow-wrap: break-word;">
                             {{ teacher.introduce|truncatechars:100 }}

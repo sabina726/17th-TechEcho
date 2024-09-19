@@ -8,15 +8,22 @@
 </div>
 
 <div class="w-full max-w-3xl mb-6 p-6 mx-auto rounded-lg bg-vanilla-5">
-    <div class="p-2 m-2 rounded-lg">
+    <div class="w-full max-w-full flex items-center justify-around">
+        {% if teacher.user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="p-2 w-32 h-32 object-cover rounded-full">
+        {% else %}
+            <img src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar" alt="User Avatar" class="p-2 w-32 h-32 object-cover rounded-full" />
+        {% endif %}
         <h2 class="mb-2 pb-2 text-3xl font-semibold ">
             {{ teacher.user.get_display_name }}
         </h2>
-        <article class=" break-words">{{ teacher.introduce }}</article>
+    </div>
+    <div class="p-2 m-2 rounded-lg">
+        <article class=" break-words text-xl">{{ teacher.introduce }}</article>
     </div>
 
-    <div class="flex p-2 m-2 indent-2 bg-vanilla-5">
-        <p class="m-2 ">專業能力:
+    <div class="flex p-2 m-2 bg-vanilla-5">
+        <p class="text-xl">專業技能:
             {% if teacher.labels.all %}
                 {% for label in teacher.labels.all %}
                 <span>{{ label.name }}</span>{% if not forloop.last %}, {% endif %}
@@ -64,9 +71,12 @@
         <ul class="mt-4">
             {% for answer in answers %}
             <li class="mb-2 text-center">
-                <a href="{% url 'questions:show' answer.question.id %}" class="text-xl text-yellow-900 font-semibold hover:text-yellow-700">
+                <div class="flex justify-around">
+                    <span class="text-xl text-yellow-900 font-semibold">{{ answer.question.title }}</span>
+                    <a href="{% url 'questions:show' answer.question.id %}" class="text-xl text-yellow-900 font-semibold hover:text-yellow-700">
                     {{ answer.content|truncatechars:10 }}
-                </a>
+                    </a>
+                </div>
             </li>
             {% empty %}
             <li class="">無回答記錄</li>

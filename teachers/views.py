@@ -2,6 +2,7 @@ from urllib.parse import unquote
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -20,6 +21,7 @@ def mentor(request):
 
 def index(request):
     label_filter = request.GET.get("label", None)
+    search_query = request.GET.get("search", None)
 
     if request.method == "POST":
         # 檢查是否該使用者已經是專家
@@ -54,6 +56,12 @@ def index(request):
 
     if label_filter:
         teachers = teachers.filter(labels__name__exact=label_filter)
+
+    if search_query:
+        teachers = teachers.filter(
+            Q(user__nickname__icontains=search_query)
+            | Q(user__username__icontains=search_query)
+        )
 
     all_labels = set(teachers.values_list("labels__name", flat=True).distinct())
 
