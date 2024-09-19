@@ -10,7 +10,7 @@
                     <div>
                         <a href="{% url 'blogs:edit' draft.pk %}" class="text-xl font-bold">{{ draft.title }}</a>
                         <p>Category: {{ draft.category.name }}</p>
-                        <p>Last updated on: {{ draft.updated_at|standard_date }}</p>
+                        <p>Last updated on: {{ draft.updated_at|date:"Y/m/d H:i" }}</p>
                     </div>
                     <div>
                         <a href="{% url 'blogs:edit' draft.pk %}" class="text-blue-500">編輯</a>

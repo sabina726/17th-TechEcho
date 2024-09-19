@@ -1,7 +1,6 @@
 import json
 
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.http import JsonResponse
 
 from editors.utils.run_code import run_javascript_code, run_python_code
 
