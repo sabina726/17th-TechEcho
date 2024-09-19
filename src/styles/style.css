@@ -1,6 +1,7 @@
 @import "./tag.css";
 @import "./animations.css";
 @import "./animate.min.css";
+@import "./github-markdown.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
