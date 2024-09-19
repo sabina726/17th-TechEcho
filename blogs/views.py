@@ -39,7 +39,7 @@ def image_upload(request):
 
 def index(request):
     blog_list = Blog.objects.filter(is_draft=False).order_by("-created_at")
-    paginator = Paginator(blog_list, 5)  # Show 5 blogs per page.
+    paginator = Paginator(blog_list, 5)
 
     page_number = request.GET.get("page")
     blogs = paginator.get_page(page_number)
@@ -124,7 +124,7 @@ def edit(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
 
     if blog.author != request.user:
-        return HttpResponseForbidden("You are not allowed to edit this blog post.")
+        return HttpResponseForbidden("你不被允許編輯此部落格文章。")
 
     if request.method == "POST":
         form = BlogForm(request.POST, instance=blog)
@@ -167,7 +167,7 @@ def delete(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
 
     if blog.author != request.user:
-        return HttpResponseForbidden("You are not allowed to delete this blog post.")
+        return HttpResponseForbidden("你不被允許刪除此部落格文章。")
 
     if request.method == "POST":
         blog.delete()
