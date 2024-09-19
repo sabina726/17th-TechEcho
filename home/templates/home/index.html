@@ -1,19 +1,10 @@
 {% extends "layouts/base.html" %}
 {% block content %}
-<div class="relative w-full h-screen overflow-hidden">
-    <div id="container">
-        <div id="code1" class="code">Python</div>
-        <div id="code2" class="code">JavaScript</div>
-        <div id="code3" class="code">Ruby</div>
-    </div>
-    <div class="outside">
-        <div class="box">
-        </div>
-        <div class="reverse-box">TechEcho</div>
-    </div>
 
-    <div class="relative z-10 flex items-center justify-center h-full mt-40">
-        <div class="relative w-full max-w-xl px-2">
+<h1 class="mt-32 text-3xl font-bold text-center text-green-3 typing-animation">技術問題、尋找答案、深入諮詢、熱情分享，軟工的技術交流平台</h1>
+
+    <div class="relative z-10 flex items-center justify-center h-full mt-10">
+        <div class="relative w-full max-w-xl px-2 ">
             <form method="GET" action="{% url 'search' %}" class="relative flex items-center">
                 <input
                     type="text"

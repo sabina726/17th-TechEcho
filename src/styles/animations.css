@@ -17,101 +17,21 @@
   font-weight: bold;
 }
 
-.outside {
-  width: 150px;
-  height: 150px;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  animation: x 3s infinite alternate linear;
+@keyframes typing {
+	from { width: 0; }
+	to { width: 100%; }
 }
 
-.box {
-  opacity: 0.8;
-  background: blue;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-size: 18px;
-  color: black;
-  font-weight: bold;
-  animation: y 1.5s infinite alternate;
+@keyframes caret {
+	50% { border-right-color: transparent; }
 }
 
-.reverse-box {
-  opacity: 0.8;
-  background: skyblue;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-size: 18px;
-  color: white;
-  font-weight: bold;
-  animation: y 2.5s infinite alternate;
-  transform: rotate(180deg);
-}
-
-@keyframes y {
-  0% {
-    width: 80%;
-    height: 80%;
-    clip-path: polygon(29.34% 0%, 70.66% 0%, 100% 29.34%, 100% 70.66%, 70.66% 100%, 29.34% 100%, 0% 70.66%, 0% 29.34%);
-  }
-  20% {
-    width: 80%;
-    height: 80%;
-    clip-path: polygon(29.34% 0%, 70.66% 0%, 100% 29.34%, 100% 70.66%, 70.66% 100%, 29.34% 100%, 0% 70.66%, 0% 29.34%);
-  }
-  40% {
-    height: 90%;
-    width: 100%;
-    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%, 25% 0%, 25% 0%);
-  }
-  60% {
-    height: 100%;
-    clip-path: polygon(50% 0%, 100% 38.31%, 80.86% 100%, 19.14% 100%, 0% 38.31%, 0% 38.31%, 0% 38.31%, 0% 38.31%);
-  }
-  70% {
-    clip-path: polygon(100% 0%, 100% 100%, 0% 100%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%);
-  }
-  85% {
-    clip-path: polygon(100% 100%, 0% 100%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);
-  }
-  100% {
-    height: 90%;
-    clip-path: polygon(100% 100%, 0% 100%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);
-  }
-}
-
-@keyframes x {
-  0% {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(270deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.typing-animation {
+	font: bold 200% Consolas, Monaco, monospace;
+	white-space: nowrap;
+	overflow: hidden;
+	border-right: .05em solid;
+	width: 20ch;
+	animation: typing 10s steps(16) infinite,
+	           caret 1s steps(1) infinite;
 }
