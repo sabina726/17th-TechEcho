@@ -4,9 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponse
 from django.shortcuts import redirect, render, reverse
-from django.template.loader import render_to_string
 from django.utils.http import url_has_allowed_host_and_scheme
 
 from users.forms import UserPhotoForm, UserProfileForm, UsersForm
@@ -36,7 +34,7 @@ def register(request):
 
     else:
         form = UsersForm()
-    return render(request, "layouts/register.html", {"form": form})
+    return render(request, "users/register.html", {"form": form})
 
 
 def log_in(request):
@@ -60,7 +58,7 @@ def log_in(request):
                 messages.error(request, "登入失敗，帳號密碼錯誤或尚未註冊")
     else:
         form = AuthenticationForm()
-    return render(request, "layouts/login.html", {"form": form, "next": next_url})
+    return render(request, "users/login.html", {"form": form, "next": next_url})
 
 
 def log_out(request):
@@ -82,14 +80,11 @@ def forget_password(request):
         password_reset.forget_password_token = uuid.uuid4()
         password_reset.save()
 
-        send_forget_password_mail(user.email, profile.forget_password_token)
+        send_forget_password_mail(user.email, password_reset.forget_password_token)
         messages.success(request, "重設密碼的郵件已發送。")
-    else:
-        messages.error(request, "找不到此帳號。")
-
         return redirect("users:forget_password")
 
-    return render(request, "layouts/forget_password.html")
+    return render(request, "users/forget_password.html")
 
 
 def change_password(request, token):
@@ -119,43 +114,34 @@ def change_password(request, token):
             return redirect("users:change_password", token=token)
 
     context = {"token": token, "user_id": user.id}
-    return render(request, "layouts/change_password.html", context)
+    return render(request, "users/change_password.html", context)
 
 
 @login_required
 def profile(request):
-    context = {"user": request.user}
-    return render(request, "layouts/profile.html", context)
+    if request.method == "POST":
+        photo_form = UserPhotoForm(request.POST, request.FILES, instance=request.user)
+        if photo_form.is_valid():
+            photo_form.save()
+            return redirect("users:profile")
+    else:
+        photo_form = UserPhotoForm(instance=request.user)
+
+    context = {"photo_form": photo_form, "user": request.user}
+    return render(request, "users/profile.html", context)
 
 
 @login_required
 def profile_edit(request):
     if request.method == "POST":
         form = UserProfileForm(request.POST, instance=request.user)
-        photo_form = UserPhotoForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid() and photo_form.is_valid():
+        if form.is_valid():
             form.save()
-            photo_form.save()
-            if "HX-Request" in request.headers:
-                response = HttpResponse()
-                response["HX-Redirect"] = reverse("users:profile")
-                return response
-            else:
-                return redirect("users:profile")
+            messages.success(request, "您的個人資料已成功更新。")
+            return redirect("users:profile")
         else:
-            if "HX-Request" in request.headers:
-                html = render_to_string(
-                    "layouts/profile_edit.html",
-                    {"form": form, "photo_form": photo_form},
-                    request,
-                )
-                return HttpResponse(html)
-            else:
-                messages.error(request, "請更正以下錯誤。")
+            messages.error(request, "請更正以下錯誤。")
     else:
         form = UserProfileForm(instance=request.user)
-        photo_form = UserPhotoForm(instance=request.user)
 
-    return render(
-        request, "layouts/profile_edit.html", {"form": form, "photo_form": photo_form}
-    )
+    return render(request, "users/profile_edit.html", {"form": form})
