@@ -78,7 +78,6 @@
   border: 0;
 }
 
-
 .dot {
   @apply rounded-full p-1.5;
 }
@@ -94,4 +93,3 @@
 .graylight-dot {
   @apply bg-green-300;
 }
-
