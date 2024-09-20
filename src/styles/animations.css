@@ -16,3 +16,21 @@
   color: black;
   font-weight: bold;
 }
+
+.typing-animation {
+  font: bold 200% Consolas, Monaco, monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: .2em solid;
+  width: 0;
+  animation: typing 6s steps(40, end) forwards, caret 0.75s steps(1) infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 33ch; }
+}
+
+@keyframes caret {
+  50% { border-right-color: transparent; }
+}
