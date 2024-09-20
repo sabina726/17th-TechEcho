@@ -1,4 +1,6 @@
 {% load static %}
+{% load users %}
+
 <nav
   class="sticky top-0 left-0 z-20 w-full p-6 bg-blue-1"
   x-data="{ open: false, articleOpen: false, submenuOpen: false, expertOpen: false, userMenuOpen: false, teacherOpen: false}"
@@ -7,8 +9,8 @@
 <div class="flex items-center justify-between">
   <div class="flex items-center text-3xl font-bold text-vanilla-7 animate-pulse">
       <a href="{% url 'index' %}" class="flex items-center">
-          TECHECHO
-          <img src="{% static 'image/logo1.jpg' %}" alt="logo" class="w-16 ml-1 h-14">
+        TECHECHO
+        <img src="{% static 'image/logo1.jpg' %}" alt="logo" class="w-16 ml-1 h-14">
       </a>
   </div>
   {% if request.path != '/' %}
