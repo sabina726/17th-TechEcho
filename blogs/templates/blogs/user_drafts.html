@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-
+{% load home %}
 {% block content %}
 <div class="max-w-4xl mx-auto mt-8 p-6">
     <h1 class="text-3xl mb-6">我的草稿</h1>
@@ -10,7 +10,7 @@
                     <div>
                         <a href="{% url 'blogs:edit' draft.pk %}" class="text-xl font-bold">{{ draft.title }}</a>
                         <p>Category: {{ draft.category.name }}</p>
-                        <p>Last updated on: {{ draft.updated_at|date:"Y-m-d H:i" }}</p>
+                        <p>Last updated on: {{ draft.updated_at|date:"Y/m/d H:i" }}</p>
                     </div>
                     <div>
                         <a href="{% url 'blogs:edit' draft.pk %}" class="text-blue-500">編輯</a>
@@ -25,6 +25,5 @@
             <li>目前沒有草稿。</li>
         {% endfor %}
     </ul>
-    {% include 'shared/pagination.html' with pages=blogs default_message="No posts available" %}
 </div>
 {% endblock %}

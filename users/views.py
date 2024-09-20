@@ -9,6 +9,10 @@ from django.shortcuts import redirect, render, reverse
 from django.template.loader import render_to_string
 from django.utils.http import url_has_allowed_host_and_scheme
 
+from answers.models import Answer
+from blogs.models import Blog
+from questions.models import Question
+from reservations.models import StudentReservation, TeacherSchedule
 from users.forms import UserPhotoForm, UserProfileForm, UsersForm
 
 from .helper import send_forget_password_mail
@@ -36,7 +40,7 @@ def register(request):
 
     else:
         form = UsersForm()
-    return render(request, "layouts/register.html", {"form": form})
+    return render(request, "users/register.html", {"form": form})
 
 
 def log_in(request):
@@ -52,15 +56,11 @@ def log_in(request):
             messages.success(request, "登入成功")
             return redirect(next_url)
         else:
-            if "username" in form.errors:
-                messages.error(request, "帳號錯誤")
-            if "password1" in form.errors:
-                messages.error(request, "密碼錯誤")
             if "username" and "password1" in form.errors:
                 messages.error(request, "登入失敗，帳號密碼錯誤或尚未註冊")
     else:
         form = AuthenticationForm()
-    return render(request, "layouts/login.html", {"form": form, "next": next_url})
+    return render(request, "users/login.html", {"form": form, "next": next_url})
 
 
 def log_out(request):
@@ -78,7 +78,7 @@ def forget_password(request):
             messages.error(request, "找不到此帳號。")
             return redirect("users:forget_password")
 
-        password_reset, created = PasswordReset.objects.get_or_create(user=user)
+        password_reset, _ = PasswordReset.objects.get_or_create(user=user)
         password_reset.forget_password_token = uuid.uuid4()
         password_reset.save()
 
@@ -89,7 +89,7 @@ def forget_password(request):
 
         return redirect("users:forget_password")
 
-    return render(request, "layouts/forget_password.html")
+    return render(request, "users/forget_password.html")
 
 
 def change_password(request, token):
@@ -119,13 +119,41 @@ def change_password(request, token):
             return redirect("users:change_password", token=token)
 
     context = {"token": token, "user_id": user.id}
-    return render(request, "layouts/change_password.html", context)
+    return render(request, "users/change_password.html", context)
 
 
 @login_required
 def profile(request):
-    context = {"user": request.user}
-    return render(request, "layouts/profile.html", context)
+
+    drafts = Blog.objects.filter(author=request.user, is_draft=True).order_by(
+        "-created_at"
+    )
+    blogs = Blog.objects.filter(author=request.user, is_draft=False).order_by(
+        "-created_at"
+    )
+
+    questions = Question.objects.filter(user=request.user).order_by("-created_at")[:]
+    answers = (
+        Answer.objects.filter(user=request.user)
+        .select_related("question", "user")
+        .order_by("-created_at")[:]
+    )
+    reservations = StudentReservation.objects.filter(
+        student=request.user
+    ).select_related("schedule__teacher")
+    schedules = TeacherSchedule.objects.filter(teacher=request.user).prefetch_related(
+        "studentreservation_set__student"
+    )
+    context = {
+        "user": request.user,
+        "drafts": drafts,
+        "questions": questions,
+        "answers": answers,
+        "blogs": blogs,
+        "reservations": reservations,
+        "schedules": schedules,
+    }
+    return render(request, "users/profile.html", context)
 
 
 @login_required
@@ -145,7 +173,7 @@ def profile_edit(request):
         else:
             if "HX-Request" in request.headers:
                 html = render_to_string(
-                    "layouts/profile_edit.html",
+                    "users/profile_edit.html",
                     {"form": form, "photo_form": photo_form},
                     request,
                 )
@@ -157,5 +185,5 @@ def profile_edit(request):
         photo_form = UserPhotoForm(instance=request.user)
 
     return render(
-        request, "layouts/profile_edit.html", {"form": form, "photo_form": photo_form}
+        request, "users/profile_edit.html", {"form": form, "photo_form": photo_form}
     )

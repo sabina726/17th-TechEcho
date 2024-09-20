@@ -1,9 +1,7 @@
 {% load static %}
 <nav
   class="sticky top-0 left-0 z-20 w-full p-6 bg-blue-1"
-
-  x-data="{ open: false, articleOpen: false,submenuOpen: false, expertOpen: false, userMenuOpen: false, teacherOpen: false}"
-
+  x-data="{ open: false, articleOpen: false, submenuOpen: false, expertOpen: false, userMenuOpen: false, teacherOpen: false}"
   @resize.window="if (window.innerWidth > 768) open = false"
 >
 <div class="flex items-center justify-between">
@@ -57,6 +55,7 @@
       </ul>
     </li>
     <li class="relative tooltip tooltip-bottom" data-tip="問看看？">
+
       <a
         href="#"
         @click="submenuOpen = !submenuOpen"

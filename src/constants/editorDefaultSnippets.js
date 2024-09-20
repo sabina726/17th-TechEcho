@@ -1,22 +1,19 @@
 const default_message = "'Hello World'"
-const default_javascript = `console.log(${default_message})`
-const default_python = `print(${default_message})`
-const default_cpp = `#include <iostream>
-using namespace std;
+const default_snippets = {
+    javascript: `console.log(${default_message})`,
+    python: `print(${default_message})`,
+    cpp: `#include <iostream>
+    using namespace std;
 
-int main() {
-    cout << ${default_message} << endl;
-    return 0;
+    int main() {
+        cout << ${default_message} << endl;
+        return 0;
+    }`,
 }
-`
 
 const getDefaultSnippets = (language) => {
-    if (language == "javascript") {
-        return default_javascript;
-    } else if (language == "python") {
-        return default_python;
-    } else if (language == "cpp") {
-        return default_cpp
+    if (language in default_snippets) {
+        return default_snippets[language]
     }
     return ""
 }
