@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import include, path
 
 urlpatterns = [
@@ -14,3 +15,10 @@ urlpatterns = [
     path("reservations/", include("reservations.urls")),
     path("blogs/", include("blogs.urls")),
 ]
+
+
+def custom_404(request, exception):
+    return redirect("http://10.8.8.93:5173/test_vue/404-page")
+
+
+handler404 = custom_404

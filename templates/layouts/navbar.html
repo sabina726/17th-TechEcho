@@ -8,7 +8,7 @@
   <div class="flex items-center text-3xl font-bold text-vanilla-7 animate-pulse">
       <a href="{% url 'index' %}" class="flex items-center">
           TECHECHO
-          <img src="{% static 'image/logo1.jpg' %}" alt="logo" class="w-16 ml-1 h-14">
+          <img src="https://techecho.s3.ap-southeast-1.amazonaws.com/homepage_pictures/techecho_logo.png" alt="logo" class="w-16 ml-1 h-14">
       </a>
   </div>
   {% if request.path != '/' %}
@@ -168,7 +168,7 @@
       <ul
         x-show="userMenuOpen"
         @click.away="userMenuOpen = false"
-        class="absolute left-0 z-20 top-5 mt-9 text-green-3 w-60 bg-vanilla-7"
+        class="absolute z-20 top-5 mt-9 text-green-3 w-60 bg-vanilla-7"
         style="display: none"
       >
         <li>
