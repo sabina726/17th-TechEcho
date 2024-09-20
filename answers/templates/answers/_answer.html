@@ -1,4 +1,4 @@
-{% load home %}
+{% load home users %}
 <section
   x-data="{ edit: false }"
   class="container mx-auto border px-6 py-4 my-4 rounded-lg"
@@ -13,6 +13,7 @@
       <div>
         <p class="text-lg font-medium text-gray-800">
           {{ answer.user.get_display_name }}
+          {{ answer.user|teacher_icon }}
         </p>
         <p class="text-gray-500">
           建立時間: {{ answer.created_at|standard_date }}

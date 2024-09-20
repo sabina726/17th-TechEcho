@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% load questions home %}
+{% load questions home users%}
 {% block content %}
     <div class="container border mt-4 rounded-lg p-6 max-w-4xl mx-auto relative mb-2">
         <div class="flex justify-between items-baseline mb-2">
@@ -21,7 +21,7 @@
         </div>
 
         <div class="flex gap-2 mb-2 text-gray-500">
-            <span>提問者：{{question.user}}</span>
+            <span>提問者：{{question.user}} {{question.user|teacher_icon}}</span>
             <span>｜建立時間：{{question.created_at|standard_date }}</span>
             <span>｜更新時間：
                 {% if question.updated_at %}

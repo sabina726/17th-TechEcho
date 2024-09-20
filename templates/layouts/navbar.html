@@ -1,3 +1,5 @@
+{% load users %}
+
 <nav
   class="sticky top-0 left-0 z-20 w-full p-6 bg-blue-1"
   x-data="{ open: false, articleOpen: false, submenuOpen: false, expertOpen: false, userMenuOpen: false, teacherOpen: false}"
@@ -154,7 +156,9 @@
       >
         <span
           class="pr-3 transition duration-300 ease-in-out hover:text-green-3 no-underline hover:underline"
-          >{{ user.username }}
+          >
+          {{ user }}
+          {{ user|teacher_icon}}
         </span>
         {% if user.profile_picture %}
         <img

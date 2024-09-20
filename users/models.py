@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.crypto import get_random_string
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from storages.backends.s3boto3 import S3Boto3Storage
 
@@ -28,7 +29,7 @@ class User(AbstractUser):
             self.slug = f"{base_slug}-{get_random_string(10)}"
         super().save(*args, **kwargs)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.get_display_name()
 
 
