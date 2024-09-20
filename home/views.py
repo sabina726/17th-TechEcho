@@ -27,7 +27,7 @@ def search(request):
 
         questions = Question.objects.filter(q_objects).distinct()
     else:
-        messages.info(request, "請輸入搜尋內容。")
+        messages.info(request, "請輸入搜尋內容")
 
     return render(
         request,

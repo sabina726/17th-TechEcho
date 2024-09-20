@@ -16,22 +16,3 @@
   color: black;
   font-weight: bold;
 }
-
-@keyframes typing {
-	from { width: 0; }
-	to { width: 100%; }
-}
-
-@keyframes caret {
-	50% { border-right-color: transparent; }
-}
-
-.typing-animation {
-	font: bold 200% Consolas, Monaco, monospace;
-	white-space: nowrap;
-	overflow: hidden;
-	border-right: .05em solid;
-	width: 20ch;
-	animation: typing 10s steps(16) infinite,
-	           caret 1s steps(1) infinite;
-}

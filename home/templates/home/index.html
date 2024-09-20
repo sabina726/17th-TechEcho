@@ -1,7 +1,49 @@
 {% extends "layouts/base.html" %}
 {% block content %}
+{% load static %}
 
-<h1 class="mt-32 text-3xl font-bold text-center text-green-3 typing-animation">技術問題、尋找答案、深入諮詢、熱情分享，軟工的技術交流平台</h1>
+    <div class="grid grid-cols-1 gap-6 m-10 md:grid-cols-3">
+        <a href="{% url 'questions:index' %}" class="block p-4 transition duration-300 ease-in-out transform shadow-xl bg-vanilla-5 card card-side hover:scale-110">
+            <figure class="flex justify-center">
+                <img
+                    src="{% static 'image/view4.jpg' %}"
+                    alt="view"
+                    class="object-cover w-full h-48 md:h-32" />
+            </figure>
+            <div class="card-body">
+                <h2 class="card-title">問題討論</h2>
+                <p>快來技術討論，一起分享吧！</p>
+            </div>
+        </a>
+
+        <a href="{% url 'teachers:index' %}" class="block p-4 transition duration-300 ease-in-out transform shadow-xl card card-side bg-vanilla-5 hover:scale-110">
+            <figure class="flex justify-center">
+                <img
+                    src="{% static 'image/view4.jpg' %}"
+                    alt="view"
+                    class="object-cover h-48 md:h-32" />
+            </figure>
+            <div class="card-body">
+                <h2 class="card-title">預約專家</h2>
+                <p>想與資深前輩們一對一討論嗎？</p>
+            </div>
+        </a>
+
+        <a href="{% url 'blogs:index' %}" class="block p-4 transition duration-300 ease-in-out transform shadow-xl card card-side bg-vanilla-5 hover:scale-110">
+            <figure class="flex justify-center">
+                <img
+                    src="{% static 'image/view4.jpg' %}"
+                    alt="view"
+                    class="object-cover w-full h-48 md:h-32" />
+            </figure>
+            <div class="card-body">
+                <h2 class="card-title">發佈文章</h2>
+                <p>分享你的得意技能，展現實力吧！</p>
+            </div>
+        </a>
+    </div>
+
+
 
     <div class="relative z-10 flex items-center justify-center h-full mt-10">
         <div class="relative w-full max-w-xl px-2 ">
@@ -18,15 +60,15 @@
                 </button>
             </form>
 
-            <div class="flex flex-wrap mt-6">
+            <div class="flex flex-wrap mt-6 md:flex-nowrap">
                 <a href="{% url 'search' %}?q=javascript" class="tag tag-yellow">JavaScript</a>
                 <a href="{% url 'search' %}?q=python" class="tag tag-blue">Python</a>
                 <a href="{% url 'search' %}?q=ruby" class="tag tag-red">Ruby</a>
                 <a href="{% url 'search' %}?q=java" class="tag tag-green">Java</a>
-                <a href="{% url 'search' %}?q=csharp" class="tag tag-purple">C#</a>
+                <a href="{% url 'search' %}?q=rust" class="tag tag-purple">Rust</a>
                 <a href="{% url 'search' %}?q=php" class="tag tag-pink">PHP</a>
                 <a href="{% url 'search' %}?q=swift" class="tag tag-teal">Swift</a>
-                <a href="{% url 'search' %}?q=go" class="tag tag-orange">Go</a>
+                <a href="{% url 'search' %}?q=golang" class="tag tag-orange">Go</a>
                 <a href="{% url 'search' %}?q=typescript" class="tag tag-amber">TypeScript</a>
             </div>
         </div>
