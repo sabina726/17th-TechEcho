@@ -1,0 +1,6 @@
+<div x-show="show" class="absolute z-10 bg-white border-2 rounded-lg w-60 p-2 text-center">
+    {% if user.is_teacher %}
+    {{user}} 是一位老師
+    {% endif %}
+    <button class="btn btn-sm">前往參觀 {{user}} 的個人頁面</button>
+</div>

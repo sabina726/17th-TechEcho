@@ -5,7 +5,10 @@
 >
   <div class="flex justify-between">
     <div class="flex items-center mb-4">
-      {% include "users/partials/_picture.html" with user=answer.user size="12" margin="4" only %}
+      <a href="#" class="relative" x-data="{show: false}" @mouseover="show=true" @mouseleave="show=false">
+        {% include "users/partials/_picture.html" with user=answer.user size="12" margin="4" only %}
+        {% include "users/partials/_user_card.html" with user=answer.user %}
+      </a>
       <div>
         <p class="text-lg font-medium text-gray-800">
           {{ answer.user.get_display_name }}
