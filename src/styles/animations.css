@@ -23,7 +23,7 @@
   overflow: hidden;
   border-right: .2em solid;
   width: 0;
-  animation: typing 6s steps(40, end) forwards, caret 0.75s steps(1) infinite;
+  animation: typing 5s steps(46, end) forwards, caret 0.75s steps(1) infinite;
 }
 
 @keyframes typing {
