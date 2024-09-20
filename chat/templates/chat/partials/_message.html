@@ -1,7 +1,8 @@
+{% comment %} chat-bubble-success {% endcomment %}
 {% load chat home %}
 
 <ul id="message_list" hx-swap-oob="beforeend">
-    <li class="fade-up chat {{ message|check_author:user|yesno:'chat-end,chat-start' }}">
+    <li class="animate-fadeUp chat {{ message|check_author:user|yesno:'chat-end,chat-start' }}">
         <div class="chat-header">
             {{message.author}}
             <time class="text-xs opacity-50">{{message.created_at|standard_date}}</time>
@@ -11,14 +12,4 @@
         </p>
         <div class="chat-footer opacity-50">Delivered</div>
     </li>
-
-    <style>
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0px); }
-        }
-        .fade-up {
-            animation: fadeUp 0.6s ease;
-        }
-    </style>
 </ul>

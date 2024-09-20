@@ -1,4 +1,4 @@
-<div id="banner" hx-swap-oob="outerHTML" class="fade-in flex text-green-3 justify-center items-center text-xl">
+<div id="banner" hx-swap-oob="outerHTML" class="animate-fadeIn flex text-green-3 justify-center items-center text-xl">
     {% if online_count|add:'-1' %}
         {% include "users/partials/_picture.html" with user=other_user size="6" margin="4" %}
         <p>
@@ -9,17 +9,7 @@
     {% else %}
         <p>無人在線</p>
     {% endif %}
-
-    <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0px); }
-        }
-        .fade-in {
-            animation: fadeIn 0.6s ease;
-        }
-    </style>
 </div>
 
-<span id="online-dot" class="dot absolute top-1 left-1 {{online_count|add:"-1"|yesno:"green-dot,gray-dot"}}"></span>
+<span id="online-dot" class="dot absolute top-1 left-1 {{online_count|add:"-1"|yesno:"green-dot animate-pulse,gray-dot"}}"></span>
 
