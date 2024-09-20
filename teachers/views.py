@@ -114,11 +114,11 @@ def show(request, id):
         messages.error(request, "輸入資料錯誤，請再嘗試")
         return render(request, "teachers/edit.html", {"teacher": teacher, "form": form})
 
-    questions = Question.objects.filter(user=teacher.user).order_by("-created_at")[:]
+    questions = Question.objects.filter(user=teacher.user).order_by("-created_at")[:8]
     answers = (
         Answer.objects.filter(user=teacher.user)
         .select_related("question", "user")
-        .order_by("-created_at")[:]
+        .order_by("-created_at")[:8]
     )
     context = {
         "teacher": teacher,
@@ -131,6 +131,7 @@ def show(request, id):
 
 
 @login_required
+@require_POST
 def edit(request, id):
     teacher = get_object_or_404(Teacher, id=id, user=request.user)
     form = TeacherForm(instance=teacher)
