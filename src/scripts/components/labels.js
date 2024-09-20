@@ -2,7 +2,7 @@ import programmingLanguages from "../../constants/choices.js"
 import Alpine from "alpinejs"
 import Tagify from "@yaireo/tagify"
 
-Alpine.data("label_input", () => ({
+Alpine.data("tags-input", () => ({
     init() {
         new Tagify(this.$el, {
             whitelist: programmingLanguages,

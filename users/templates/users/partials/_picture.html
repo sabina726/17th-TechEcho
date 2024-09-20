@@ -1,0 +1,15 @@
+{% comment %} w-7 h-7 w-12 h-12 mr-0 mr-4 {% endcomment %}
+
+{% if user.profile_picture %}
+    <img
+        src="{{ user.profile_picture.url }}"
+        alt="Profile Picture"
+        class="rounded-full cursor-pointer w-{{size}} h-{{size}} mr-{{margin}}"
+    />
+    {% else %}
+    <img
+        src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar"
+        alt="User Avatar"
+        class="rounded-full cursor-pointer w-{{size}} h-{{size}} mr-{{margin}}"
+    />
+{% endif %}
