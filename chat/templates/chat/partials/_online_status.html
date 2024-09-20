@@ -21,25 +21,5 @@
     </style>
 </div>
 
-{% if online_count|add:'-1' %}
-    <span id="online-dot" class="ligth-up dot green-dot absolute top-1 left-1"></span>
-{% else %}
-    <span id="online-dot" class="dim-down dot gray-dot absolute top-1 left-1"></span>
-{% endif %}
+<span id="online-dot" class="dot absolute top-1 left-1 {{online_count|add:"-1"|yesno:"green-dot,gray-dot"}}"></span>
 
-<style>
-    @keyframes lightUp {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-    .light-up {
-        animation: lightUp 1s ease;
-    }
-    @keyframes dimDown {
-        from { opacity: 1; }
-        to { opacity: 0.7; }
-    }
-    .dim-down {
-        animation: dimDown 1s ease;
-    }
-</style>
