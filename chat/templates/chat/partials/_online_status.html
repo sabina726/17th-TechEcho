@@ -1,6 +1,6 @@
 <div id="banner" hx-swap-oob="outerHTML" class="fade-in flex text-green-3 justify-center items-center text-xl">
     {% if online_count|add:'-1' %}
-        <img src="https://via.placeholder.com/40" alt="photo" class="w-6 h-6 rounded-full mr-4">
+        {% include "users/partials/_picture.html" with user=other_user size="6" margin="4" %}
         <p>
             {{ other_user.get_display_name }}
             {% if other_user.is_teacher %}

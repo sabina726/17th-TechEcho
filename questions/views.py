@@ -56,8 +56,13 @@ def index(request):
         messages.error(request, "輸入資料錯誤，請再嘗試")
         return render(request, "questions/new.html", {"form": form})
 
-    questions = Question.objects.prefetch_related("labels").order_by("-id")
+    questions = (
+        Question.objects.select_related("user")
+        .prefetch_related("labels")
+        .order_by("-id")
+    )
     questions = paginate(request, questions)
+
     return render(request, "questions/index.html", {"questions": questions})
 
 

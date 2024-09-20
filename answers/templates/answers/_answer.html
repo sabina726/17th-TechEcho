@@ -5,11 +5,7 @@
 >
   <div class="flex justify-between">
     <div class="flex items-center mb-4">
-      <img
-        src="https://via.placeholder.com/40"
-        alt="photo"
-        class="w-12 h-12 rounded-full mr-4"
-      />
+      {% include "users/partials/_picture.html" with user=answer.user size="12" margin="4" only %}
       <div>
         <p class="text-lg font-medium text-gray-800">
           {{ answer.user.get_display_name }}
