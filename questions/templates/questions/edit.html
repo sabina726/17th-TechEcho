@@ -9,9 +9,13 @@
 
             {% for field in form %}
             <div class="form-control">
-                <label class="label">{{ field.label }}</label>
-                {{ field }}
-                <span class="text-red-500">{{ field.errors }}</span>
+                {% if field.label == "標籤" %}
+                    {% include "questions/partials/_labels.html" with field=field question=question %}
+                {% else %}
+                    <label class="label">{{ field.label }}</label>
+                    {{ field }}
+                    <span class="text-red-500">{{ field.errors }}</span>
+                {% endif %}
             </div>
             {% endfor %}
 
@@ -23,13 +27,10 @@
 
     <div class="w-full md:w-1/2 pl-0 md:pl-4">
         <h2 class="text-xl font-bold mb-4 text-gray-800">預覽問題內容</h2>
-        {% if preview_content %}
         <div class="card bg-base-100 w-full shadow-xl">
-            <div class="card-body markdown h-[70vh] overflow-auto">
-                {{preview_content|strip_markdown_safe}}
+            <div class="card-body markdown h-[75vh] overflow-auto">
             </div>
         </div>
-        {% endif %}
     </div>
 </div>
 {% endblock  %}

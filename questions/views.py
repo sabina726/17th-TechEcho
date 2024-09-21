@@ -119,12 +119,14 @@ def show(request, id):
 @login_required
 @require_GET
 def edit(request, id):
-    question = get_object_or_404(Question, pk=id, user=request.user)
+    question = get_object_or_404(
+        Question.objects.prefetch_related("labels"), pk=id, user=request.user
+    )
     form = QuestionForm(instance=question)
     return render(
         request,
         "questions/edit.html",
-        {"form": form, "question": question, "labels": question.labels.all()},
+        {"form": form, "question": question},
     )
 
 
@@ -219,4 +221,5 @@ def preview(request):
     return render(
         request,
         "questions/partials/_preview.html",
+        {"preview_content": "請先依照規定填好標題、內容、標籤，才能預覽。"},
     )
