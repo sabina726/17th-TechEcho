@@ -1,11 +1,10 @@
 {% extends 'layouts/base.html' %}
-{% load home %}
 
 {% block content %}
 <div class="flex flex-col md:flex-row max-w-6xl mx-auto bg-vanilla-5 p-6 my-4 rounded-md shadow-md">
     <div class="w-full md:w-1/2 pr-0 md:pr-4 mb-4 md:mb-0">
         <h1 class="text-xl font-bold mb-2 text-gray-800">新增問題</h1>
-        <form class="space-y-4" action="{% url 'questions:index' %}" method="POST">
+        <form id="question-form" class="space-y-4" method="POST">
             {% csrf_token %}
 
             {% for field in form %}
@@ -16,21 +15,26 @@
             </div>
             {% endfor %}
 
-            <button class="btn" name="type" value="new">新增此問題</button>
-            <button class="btn" name="type" value="preview">預覽問題內容</button>
+            <button class="btn" formaction="{% url 'questions:index' %}">新增此問題</button>
+            <button
+                class="btn"
+                hx-post="{% url 'questions:preview' %}"
+                hx-target="#preview-container"
+                hx-include="#question-form">
+                預覽問題內容
+            </button>
             <a href="{% url 'questions:index' %}" class="btn">回到問題列表</a>
         </form>
     </div>
 
     <div class="w-full md:w-1/2 pl-0 md:pl-4">
         <h2 class="text-xl font-bold mb-4 text-gray-800">預覽問題內容</h2>
-        {% if preview_content %}
-        <div class="card bg-base-100 w-full shadow-xl">
-            <div class="card-body markdown h-[70vh] overflow-auto">
-                {{preview_content|strip_markdown_safe}}
+        <div id="preview-container">
+            <div class="card bg-base-100 w-full shadow-xl">
+                <div class="card-body markdown h-[70vh] overflow-auto">
+                </div>
             </div>
         </div>
-        {% endif %}
     </div>
 </div>
 

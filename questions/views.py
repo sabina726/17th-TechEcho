@@ -38,21 +38,13 @@ def index(request):
         form = QuestionForm(request.POST)
 
         if form.is_valid() and parse_form_labels(form):
-            action = request.POST.get("type", None)
-            if action == "new":
-                instance = form.save(commit=False)
-                instance.user = request.user
-                instance.save()
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
+            form.save_m2m()
 
-                messages.success(request, "成功提問")
-                return redirect("questions:index")
-            elif action == "preview":
-                preview_content = form.cleaned_data.get("details", None)
-                return render(
-                    request,
-                    "questions/new.html",
-                    {"form": form, "preview_content": preview_content},
-                )
+            messages.success(request, "成功提問")
+            return redirect("questions:index")
 
         messages.error(request, "輸入資料錯誤，請再嘗試")
         return render(request, "questions/new.html", {"form": form})
@@ -209,4 +201,22 @@ def follows(request, id):
         request,
         "questions/partials/_follows.html",
         {"question": question, "followed": question.followed_by(request.user)},
+    )
+
+
+@login_required
+@require_POST
+def preview(request):
+    form = QuestionForm(request.POST)
+    if form.is_valid():
+        preview_content = form.cleaned_data.get("details", None)
+        return render(
+            request,
+            "questions/partials/_preview.html",
+            {"preview_content": preview_content},
+        )
+
+    return render(
+        request,
+        "questions/partials/_preview.html",
     )
