@@ -66,7 +66,7 @@
                 </a>
             </li>
             {% empty %}
-            <li class="">無提問記錄</li>
+            <li class="p-1 text-center">無提問記錄</li>
             {% endfor %}
         </ul>
     </div>
@@ -76,20 +76,20 @@
     <div class="p-2">
         <h3 class="p-1 text-2xl text-center font-semibold">回答過的問題</h3>
         <div class="w-full max-w-full">
-                <div class="w-full flex justify-around">
+                <div class="p-1 w-full flex justify-around">
                     <p class="p-1 text-xl font-semibold">回答標題</p>
                     <p class="p-1 text-xl font-semibold">回答答案</p>
                 </div>
             <ul class="flex flex-col items-center">
                 {% for answer in answers %}
                 <div class="w-full flex justify-around">
-                    <span class="p-1 text-xl text-green-3 font-semibold">{{ answer.question.title }}</span>
-                    <a href="{% url 'questions:show' answer.question.id %}" class="p-1 text-xl text-yellow-900 font-semibold hover:text-yellow-700">
+                    <span class="w-1/2 p-1 text-xl text-center text-green-3 font-semibold">{{ answer.question.title }}</span>
+                    <a href="{% url 'questions:show' answer.question.id %}" class="p-1 w-1/2 text-center text-xl text-yellow-900 font-semibold hover:text-yellow-700">
                     {{ answer.content|truncatechars:15 }}
                     </a>
                 </div>
                 {% empty %}
-                <li class="">無回答記錄</li>
+                <li class="p-1 text-center">無回答記錄</li>
                 {% endfor %}
             </ul>
         </div>
