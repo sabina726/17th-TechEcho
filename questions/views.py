@@ -8,7 +8,7 @@ from django.views.decorators.http import require_GET, require_POST
 
 from answers.forms import AnswerForm
 from answers.utils.answers_sort import get_ordered_answers
-from lib.utils.labels import parse_labels
+from lib.utils.labels import parse_form_labels, parse_labels
 from lib.utils.pagination import paginate
 
 from .forms import QuestionForm
@@ -36,22 +36,26 @@ def index(request):
             return redirect("users:login")
 
         form = QuestionForm(request.POST)
-        labels = parse_labels(request.POST)
+        action = request.POST.get("type", None)
 
-        if not labels:
-            messages.error(request, "標籤至少要一個，且是認可的程式語言")
-            return render(request, "questions/new.html", {"form": form})
+        if form.is_valid() and parse_form_labels(form):
+            if action == "new":
+                instance = form.save()
+                instance.user = request.user
+                instance.save()
 
-        if form.is_valid():
-            # commit=False is not applicable here because instance.labels.set(labels) requires a pk
-            # and since our pk is defined by the ORM not by us, it will only exist once we save it to the DB
-            instance = form.save()
-            instance.labels.set(labels)
-            instance.user = request.user
-            instance.save()
-
-            messages.success(request, "成功提問")
-            return redirect("questions:index")
+                messages.success(request, "成功提問")
+                return redirect("questions:index")
+            elif action == "preview":
+                preview_content = form.cleaned_data.get("details", None)
+                return render(
+                    request,
+                    "questions/new.html",
+                    {"form": form, "preview_content": preview_content},
+                )
+            else:
+                messages.error(request, "請選擇正確的輸入方法")
+                return render(request, "questions/new.html", {"form": form})
 
         messages.error(request, "輸入資料錯誤，請再嘗試")
         return render(request, "questions/new.html", {"form": form})
