@@ -1,8 +1,13 @@
 {% extends "layouts/base.html" %}
 {% block content %}
 {% load static %}
+<div class="container mx-auto mt-6 text-center">
+    <h1 class="text-5xl font-extrabold tracking-wider transform scale-90 opacity-0 text-green-3 drop-shadow-lg animate-fade-in-and-grow">
+        軟工的技術平台
+    </h1>
+</div>
 
-    <div class="grid max-w-full grid-cols-1 gap-6 m-10 md:grid-cols-3">
+    <div class="grid max-w-full grid-cols-1 gap-6 m-6 md:grid-cols-3">
         <a href="{% url 'questions:index' %}" class="block p-4 transition duration-300 ease-in-out transform shadow-xl bg-vanilla-5 card card-side hover:scale-110 text-green-3">
             <figure class="flex justify-center">
                 <img
@@ -43,8 +48,8 @@
         </a>
     </div>
 
-    <div class="justify-center hidden mt-20 md:flex">
-        <h1 class="text-3xl font-bold text-green-3 typing-animation">軟工的技術平台，技術問題、尋找答案、深入諮詢、熱情分享</h1>
+    <div class="justify-center hidden mt-10 md:flex">
+        <h1 class="text-3xl font-bold text-green-3 typing-animation">技術問題、尋找答案、深入諮詢、熱情分享</h1>
     </div>
 
     <div class="relative z-10 flex items-center justify-center h-full my-10">
