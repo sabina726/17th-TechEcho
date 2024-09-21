@@ -1,10 +1,34 @@
 import { library, dom } from "@fortawesome/fontawesome-svg-core"
-
-import { faMagnifyingGlass, faArrowUp, faArrowDown, faBell} from "@fortawesome/free-solid-svg-icons"
-
 import Alpine from 'alpinejs';
 
-library.add(faBell, faMagnifyingGlass, faArrowUp, faArrowDown)
+import {
+    faMagnifyingGlass,
+    faArrowUp,
+    faArrowDown,
+    faBell,
+    faGlasses,
+    faUser,
+    faCalendarCheck,
+    faClockRotateLeft,
+    faPen
+} from "@fortawesome/free-solid-svg-icons"
+
+import {
+    faCalendar
+} from "@fortawesome/free-regular-svg-icons"
+
+library.add(
+    faMagnifyingGlass,
+    faArrowUp,
+    faArrowDown,
+    faBell,
+    faGlasses,
+    faUser,
+    faCalendarCheck,
+    faCalendar,
+    faClockRotateLeft,
+    faPen
+)
 
 dom.i2svg()
 

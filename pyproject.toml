@@ -2,7 +2,15 @@
 name = "techecho"
 version = "0.1.0"
 description = ""
-authors = ["chen weichen <newsforcwc@gmail.com>"]
+authors = [
+    "alex <alexyongxinlin@gmail.com>",
+    "buding <buding033171@gmail.com>",
+    "chen weichen <newsforcwc@gmail.com>",
+    "chi <a27976566@gmail.com>",
+    "Eudora <eudoralin.tw@gmail.com>",
+    "hong <sabina880731@gmail.com>",
+    "tony <tony.t0705@gmail.com>"
+]
 readme = "README.md"
 package-mode = false
 
@@ -21,6 +29,7 @@ pyjwt = "^2.9.0"
 pillow = "^10.4.0"
 django-storages = "^1.14.4"
 boto3 = "^1.35.19"
+markdown = "^3.7"
 
 
 
@@ -29,6 +38,7 @@ django-extensions = "^3.2.3"
 pre-commit = "^3.8.0"
 python-dotenv = "^1.0.1"
 commitizen = "^3.29.0"
+faker = "^28.4.1"
 
 
 [build-system]

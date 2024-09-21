@@ -4,26 +4,18 @@
 {% load chat %}
 {% block content %}
 
-<h1>Chat Room: {{ chat_group.group_name }}</h1>
+<div class="flex gap-2 my-8 mx-auto max-w-5xl min-w-xs">
+    <div x-data="scroll" class="w-2/5 border-10 shadow-lg rounded-lg">
+        <div class="relative bg-vanilla-5 py-2 rounded-t-lg">
+            <span id="online-dot"></span>
+            <div id="banner"></div>
+        </div>
 
-<div class="p-6 max-w-4xl mx-auto relative">
-    <div class="border-2 p-6 mx-auto">
-        <h1 class="text-xl bg-vanilla-5 py-2 text-center">目前使用者: {{user}} </h1>
-
-        <ul id="message_list" class="mb-2">
-            {% for message in chat_messages %}
-            <li class="chat chat-{{message|check_author:user}}">
-                <div class="chat-header">
-                    {{ message.author.username }}
-                    <time class="text-xs opacity-50">{{message.created_at}}</time>
-                </div>
-                <div class="chat-bubble">{{ message.content }}</div>
-                <div class="chat-footer opacity-50">Delivered</div>
-            </li>
-            {% endfor %}
+        <ul x-ref="list" id="message_list" class="w-11/12 mx-auto mb-2 h-[55vh] overflow-auto">
+            {% include "chat/partials/_message_list.html" with chat_messages=chat_messages user=user chat_group_id=chat_group.id only %}
         </ul>
 
-        <form class="w-full py-2 flex flex-row gap-2"
+        <form class="mx-auto p-2 flex flex-row gap-2"
             hx-ext="ws"
             ws-connect="/ws/chatroom/{{ chat_group.id }}/"
             ws-send
@@ -40,6 +32,10 @@
             {% endfor%}
             <button class="btn btn-md bg-green-3 text-white">發送</button>
         </form>
+    </div>
+
+    <div class="w-3/5 border-10 shadow-lg rounded-lg px-2 bg-vanilla-5">
+        {% include "editors/editors.html" with id=chat_group.id %}
     </div>
 </div>
 

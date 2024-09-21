@@ -43,6 +43,12 @@
                 <button class="btn bg-cyan-500 text-white hover:bg-amber-700">修改專家檔案</button>
         </form>
         {% endif %}
+
+    <div>
+        <a href="{% url 'reservations:teacher_index' %}" class="p-2 m-2 text-center btn btn-MD">可預約時間</a>
+    </div>
+
+    <div class="flex items-center justify-between mt-6">
         {% if request.user == teacher.user %}
         <form action="{% url 'teachers:delete' teacher.id %}"
                 method="POST"

@@ -3,8 +3,6 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
 from taggit.managers import TaggableManager
 
-from chat.models import ChatGroup
-
 
 class Teacher(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -14,13 +12,6 @@ class Teacher(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    chat_group = models.OneToOneField(
-        "chat.ChatGroup",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="assigned_teacher",
-    )
 
     class Meta:
         ordering = ["-updated_at"]
@@ -32,14 +23,7 @@ class Teacher(models.Model):
         if is_new:
             self.user.is_teacher = True
             self.user.save()
-            group_name = f"{self.user.username}"
-            self.chat_group = ChatGroup.objects.create(group_name=group_name)
             super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        if self.chat_group:
-            self.chat_group.delete()
-        super().delete(*args, **kwargs)
-
     def __str__(self):
-        return f"{self.user.username}"
+        return f"{self.user.get_display_name()}"

@@ -37,7 +37,7 @@ SECRET_KEY = os.getenv("APP_SECRET_KEY")
 DEBUG = is_dev()
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ["https://techecho.tonytests.com"]
+CSRF_TRUSTED_ORIGINS = ["https://techecho.tonytests.com", "https://www.tech-echo.dev"]
 
 
 SITE_ID = 1
@@ -52,12 +52,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "home",
-    "teachers",
-    "questions",
-    "answers",
-    "users",
-    "payments",
     "django_htmx",
     "django.contrib.sites",
     "allauth",
@@ -65,11 +59,17 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
-    "chat",
-    "appointments",
-    "notifications",
-    "blogs",
-    "editors",
+    "home.apps.HomeConfig",
+    "teachers.apps.TeachersConfig",
+    "questions.apps.QuestionsConfig",
+    "answers.apps.AnswersConfig",
+    "users.apps.UsersConfig",
+    "payments.apps.PaymentsConfig",
+    "chat.apps.ChatConfig",
+    "reservations.apps.ReservationsConfig",
+    "notifications.apps.NotificationsConfig",
+    "blogs.apps.BlogsConfig",
+    "editors.apps.EditorsConfig",
 ]
 
 
@@ -104,7 +104,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "lib.utils.users.fetch_user_notifications",
+                "lib.context_processors.users.fetch_user_notifications",
             ],
         },
     },
@@ -203,8 +203,8 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "@gmail.com"
-EMAIL_HOST_PASSWORD = ""
+EMAIL_HOST_USER = "techecho17@gmail.com"
+EMAIL_HOST_PASSWORD = "lvos amkk iuzp enjf"
 
 
 # AWS S3 configurations

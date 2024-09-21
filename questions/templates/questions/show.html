@@ -1,10 +1,10 @@
 {% extends 'layouts/base.html' %}
-{% load questions %}
+{% load questions home users %}
 {% block content %}
     <div class="container border mt-4 rounded-lg p-6 max-w-4xl mx-auto relative mb-2">
-        <div class="flex justify-between items-baseline mb-2">
+        <div class="flex justify-between items-center mb-2">
             <div class="flex gap-4 items-center">
-                <h1 class="text-2xl">問題：{{question.title}}</h1>
+                <h1 class="text-3xl">{{question.title}}</h1>
                 {% if user.is_authenticated and user != question.user %}
                     {% include "questions/partials/_follows.html" with question=question followed=followed only %}
                 {% endif %}
@@ -21,13 +21,16 @@
         </div>
 
         <div class="flex gap-2 mb-2 text-gray-500">
-            <span>提問者：{{question.user.get_display_name}}</span>
-            <span>｜建立時間：{{question.created_at|date:'Y/m/d H:i' }}</span>
+            <a href="#" class="relative" x-data="{show: false}" @mouseover="show=true" @mouseleave="show=false">
+                提問者： {{question.user}} {{question.user|teacher_icon}}
+                {% include "users/partials/_user_card.html" with user=question.user %}
+            </a>
+            <span>｜建立時間：{{question.created_at|standard_date }}</span>
             <span>｜更新時間：
                 {% if question.updated_at %}
-                    {{question.updated_at|date:'Y/m/d H:i' }}
+                    {{question.updated_at|standard_date }}
                 {% else %}
-                    {{question.created_at|date:'Y/m/d H:i' }}
+                    {{question.created_at|standard_date }}
                 {% endif %}
             </span>
         </div>

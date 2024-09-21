@@ -1,15 +1,22 @@
-{% load questions %}
+{% load questions users %}
 <ul>
     {% for question in questions %}
     <li class="border-2 shadow p-2 mb-1 text-wrap break-all">
-        <a href="{% url 'questions:show' question.id%}">
-            <h3 class="text-xl link">標題： {{question.title}}</h3>
-        </a>
+        <div class="flex justify-between items-center">
+            <a href="{% url 'questions:show' question.id%}" class="text-2xl link">{{question.title}}</a>
+            <div class="relative" x-data="{show: false}" @mouseover="show=true" @mouseleave="show=false">
+                <a href="#" class="flex gap-1 items-center">
+                    {% include "users/partials/_picture.html" with user=question.user size="7" margin="0" only %}
+                    <div>{{question.user}} {{question.user|teacher_icon}}</div>
+                </a>
+                {% include "users/partials/_user_card.html" with user=question.user %}
+            </div>
+        </div>
 
         <div>
             <span>標籤：</span>
             {% for label in question.labels.all %}
-            <span>{{label}},</span>
+            <span>{{label}}, </span>
             {% endfor %}
         </div>
         <p>內文: {{question.details|striptags|truncatechars:20}}</p>

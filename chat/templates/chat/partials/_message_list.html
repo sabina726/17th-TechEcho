@@ -1,0 +1,36 @@
+{% load chat home %}
+
+{% for message in chat_messages %}
+    {% if forloop.first and chat_messages.has_previous %}
+    <div
+        hx-get="{% url "chat:room" chat_group_id %}?page={{chat_messages.previous_page_number}}"
+        hx-trigger="intersect once"
+        hx-swap="outerHTML"
+        class="text-center">
+        載入更多訊息中...
+    </div>
+    {% endif %}
+
+    <li class="message chat
+        {% if message|check_author:user %}
+            chat-end
+        {% else %}
+            chat-start
+        {% endif %}"
+    >
+        <div class="chat-header">
+            {{ message.author }}
+            <time class="text-xs opacity-50">{{message.created_at|standard_date}}</time>
+        </div>
+        <article class="chat-bubble text-white break-all
+            {% if message|check_author:user %}
+                chat-bubble-success
+            {% else %}
+                bg-blue-1
+            {% endif %}"
+        >
+            {{ message.content|linebreaksbr }}
+        </article>
+        <div class="chat-footer opacity-50">Delivered</div>
+    </li>
+{% endfor %}
