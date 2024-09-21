@@ -29,10 +29,10 @@
         </div>
     </div>
     <div class="m-2 p-1 w-full max-w-full flex justify-center">
-        <h2 class="w-1/3 m-2 p-1 text-3xl font-semibold">
+        <h2 class="w-1/3 m-2 p-1 text-3xl font-semibold text-center">
             {{ teacher.user.get_display_name }}
         </h2>
-        <article class="w-2/3 m-2 p-1 w-full break-words text-xl">{{ teacher.introduce }}</article>
+        <article class="w-2/3 m-2 p-1 break-words text-xl text-center">{{ teacher.introduce }}</article>
     </div>
     <div class="m-2 p-1 w-full max-w-full flex justify-between">
         {% if request.user == teacher.user %}
