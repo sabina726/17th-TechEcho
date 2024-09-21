@@ -40,8 +40,8 @@
     {% endif %}
   </div>
 
-  <div x-show="!edit" id="answer-content" class="text-lg leading-relaxed mb-4">
-    {{ answer.content|linebreaksbr }}
+  <div x-show="!edit" id="answer-content" class="text-lg leading-relaxed mb-4 markdown">
+    {{ answer.content|strip_markdown_safe }}
   </div>
 
   <div x-show="edit" id="edit-form">

@@ -37,14 +37,15 @@
 
         <article  class="p-2 border-2 mb-2 rounded-lg">
             <h3 class="mb-2">問題內容：</h3>
-            <p class="text-wrap break-all">
-                {{question.details|linebreaksbr}}
-            </p>
+            <div class="markdown">
+                {{ question.details|strip_markdown_safe }}
+            </div>
         </article>
 
-        {% include "questions/partials/_votes.html" with question=question vote=vote user=user only %}
+        <div class="flex gap-2 justify-between items-center">
+            {% include "questions/partials/_votes.html" with question=question vote=vote user=user only %}
 
-        {% if user.is_authenticated and user == question.user %}
+            {% if user.is_authenticated and user == question.user %}
             <div class="flex gap-2">
                 <a href="{% url "questions:edit" question.id%}" class="btn btn-sm bg-blue-600 text-white">編輯此問題</a>
                 <form action="{% url "questions:delete"  question.id%}" method="POST" onSubmit="return confirm('確定要刪除此問題嗎？')">
@@ -52,7 +53,8 @@
                     <button class="btn btn-sm bg-red-600 text-white">刪除此問題</button>
                 </form>
             </div>
-        {% endif %}
+            {% endif %}
+        </div>
 
     </div>
 

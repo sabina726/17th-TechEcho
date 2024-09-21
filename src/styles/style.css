@@ -90,6 +90,6 @@
   @apply bg-gray-500;
 }
 
-.graylight-dot {
-  @apply bg-green-300;
+.markdown {
+  @apply prose dark:prose-invert;
 }

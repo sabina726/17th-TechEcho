@@ -19,7 +19,15 @@
             <span>{{label}}, </span>
             {% endfor %}
         </div>
-        <p>內文: {{question.details|striptags|truncatechars:20}}</p>
+
+        <div>
+            <span>
+                {{question.votes_count}} 個讚 |
+            </span>
+            <span>
+                {{question.answers_count}} 個回答
+            </span>
+        </div>
     </li>
     {% endfor %}
 
