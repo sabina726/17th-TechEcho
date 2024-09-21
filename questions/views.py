@@ -79,11 +79,7 @@ def show(request, id):
         form = QuestionForm(request.POST, instance=question)
         labels = parse_labels(request.POST)
 
-        if not labels:
-            messages.error(request, "標籤至少要一個，且是認可的程式語言")
-            return render(request, "questions/new.html", {"form": form})
-
-        if form.is_valid():
+        if form.is_valid() and parse_form_labels(form):
             instance = form.save(commit=False)
             instance.labels.set(labels)
             instance.save()
