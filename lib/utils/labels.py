@@ -1,6 +1,6 @@
 import json
 
-from lib.constants.choices import programming_languages
+from lib.constants.choices import label_choices
 
 
 def parse_labels(request_method):
@@ -18,7 +18,7 @@ def parse_labels(request_method):
 
 
 def label_is_valid(label):
-    return label.lower() in programming_languages
+    return label.lower() in label_choices
 
 
 def parse_form_labels(form):
@@ -26,8 +26,9 @@ def parse_form_labels(form):
     if not labels:
         return False
 
-    labels = [label.lower() for label in labels[2:-4]]
-    if not labels or not set(labels).issubset(set(programming_languages)):
+    labels = [label.lower() for label in labels if label.lower() in label_choices]
+
+    if not labels:
         return False
 
     form.cleaned_data["labels"] = labels

@@ -16,8 +16,6 @@
             </div>
             {% endfor %}
 
-            {% comment %} {% include "questions/partials/_labels.html" %} {% endcomment %}
-
             <button class="btn" name="type" value="new">新增此問題</button>
             <button class="btn" name="type" value="preview">預覽問題內容</button>
             <a href="{% url 'questions:index' %}" class="btn">回到問題列表</a>

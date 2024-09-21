@@ -22,7 +22,7 @@ from .utils.sort import order_is_valid
 
 def index(request):
     # partial rendering only
-    if request.htmx:
+    if request.htmx and request.htmx.request.method == "GET":
         order = request.GET.get("order")
         questions = Question.objects.order_by(order if order_is_valid(order) else "-id")
         questions = paginate(request, questions)
@@ -36,11 +36,11 @@ def index(request):
             return redirect("users:login")
 
         form = QuestionForm(request.POST)
-        action = request.POST.get("type", None)
 
         if form.is_valid() and parse_form_labels(form):
+            action = request.POST.get("type", None)
             if action == "new":
-                instance = form.save()
+                instance = form.save(commit=False)
                 instance.user = request.user
                 instance.save()
 
@@ -53,9 +53,6 @@ def index(request):
                     "questions/new.html",
                     {"form": form, "preview_content": preview_content},
                 )
-            else:
-                messages.error(request, "請選擇正確的輸入方法")
-                return render(request, "questions/new.html", {"form": form})
 
         messages.error(request, "輸入資料錯誤，請再嘗試")
         return render(request, "questions/new.html", {"form": form})

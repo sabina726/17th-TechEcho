@@ -93,3 +93,8 @@
 .markdown {
   @apply prose dark:prose-invert;
 }
+
+.prose pre {
+  overflow: visible;
+  white-space: pre-wrap;
+}
