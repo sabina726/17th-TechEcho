@@ -29,19 +29,23 @@ def update_answers_count(sender, instance, created, **kwargs):
                 url_name=url_name,
             )
             for user in question.followers.all()
+            if user != instance.user
         ]
-        notifications.append(
-            Notification(
-                user=question.user,
-                question_id=question_id,
-                answer_id=answer_id,
-                message=message,
-                url_name=url_name,
+        if question.user != instance.user:
+            notifications.append(
+                Notification(
+                    user=question.user,
+                    question_id=question_id,
+                    answer_id=answer_id,
+                    message=message,
+                    url_name=url_name,
+                )
             )
-        )
+        if len(notifications) == 0:
+            return
+
         notifications = Notification.objects.bulk_create(notifications)
 
-        # send the news to followers/subscribers
         channel_layer = get_channel_layer()
         group_name = f"notifications_questions_{question.id}"
         event = {

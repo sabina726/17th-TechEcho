@@ -90,6 +90,16 @@
   @apply bg-gray-500;
 }
 
-.graylight-dot {
-  @apply bg-green-300;
+.markdown {
+  @apply prose dark:prose-invert;
+}
+
+.prose pre {
+  overflow: visible;
+  white-space: pre-wrap;
+}
+
+.remote-cursor {
+  border-left: 2px solid red;
+  height: 100%;
 }
