@@ -18,21 +18,22 @@
   <form
     method="GET"
     action="{% url 'search' %}"
-    class="relative flex items-center"
+    class="relative items-center hidden md:flex"
   >
     <input
       type="text"
       name="q"
       class="w-full h-12 p-4 bg-white border border-gray-300 rounded-3xl"
-      placeholder="Search..."
+      placeholder="輸入關鍵字..."
       value="{{ query }}"
     />
     <button type="submit" class="absolute text-gray-500 bottom-3 right-3">
       <i class="fa-solid fa-magnifying-glass"></i>
     </button>
   </form>
-  {% endif %}
-  <ul class="hidden space-x-4 text-xl text-white md:flex whitespace-nowrap">
+{% endif %}
+
+  <ul class="hidden space-x-2 text-base text-white md:space-x-4 lg:space-x-6 xl:space-x-10 md:text-lg lg:text-xl xl:text-2xl md:flex whitespace-nowrap">
     <li class="relative tooltip tooltip-bottom" data-tip="發表嗎？">
       <button
         type="button"
