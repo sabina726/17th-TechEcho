@@ -6,7 +6,8 @@
   @resize.window="if (window.innerWidth > 768) open = false"
 >
 <div class="flex items-center justify-between">
-  <div class="flex items-center text-3xl font-bold text-vanilla-7 animate-pulse">
+  <div class="flex items-center text-3xl font-bold text-vanilla-7">
+    {% include 'layouts/tags.html' %}
       <a href="{% url 'index' %}" class="flex items-center">
 
           TECHECHO
