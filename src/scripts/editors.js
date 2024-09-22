@@ -36,7 +36,10 @@ function debounce(func, delay) {
 }
 
 const debouncedSetCursorAwareness = debounce((position) => {
-  awareness.setLocalStateField('cursor', { position });
+	awareness.setLocalStateField('cursor', {
+		position,
+		clientID: awareness.clientID
+	});
 }, 200);
 
 editor.onDidChangeCursorSelection(_ => {
@@ -45,16 +48,22 @@ editor.onDidChangeCursorSelection(_ => {
 })
 
 const languageSelect = document.getElementById('language-select');
-let currentLanguage = awareness.getLocalState()?.selectedLanguage || 'javascript';
+const currentLanguage = awareness.getLocalState()?.selectedLanguage || 'javascript';
 monaco.editor.setModelLanguage(editor.getModel(), currentLanguage);
 languageSelect.value = currentLanguage;
 
+let lastLocalUpdate = Date.now();
 const debouncedSelectChange = debounce((selectedLanguage) => {
-	awareness.setLocalStateField('language', { selectedLanguage });
+	console.log("time: ", lastLocalUpdate)
+	awareness.setLocalStateField('language', {
+		selectedLanguage,
+		clientID: awareness.clientID,
+		timestamp: lastLocalUpdate
+	});
 }, 200);
 
-
 languageSelect.addEventListener('change', (e) => {
+	lastLocalUpdate = Date.now();
 	const selectedLanguage = e.target.value;
 	monaco.editor.setModelLanguage(editor.getModel(), selectedLanguage);
 	editor.setValue(getDefaultSnippets(languageSelect.value));
@@ -62,10 +71,9 @@ languageSelect.addEventListener('change', (e) => {
 });
 
 const remoteCursors = editor.createDecorationsCollection([]);
-let count = 0;
 awareness.on('change', _ => {
-	awareness.getStates().forEach((state, clientId) => {
-		if (clientId !== awareness.clientID) {
+	awareness.getStates().forEach((state, clientID) => {
+		if (clientID !== awareness.clientID) {
 			const cursor = state.cursor;
 			if (cursor) {
 				const decorations = [];
@@ -82,7 +90,7 @@ awareness.on('change', _ => {
 				remoteCursors.set(decorations);
 			}
 			const languageState = state.language;
-			if (languageState) {
+			if (languageState && languageState.timestamp > lastLocalUpdate) {
 				const { selectedLanguage } = languageState;
 				monaco.editor.setModelLanguage(editor.getModel(), selectedLanguage);
 				languageSelect.value = selectedLanguage;
