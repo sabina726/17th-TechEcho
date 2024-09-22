@@ -98,3 +98,8 @@
   overflow: visible;
   white-space: pre-wrap;
 }
+
+.remote-cursor {
+  border-left: 2px solid red;
+  height: 100%;
+}
