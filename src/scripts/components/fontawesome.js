@@ -3,6 +3,7 @@ import Alpine from 'alpinejs';
 
 import {
     faMagnifyingGlass,
+    faGraduationCap,
     faArrowUp,
     faArrowDown,
     faBell,
@@ -19,6 +20,7 @@ import {
 
 library.add(
     faMagnifyingGlass,
+    faGraduationCap,
     faArrowUp,
     faArrowDown,
     faBell,
