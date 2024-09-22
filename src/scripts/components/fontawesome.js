@@ -3,6 +3,7 @@ import Alpine from 'alpinejs';
 
 import {
     faMagnifyingGlass,
+    faGraduationCap,
     faArrowUp,
     faArrowDown,
     faBell,
@@ -12,6 +13,8 @@ import {
     faClockRotateLeft,
     faPen,
     faCamera,
+    faBars,
+    faTimes
 } from "@fortawesome/free-solid-svg-icons"
 
 import {
@@ -20,6 +23,7 @@ import {
 
 library.add(
     faMagnifyingGlass,
+    faGraduationCap,
     faArrowUp,
     faArrowDown,
     faBell,
@@ -30,6 +34,8 @@ library.add(
     faClockRotateLeft,
     faPen,
     faCamera,
+    faBars,
+    faTimes
 )
 
 dom.i2svg()
