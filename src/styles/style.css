@@ -107,3 +107,7 @@
 .btn-techecho {
   @apply bg-vanilla-5 hover:bg-blue-2 hover:text-white;
 }
+
+html {
+  scroll-behavior: smooth;
+}
