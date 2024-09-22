@@ -10,7 +10,8 @@ import {
     faUser,
     faCalendarCheck,
     faClockRotateLeft,
-    faPen
+    faPen,
+    faCamera,
 } from "@fortawesome/free-solid-svg-icons"
 
 import {
@@ -27,7 +28,8 @@ library.add(
     faCalendarCheck,
     faCalendar,
     faClockRotateLeft,
-    faPen
+    faPen,
+    faCamera,
 )
 
 dom.i2svg()
