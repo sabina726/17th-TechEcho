@@ -1,18 +1,18 @@
-{% load home %}
+{% load home users %}
 <section
   x-data="{ edit: false }"
   class="container mx-auto border px-6 py-4 my-4 rounded-lg"
 >
   <div class="flex justify-between">
     <div class="flex items-center mb-4">
-      <img
-        src="https://via.placeholder.com/40"
-        alt="photo"
-        class="w-12 h-12 rounded-full mr-4"
-      />
+      <a href="#" class="relative" x-data="{show: false}" @mouseover="show=true" @mouseleave="show=false">
+        {% include "users/partials/_picture.html" with user=answer.user size="12" margin="4" only %}
+        {% include "users/partials/_user_card.html" with user=answer.user %}
+      </a>
       <div>
         <p class="text-lg font-medium text-gray-800">
           {{ answer.user.get_display_name }}
+          {{ answer.user|teacher_icon }}
         </p>
         <p class="text-gray-500">
           建立時間: {{ answer.created_at|standard_date }}

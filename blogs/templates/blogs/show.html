@@ -1,14 +1,17 @@
 {% extends 'layouts/base.html' %}
-{% load home %}
+{% load home users%}
 {% block content %}
 <div class="max-w-2xl mx-auto p-6 bg-white border border-gray-300 rounded-lg shadow-md">
 
     <div class="mb-6">
         <h1 class="text-2xl font-bold mb-4 break-words">{{ blog.title }}</h1>
-        <p class="text-sm text-gray-600 mb-2">
-            作者: {{ author_display_name }} |
-            發表時間: {{ blog.created_at|date:"Y-m-d H:i" }}
-        </p>
+        <div class="text-sm text-gray-600 mb-2 flex">
+            <a href="#" class="relative" x-data="{show: false}" @mouseover="show=true" @mouseleave="show=false">
+                作者: {{ author_display_name }} {{blog.author|teacher_icon}} |
+                {% include "users/partials/_user_card.html" with user=blog.author %}
+            </a>
+            <p> 發表時間: {{ blog.created_at|standard_date }} </p>
+        </div>
         <div class="markdown-body max-w-full overflow-x-auto break-all p-5">
             {{ content_html|safe }}
         </div>

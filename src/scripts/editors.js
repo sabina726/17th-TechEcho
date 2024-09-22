@@ -66,6 +66,7 @@ fontSizeSelect.addEventListener('change', (event) => {
 const resultWebSocket = new WebSocket(`/ws/editor/result/${editorId}/`)
 const evalBtn = document.getElementById('eval');
 evalBtn.addEventListener('click', () => {
+	document.getElementById("result").innerText = "執行程式中......"
 	const params = {
 		code: editor.getValue(),
 		language: languageSelect.value
