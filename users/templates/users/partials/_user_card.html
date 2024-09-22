@@ -1,6 +1,6 @@
 {% load users %}
 <div
-    x-show="show && window.innerWidth >= 768"
+    x-show="show && window.innerWidth >= 1024"
     class="absolute z-10 max-w-xs max-h-screen p-4 overflow-auto text-center transition duration-300 ease-in-out transform bg-white border-2 rounded-lg shadow-lg w-60"
     x-transition:enter="transform transition duration-300"
     x-transition:enter-start="scale-75 opacity-0"
@@ -27,7 +27,7 @@
     <p class="mb-2 text-lg font-bold">{{ user }} 老師 {{ user|teacher_icon }}</p>
     <button
         class="px-4 py-2 mb-2 text-white transition rounded-full bg-green-4 hover:bg-green-3"
-        @click="window.location.href='{% url 'teachers:show' user.id %}'"
+        @click="window.location.href='{% url 'reservations:teacher_available' %}'"
     >
         前往 {{ user }} 預約時間
     </button>
