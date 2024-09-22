@@ -13,12 +13,10 @@ self.MonacoEnvironment = {
 	}
 };
 
-const languageSelect = document.getElementById('language-select');
-languageSelect.value = "javascript";
 const editor = monaco.editor.create(document.getElementById('editor'), {
-	value: '',
-	language: languageSelect.value,
-	theme: 'vs-light',
+	value: getDefaultSnippets("javascript"),
+	language: "javascript",
+	theme: "vs-light",
 	fontSize: 12
 });
 
@@ -29,25 +27,70 @@ const awareness = provider.awareness
 const yText = ydoc.getText();
 new MonacoBinding(yText, editor.getModel(), new Set([editor]), awareness);
 
-function changeLanguage(newLanguage) {
-	monaco.editor.setModelLanguage(editor.getModel(), newLanguage);
-	awareness.setLocalStateField('language', { language: newLanguage});
+function debounce(func, delay) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), delay);
+  };
 }
 
-languageSelect.addEventListener('change', _ => {
-	changeLanguage(languageSelect.value);
+const debouncedSetCursorAwareness = debounce((position) => {
+  awareness.setLocalStateField('cursor', { position });
+}, 200);
+
+editor.onDidChangeCursorSelection(_ => {
+	const position = editor.getPosition();
+	debouncedSetCursorAwareness(position);
+})
+
+const languageSelect = document.getElementById('language-select');
+let currentLanguage = awareness.getLocalState()?.selectedLanguage || 'javascript';
+monaco.editor.setModelLanguage(editor.getModel(), currentLanguage);
+languageSelect.value = currentLanguage;
+
+const debouncedSelectChange = debounce((selectedLanguage) => {
+	awareness.setLocalStateField('language', { selectedLanguage });
+}, 200);
+
+
+languageSelect.addEventListener('change', (e) => {
+	const selectedLanguage = e.target.value;
+	monaco.editor.setModelLanguage(editor.getModel(), selectedLanguage);
 	editor.setValue(getDefaultSnippets(languageSelect.value));
+	debouncedSelectChange(selectedLanguage);
 });
 
+const remoteCursors = editor.createDecorationsCollection([]);
+let count = 0;
 awareness.on('change', _ => {
-	const states = awareness.getStates();
-	states.forEach(ele => {
-		if (ele.language && ele.language.language !== languageSelect.value) {
-			languageSelect.value = ele.language.language;
-			monaco.editor.setModelLanguage(editor.getModel(), languageSelect.value);
+	awareness.getStates().forEach((state, clientId) => {
+		if (clientId !== awareness.clientID) {
+			const cursor = state.cursor;
+			if (cursor) {
+				const decorations = [];
+				const { position } = cursor;
+
+				decorations.push({
+					range: new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
+					options: {
+						className: 'remote-cursor',
+						stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges
+					}
+				});
+
+				remoteCursors.set(decorations);
+			}
+			const languageState = state.language;
+			if (languageState) {
+				const { selectedLanguage } = languageState;
+				monaco.editor.setModelLanguage(editor.getModel(), selectedLanguage);
+				languageSelect.value = selectedLanguage;
+			}
 		}
 	})
 });
+
 
 
 const themeSelect = document.getElementById('theme-select');
@@ -66,12 +109,17 @@ fontSizeSelect.addEventListener('change', (event) => {
 const resultWebSocket = new WebSocket(`/ws/editor/result/${editorId}/`)
 const evalBtn = document.getElementById('eval');
 evalBtn.addEventListener('click', () => {
-	document.getElementById("result").innerText = "執行程式中......"
-	const params = {
-		code: editor.getValue(),
-		language: languageSelect.value
+	const code = editor.getValue().trim();
+	if (code === "") {
+		document.getElementById("result").innerText = "請先輸入程式代碼";
+	} else {
+		const params = {
+			code: code,
+			language: languageSelect.value
+		}
+		resultWebSocket.send(JSON.stringify(params));
+		document.getElementById("result").innerText = "執行程式中......";
 	}
-	resultWebSocket.send(JSON.stringify(params));
 })
 
 resultWebSocket.onmessage = event => {
