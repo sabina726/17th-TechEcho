@@ -16,6 +16,10 @@ from .models import Teacher
 
 
 def mentor(request):
+    if request.user.is_teacher:
+        teacher_name = request.user.nickname
+        messages.success(request, f"歡迎 {teacher_name}")
+        return redirect("teachers:show", request.user.teacher.id)
     return render(request, "teachers/mentor.html")
 
 
@@ -28,43 +32,35 @@ def index(request):
         if Teacher.objects.filter(user=request.user).exists():
             messages.error(request, "你已經註冊為專家，無法重複註冊")
             return redirect("teachers:index")
-
         form = TeacherForm(request.POST)
         labels = parse_labels(request.POST)
 
         if not labels:
             messages.error(request, "標籤至少要一個，且是認可的程式語言")
             return render(request, "teachers/new.html", {"form": form})
-
         nickname = request.POST.get("nickname", None)
+
         if nickname and form.is_valid():
             teacher_info = form.save(commit=False)
             teacher_info.user = request.user
             teacher_info.save()
             teacher_info.labels.set(labels)
             form.save_m2m()
-
             request.user.nickname = unquote(nickname)
             request.user.save()
-
             messages.success(request, "歡迎加入")
             return redirect("teachers:index")
-
         return render(request, "teachers/new.html", {"form": form})
 
     teachers = Teacher.objects.all().prefetch_related("labels").order_by("-updated_at")
-
     if label_filter:
         teachers = teachers.filter(labels__name__exact=label_filter)
-
     if search_query:
         teachers = teachers.filter(
             Q(user__nickname__icontains=search_query)
             | Q(user__username__icontains=search_query)
         )
-
-    all_labels = set(teachers.values_list("labels__name", flat=True).distinct())
-
+    all_labels = set(teachers.values_list("labels__name", flat=True))
     teachers = paginate(request, teachers, items_count=8)
     return render(
         request,
