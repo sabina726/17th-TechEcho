@@ -103,3 +103,7 @@
   border-left: 2px solid red;
   height: 100%;
 }
+
+.btn-techecho {
+  @apply bg-vanilla-5 hover:bg-blue-2 hover:text-white;
+}

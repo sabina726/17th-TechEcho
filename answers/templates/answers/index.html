@@ -3,13 +3,15 @@
         <h2><span id="total-answers">{{ answers.paginator.count }}</span> 個答案</h2>
     </div>
 
-    <div class="flex gap-2 p-1">
-        <p>排序依據：</p>
-        <a href="{% url 'questions:show' question.id %}?order=id">最新</a>
-        <a href="{% url 'questions:show' question.id %}?order=votes_count">讚數</a>
-    </div>
+    <div class="flex justify-between items-center">
+        <div class="flex gap-2 p-1">
+            <p>排序依據：</p>
+            <a class="link" href="{% url 'questions:show' question.id %}?order=id">最新</a>
+            <a class="link" href="{% url 'questions:show' question.id %}?order=votes_count">讚數</a>
+        </div>
 
-    <a href="#add-answer" class="btn">新增答案</a>
+        <a href="#add-answer" class="btn btn-techecho">新增答案</a>
+    </div>
 
     {% for answer in answers %}
         {% include "answers/_answer.html" with answer=answer user=user %}
@@ -20,9 +22,9 @@
     {% if user.is_authenticated %}
         <form method="POST" action="{% url 'answers:index' question.id %}">
             {% csrf_token %}
-            <div class="flex flex-col gap-2 border px-6 py-4 my-4 rounded-lg">
+            <div class="flex flex-col gap-2 bg-vanilla-7 px-6 py-4 my-4 rounded-lg">
                 {% for field in form %}
-                <div class="form-control">
+                <div class="form-control rounded-lg bg-white">
                     {{ field }}
                     <span class="text-red-500">{{ field.errors }}</span>
                 </div>
