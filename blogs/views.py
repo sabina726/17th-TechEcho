@@ -67,7 +67,6 @@ def new(request):
 
             if action == "preview":
                 content_html = markdown.markdown(form.cleaned_data["content"])
-
                 return render(
                     request,
                     "blogs/new.html",
@@ -77,10 +76,12 @@ def new(request):
             elif action == "publish":
                 blog.is_draft = False
                 blog.save()
+                form.save_m2m()
                 return redirect("blogs:index")
 
             blog.is_draft = True
             blog.save()
+            form.save_m2m()
             return redirect("blogs:index")
 
         return render(request, "blogs/new.html", {"form": form})
