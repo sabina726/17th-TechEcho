@@ -24,7 +24,7 @@ class User(AbstractUser):
     time = models.CharField(max_length=255, null=True, blank=True)
     introduce = models.TextField(null=True, blank=True)
     skill = models.CharField(max_length=255, null=True, blank=True)
-    github_link = models.URLField(max_length=200, blank=True, null=True)
+    github_link = models.URLField(max_length=200, null=True, blank=True)
 
     def get_display_name(self):
         return self.nickname or self.username

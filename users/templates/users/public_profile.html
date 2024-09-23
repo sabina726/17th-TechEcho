@@ -1,13 +1,13 @@
 {% extends "layouts/base.html" %} {% block content %} {% csrf_token %}
 <div>
-  <div class="container mx-auto py-8">
-    <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
+  <div class="container py-8 mx-auto">
+    <div class="grid grid-cols-4 gap-6 px-4 sm:grid-cols-12">
       <div class="col-span-4 sm:col-span-3">
-        <div class="shadow rounded-lg p-6">
+        <div class="p-6 rounded-lg shadow">
           <div class="flex flex-col items-center">
             {% include "users/partials/_picture.html" with user=user size="32" margin="4" %}
             <h1 class="text-xl font-bold">{{user}}</h1>
-            <div class="flex justify-center items-center">
+            <div class="flex items-center justify-center">
               <a
                 class="text-gray-700 hover:text-orange-600"
                 aria-label="Visit LinkedIn"
@@ -31,16 +31,16 @@
           </div>
           <hr class="my-6 border-t border-gray-300" />
           <div class="flex flex-col">
-            <span class="text-gray-700 uppercase font-bold tracking-wider mb-2"
+            <span class="mb-2 font-bold tracking-wider text-gray-700 uppercase"
               >技能</span
             >
-            {% if user.skill == "None" %} 未設定 {% else %} {{ user.skill }} {% endif %}
+           {{ user.skill|default:'尚未填寫' }}
           </div>
         </div>
 
-        <div class="w-full max-w-5xl mt-6 p-2 mx-auto rounded-lg bg-teal-100">
+        <div class="w-full max-w-5xl p-2 mx-auto mt-6 bg-teal-100 rounded-lg">
           <div class="p-2">
-            <h3 class="p-1 text-2xl text-center font-semibold">可預約時間</h3>
+            <h3 class="p-1 text-2xl font-semibold text-center">可預約時間</h3>
             <ul class="mt-4">
               {% for schedule in schedules %}
               <li class="flex justify-between p-2 rounded-lg">
@@ -68,33 +68,32 @@
         </div>
       </div>
       <div class="col-span-4 sm:col-span-9">
-        <div class="shadow rounded-lg p-6">
-          <h2 class="text-xl font-bold mb-4">關於{{user}}</h2>
+        <div class="p-6 rounded-lg shadow">
+          <h2 class="mb-4 text-xl font-bold">關於{{user}}</h2>
           {% if user.about %}
           <span class="text-block-700">{{ user.about }}</span>
           {% else %}
           <p>尚未填寫</p>
           {% endif %}
 
-          <h2 class="text-xl font-bold mt-6 mb-4">經驗</h2>
+          <h2 class="mt-6 mb-4 text-xl font-bold">經驗</h2>
           <div class="mb-6">
-            <div class="flex justify-between flex-wrap gap-2 w-full">
-              <span class="text-gray-700 font-bold">
-                {% if user.title == "None" %} 未設定 {% else %} {{ user.title }}
-                {% endif %}
+            <div class="flex flex-wrap justify-between w-full gap-2">
+              <span class="font-bold text-gray-700">
+                {{ user.title |default:'尚未填寫'}}
               </span>
-              <span class="text-gray-700 mr-2">
-                {% if user.time == "None" %} 未設定 {% else %} {{ user.time }}
-                {% endif %}
+              <span class="mr-2 text-gray-700">
+               {{ user.time |default:'尚未填寫' }}
+
               </span>
             </div>
-            <p class="mt-2">{{ user.introduce|default:"未設定" }}</p>
+            <p class="mt-2">{{ user.introduce|default:"尚未填寫" }}</p>
             <hr class="my-4 border-t border-gray-300" />
           </div>
           {% if request.user == user %}
           <a
             href="{% url 'users:public_profile_edit' user.id %}"
-            class="bg-blue-500 text-white px-4 py-2 rounded pt-3"
+            class="px-4 py-2 pt-3 text-white bg-blue-500 rounded"
             >編輯</a
           >
           {% endif %}
