@@ -244,6 +244,9 @@ jmespath==1.0.1 ; python_version >= "3.12" and python_version < "4.0" \
 line-pay==0.2.0 ; python_version >= "3.12" and python_version < "4.0" \
     --hash=sha256:20af5264a1417588057af9b7484c615a7a64038a24fd46525e3c1f936f3c2e41 \
     --hash=sha256:584f3b4bef4b57e3d3275ca6be941b876e10156063e739d1550ebbba7aafd3db
+markdown2==2.5.0 ; python_version >= "3.12" and python_version < "4" \
+    --hash=sha256:300d4429b620ebc974ef512339a9e08bc080473f95135a91f33906e24e8280c1 \
+    --hash=sha256:9bff02911f8b617b61eb269c4c1a5f9b2087d7ff051604f66a61b63cab30adc2
 markdown==3.7 ; python_version >= "3.12" and python_version < "4.0" \
     --hash=sha256:2ae2471477cfd02dbbf038d5d9bc226d40def84b4fe2986e49b59b6b472bbed2 \
     --hash=sha256:7eb6df5690b81a1d7942992c97fad2938e956e79df20cbc6186e9c3a77b1c803
