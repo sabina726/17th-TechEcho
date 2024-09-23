@@ -193,8 +193,6 @@
         <h1 class="text-2xl font-bold mb-2">通知總覽</h1>
         <div
           class="mt-4"
-          hx-ext="ws"
-          ws-connect="ws/notifications/"
           >
           <ul id="notification_list" class="space-y-2">
             {% for notification in user_with_notifications.notification_set.all%}
@@ -317,13 +315,13 @@
         <h1 class="text-2xl font-bold mb-2">我回答過的</h1>
           {% for answer in answers %}
             <div class=" border-4 mb-2">
-                <a href="{% url 'questions:show' answer.question.id %}" class="text-black  hover:text-blue-700">
-                    {{ answer.content}}
-                </a>
+              <a href="{% url 'questions:show' answer.question.id %}" class="text-black  hover:text-blue-700">
+                  {{ answer.content}}
+              </a>
             </div>
-                {% empty %}
-                <li class="text-black">無回答記錄</li>
-                {% endfor %}
+          {% empty %}
+            <li class="text-black">無回答記錄</li>
+          {% endfor %}
       </div>
 
       <div

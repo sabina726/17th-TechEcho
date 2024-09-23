@@ -111,7 +111,10 @@ def student_index(request):
 @login_required
 @student_required
 def student_new(request, id):
-    schedule = get_object_or_404(TeacherSchedule, id=id)
+    schedule = get_object_or_404(
+        TeacherSchedule.objects.exclude(teacher=request.user), id=id
+    )
+
     if request.method == "POST":
         if StudentReservation.objects.filter(schedule=schedule).exists():
             messages.error(request, "不能預約重複時間")
