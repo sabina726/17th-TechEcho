@@ -10,6 +10,7 @@ from answers.models import Answer
 from lib.utils.labels import parse_labels
 from lib.utils.pagination import paginate
 from questions.models import Question
+from reservations.models import TeacherSchedule
 
 from .forms import TeacherForm
 from .models import Teacher
@@ -115,10 +116,12 @@ def show(request, id):
         .select_related("question", "user")
         .order_by("-created_at")[:8]
     )
+    schedules = TeacherSchedule.objects.filter(teacher_id=id).order_by("start_time")
     context = {
         "teacher": teacher,
         "questions": questions,
         "answers": answers,
+        "schedules": schedules,
     }
 
     return render(request, "teachers/show.html", context)
