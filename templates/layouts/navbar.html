@@ -299,29 +299,35 @@
 </li>
 
 
-  {% if user.is_authenticated %}
-  <li>
-    <a
-      href="{% url 'users:logout'%}"
-      class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
-    >登出
-    </a>
-  </li>
-  {% else %}
-  <li>
-    <a
-      href="{% url 'users:login'%}?next={{ request.path }}"
-      class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
-    >登入
-    </a>
-  </li>
-  <li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
-    <a
-      href="{% url 'users:register' %}"
-      class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
-    >註冊
-    </a>
-  </li>
-  {% endif %}
+
+{% if user.is_authenticated %}
+<li class="flex items-center justify-center mt-4">
+  <a
+    href="{% url 'users:profile' %}"
+    class="block w-1/2 px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
+  >
+  {{ user }}
+  {{ user|teacher_icon }}
+  {{ user|student_icon }}
+  的個人檔案</a>
+  <a
+    href="{% url 'users:logout' %}"
+    class="block w-1/2 px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
+  >登出</a>
+</li>
+{% else %}
+<li>
+  <a
+    href="{% url 'users:login' %}?next={{ request.path }}"
+    class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
+  >登入</a>
+</li>
+<li class="relative tooltip tooltip-bottom" data-tip="沒有帳號？">
+  <a
+    href="{% url 'users:register' %}"
+    class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
+  >註冊</a>
+</li>
+{% endif %}
 </ul>
 </nav>
