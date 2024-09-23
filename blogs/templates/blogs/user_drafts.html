@@ -9,7 +9,7 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <a href="{% url 'blogs:edit' draft.pk %}" class="text-xl font-bold">{{ draft.title }}</a>
-                        <p>Category: {{ draft.category.name }}</p>
+                        <p>標籤: {{ draft.category.name }}</p>
                         <p>Last updated on: {{ draft.updated_at|date:"Y/m/d H:i" }}</p>
                     </div>
                     <div>

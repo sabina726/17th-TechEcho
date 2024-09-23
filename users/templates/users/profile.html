@@ -14,20 +14,13 @@
 <div class="flex items-start gap-8">
     <aside class="w-64 flex-shrink-0">
       <div class="mb-6">
-        {% if user.profile_picture %}
-        <img
-          src="{{ user.profile_picture.url }}"
-          alt="Profile Picture"
-          class="w-32 h-32 rounded-full mb-4"
-        />
-        {% else %}
-        <img
-          src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar"
-          alt="User Avatar"
-          class="w-32 h-32 rounded-full mb-4"
-        />
-        {% endif %}
-        <h2 class="text-lg font-semibold pl-8">{{ user.username }}</h2>
+        <div class="relative w-32 h-32 mb-4">
+        {% include "users/partials/_picture.html" with user=user size="32" margin="4" %}
+          <a href="{% url 'users:profile_edit' %}">
+            <i class="fa-solid fa-camera absolute bottom-0 right-0 bg-gray-100 rounded-full p-1 text-gray-700"></i>
+          </a>
+        </div>
+        <h2 class="text-lg font-semibold pl-8">{{ user }}</h2>
       </div>
       <nav>
         <ul class="space-y-2">
