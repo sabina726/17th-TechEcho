@@ -15,15 +15,11 @@
                     </div>
                     <div class="flex items-center gap-1">
                         <a href="{% url 'chat:room' reservation.chat_group.id %}" class="btn btn-sm">進入聊天室</a>
-                        {% if reservation.can_edit %}
-                            <a href="{% url 'reservations:student_edit' reservation.id %}" class="btn btn-sm bg-blue-600 text-white">編輯</a>
-                            <form method="POST" action="{% url 'reservations:student_delete' reservation.id %}" onsubmit="return confirm('確定要刪除嗎？')">
-                                {% csrf_token %}
-                                <button class="btn btn-sm bg-red-600 text-white">刪除</button>
-                            </form>
-                        {% else %}
-                            <p class="text-gray-500">上課三小時前，無法更改</p>
-                        {% endif %}
+                        <a href="{% url 'reservations:student_edit' reservation.id %}" class="btn btn-sm bg-blue-600 text-white">編輯</a>
+                        <form method="POST" action="{% url 'reservations:student_delete' reservation.id %}" onsubmit="return confirm('確定要刪除嗎？')">
+                            {% csrf_token %}
+                            <button class="btn btn-sm bg-red-600 text-white">刪除</button>
+                        </form>
                     </div>
                 </li>
             {% empty %}
