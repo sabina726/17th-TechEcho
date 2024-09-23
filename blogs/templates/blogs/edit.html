@@ -35,16 +35,21 @@
                 {{ form.is_draft }}
             </div>
 
-            <button type="submit" name="action" value="update" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">
-                更新文章
-            </button>
+            {% if blog.is_draft %}
+                <!-- Show these buttons when editing a draft -->
+                <button type="submit" name="action" value="publish" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md">
+                    發佈文章
+                </button>
+            {% else %}
+                <!-- Show these buttons when editing a published article -->
+                <button type="submit" name="action" value="update" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">
+                    更新文章
+                </button>
+            {% endif %}
 
+            <!-- These buttons are common to both -->
             <button type="submit" name="action" value="preview" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md">
                 預覽文章
-            </button>
-
-            <button type="submit" name="action" value="publish" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md">
-                發佈文章
             </button>
 
             <button type="submit" name="action" value="save_draft" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-md">
