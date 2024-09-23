@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<div class="flex flex-wrap max-w-full mx-auto">
+<div class="flex flex-wrap w-full max-w-full h-full mx-auto">
     <section class="flex items-center flex-col w-full sm:w-1/5 m-2" x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
         <form method="get" action="{% url 'teachers:index' %}">
             <input type="text" name="search" placeholder="搜尋暱稱或專家名" class="input border border-blue-400">
@@ -15,12 +15,12 @@
         </form>
         <div class="m-2 flex flex-wrap justify-center max-w-full">
             <a href="{% url 'teachers:index' %}"
-            class="btn btn-outline m-2 flex items-center justify-center w-full max-w-full sm:w-auto"
+            class="btn btn-outline m-2 flex items-center justify-center w-full max-w-full sm:w-auto bg-vanilla-7"
             @click="selectedLabel = ''; localStorage.removeItem('selectedLabel')">尋找所有語言</a>
             {% for label in all_labels %}
                 <a href="?label={{ label|lower|urlencode }}"
-                    class="btn btn-outline m-2 flex items-center justify-center w-full sm:w-1/3"
-                    :class="{ 'bg-blue-500 text-white': selectedLabel === '{{ label|lower }}' }"
+                    class="btn btn-outline m-2 flex items-center justify-center w-full sm:w-1/3 bg-vanilla-7"
+                    :class="{ 'bg-blue-500': selectedLabel === '{{ label|lower }}' }"
                     @click="selectedLabel = '{{ label|lower }}'; localStorage.setItem('selectedLabel', '{{ label|lower }}')">
                     {{ label }}
                 </a>
@@ -41,7 +41,7 @@
             <section>
                 {% for teacher in teachers %}
                 <a href="{% url 'teachers:show' teacher.id %}"
-                    class="w-full max-w-full block mb-4 p-4 shadow-md hover:bg-gray-100">
+                    class="w-full max-w-full block mb-4 p-4 shadow-md rounded-lg hover:bg-vanilla-7">
                     <div class="flex justify-around w-full max-w-full">
                         <div class="flex justify-center items-center max-w-full w-1/3">
                             {% if teacher.user.profile_picture %}
