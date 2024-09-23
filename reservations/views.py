@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -170,3 +171,18 @@ def teacher_available(request):
     return render(
         request, "reservations/teacher/teacher_available.html", {"schedules": schedules}
     )
+
+
+def calendar_events(request):
+    schedules = TeacherSchedule.objects.filter(teacher=request.user)
+    events = [
+        {
+            "id": schedule.id,
+            "title": f"{schedule.teacher.get_display_name()}",
+            "start": schedule.start_time.isoformat(),
+            "end": schedule.end_time.isoformat(),
+            "url": f"/reservations/teacher/{schedule.id}/delete/",
+        }
+        for schedule in schedules
+    ]
+    return JsonResponse(events, safe=False)

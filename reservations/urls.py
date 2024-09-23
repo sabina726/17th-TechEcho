@@ -10,6 +10,7 @@ url_teacher = [
     path("teacher/<int:id>/edit/", views.teacher_edit, name="teacher_edit"),
     path("teacher/<int:id>/delete/", views.teacher_delete, name="teacher_delete"),
     path("teacher/available/", views.teacher_available, name="teacher_available"),
+    path("teacher/calendar_events/", views.calendar_events, name="calendar_events"),
 ]
 
 url_student = [

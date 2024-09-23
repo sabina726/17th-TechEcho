@@ -42,5 +42,49 @@
                 <li class="text-center text-xl text-gray-500 py-4">您目前尚未開放授課時間</li>
             {% endfor %}
         </ul>
+
+        <div id='calendar'></div>
     </section>
+
+    <style>
+        #calendar {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+    </style>
+
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar/main.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar/main.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar/locales/zh-tw.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/dayjs/dayjs.min.js'></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'zh-tw',
+                selectable: true,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: '{% url "reservations:calendar_events" %}',
+                eventClick: function(info) {
+                    var eventUrl = info.event.extendedProps.url;
+                    console.log(confirm('確定要刪除這個時間嗎？'))
+                }
+            });
+            calendar.render();
+        });
+
+        function getCookie(name) {
+            const cookie = document.cookie.split('; ').find(row => row.startsWith(name + '='));
+            return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
+        }
+    </script>
+
+
+
 {% endblock %}
