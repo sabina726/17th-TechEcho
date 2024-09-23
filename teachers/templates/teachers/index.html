@@ -2,8 +2,9 @@
 
 {% block content %}
 
+
 <div class="flex flex-wrap max-w-full mx-auto">
-    <section class="flex justify-center items-center flex-col w-full sm:w-1/5 m-2" x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
+    <section class="flex items-center flex-col w-full sm:w-1/5 m-2" x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
         <form method="get" action="{% url 'teachers:index' %}">
             <input type="text" name="search" placeholder="搜尋暱稱或專家名" class="input border border-blue-400">
             <button type="submit"
@@ -42,11 +43,11 @@
                 <a href="{% url 'teachers:show' teacher.id %}"
                     class="w-full max-w-full block mb-4 p-4 shadow-md hover:bg-gray-100">
                     <div class="flex justify-around w-full max-w-full">
-                        <div class="flex justify-center max-w-full w-1/3">
+                        <div class="flex justify-center items-center max-w-full w-1/3">
                             {% if teacher.user.profile_picture %}
-                                <img src="{{ teacher.user.profile_picture.url }}" alt="Profile Picture" class="w-1/2 h-32 object-cover rounded-full">
+                                <img src="{{ teacher.user.profile_picture.url }}" alt="Profile Picture" class="w-1/2 h-32 object-center rounded-full">
                             {% else %}
-                                <img src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar" alt="User Avatar" class="w-1/2 h-32 object-cover rounded-full">
+                                <img src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar" alt="User Avatar" class="w-1/2 h-32 object-center rounded-full">
                             {% endif %}
                         </div>
                         <div class="flex flex-col justify-around ml-4 w-2/3 max-w-full">

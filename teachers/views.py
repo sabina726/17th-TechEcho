@@ -16,7 +16,7 @@ from .models import Teacher
 
 
 def mentor(request):
-    if request.user.is_teacher:
+    if request.user.is_authenticated and request.user.is_teacher:
         teacher_name = request.user.nickname
         messages.success(request, f"歡迎 {teacher_name}")
         return redirect("teachers:show", request.user.teacher.id)
