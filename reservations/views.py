@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -100,11 +101,6 @@ def student_index(request):
     reservations = StudentReservation.objects.filter(
         student=request.user
     ).select_related("schedule__teacher")
-    # 距離開始時間三小時以上，才能編輯或刪除
-    for reservation in reservations:
-        reservation.can_edit = (
-            reservation.schedule.start_time - timezone.now() > timedelta(hours=3)
-        )
     return render(
         request,
         "reservations/student/student_index.html",
@@ -164,9 +160,26 @@ def student_delete(request, id):
 
 
 def teacher_available(request):
-    schedules = TeacherSchedule.objects.filter(
-        studentreservation__isnull=True
-    ).select_related("teacher")
+    schedules = (
+        TeacherSchedule.objects.exclude(teacher=request.user)
+        .filter(studentreservation__isnull=True)
+        .select_related("teacher")
+    )
     return render(
         request, "reservations/teacher/teacher_available.html", {"schedules": schedules}
     )
+
+
+def calendar_events(request):
+    schedules = TeacherSchedule.objects.filter(teacher=request.user)
+    events = [
+        {
+            "id": schedule.id,
+            "title": f"{schedule.teacher.get_display_name()}",
+            "start": schedule.start_time.isoformat(),
+            "end": schedule.end_time.isoformat(),
+            "url": f"/reservations/teacher/{schedule.id}/delete/",
+        }
+        for schedule in schedules
+    ]
+    return JsonResponse(events, safe=False)

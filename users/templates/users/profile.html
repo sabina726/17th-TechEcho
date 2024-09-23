@@ -5,6 +5,7 @@
     currentView: localStorage.getItem('currentView') || 'profile',
     showSubMenu: false,
     showSubMenu1: false,
+    showSubMenu2: false,
     setView(view) {
     this.currentView = view;
     localStorage.setItem('currentView', view);
@@ -26,11 +27,30 @@
         <ul class="space-y-2">
           <li>
             <a
-              href="#"
-              class="flex items-center"
-              @click.prevent="setView('profile')">
-            <i class="fa-solid fa-user mr-2"></i>我的個人資料
+            href="#"
+            class="flex items-center"
+            @click.prevent="showSubMenu2 = !showSubMenu2"
+            >
+              <i class="fa-solid fa-user mr-2"></i>
+              我的個人資料
             </a>
+            <ul x-show="showSubMenu2" class="pl-6 mt-2 space-y-2">
+              <li>
+                <a
+                href="#"
+                class="flex items-center text-gray-700"
+                @click.prevent="setView('profile')">
+                  基本資料
+                </a>
+              </li>
+                <li>
+                  <a
+                  href="{% url 'users:public_profile' user.id %}"
+                  class="flex items-center text-gray-700">
+                    我公開的個人資料
+                  </a>
+                </li>
+            </ul>
           </li>
           <li>
             <a
@@ -264,7 +284,6 @@
                         <p>{{ reservation.schedule.start_time|date:'Y/m/d H:i' }} - {{ reservation.schedule.end_time|date:'Y/m/d H:i' }}</p>
                     </div>
                     <a href="{% url 'chat:room' reservation.chat_group.id %}" class="btn btn-sm">進入聊天室</a>
-                    {% if reservation.can_edit %}
                     <div class="flex items-center gap-1">
                         <a href="{% url 'reservations:student_edit' reservation.id %}" class="btn btn-sm bg-blue-600 text-white">編輯</a>
                         <form method="POST" action="{% url 'reservations:student_delete' reservation.id %}" onsubmit="return confirm('確定要刪除嗎？')">
@@ -272,9 +291,6 @@
                             <button class="btn btn-sm bg-red-600 text-white">刪除</button>
                         </form>
                     </div>
-                    {% else %}
-                        <p class="text-gray-500">上課三小時前，無法更改</p>
-                    {% endif %}
                 </li>
             {% empty %}
                 <li class="text-center text-xl text-gray-500 py-4">您尚未預約任何專家～</li>
