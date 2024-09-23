@@ -39,7 +39,7 @@ def index(request):
     if request.user.is_authenticated:
         if check_premium_status(request.user):
             messages.success(request, "Premium用戶歡迎回來")
-            return render(request, "teachers/index.html")
+            return redirect("teachers:index")
         else:
             messages.warning(request, "您尚未升級Premium")
             return render(request, "payments/index.html")
@@ -291,7 +291,7 @@ def linepay_confirm_payment(request):
 
         messages.error(request, "付款失敗，請稍後再試！")
 
-    return render(request, "teachers/index.html")
+    return redirect("teachers:index")
 
 
 def linepay_cancel_payment(request):
