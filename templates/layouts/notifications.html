@@ -10,7 +10,7 @@
         </span>
     </button>
     <form x-show="notificationOpen" @click.away="closeDropdown()"
-        class="absolute right-0 z-20 mt-8 text-green-3 w-60 bg-vanilla-5"
+        class="border-2 border-blue-1 absolute right-0 z-20 mt-8 text-green-3 w-60 bg-vanilla-5"
         style="display: none"
         hx-ext="ws"
         ws-connect="ws/notifications/">

@@ -32,12 +32,10 @@ def room(request, id):
     chat_messages = paginate(request, chat_messages, items_count=30, default_page=-1)
     return render(
         request,
-        "chat/chat.html",
+        "chat/index.html",
         {
             "chat_messages": chat_messages,
             "form": ChatMessageForm(),
             "chat_group": chat_group,
-            "other_user": chat_group.get_other_user(request.user),
-            "online_count": chat_group.members_online.count(),
         },
     )
