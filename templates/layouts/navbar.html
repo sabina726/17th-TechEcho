@@ -35,7 +35,7 @@
 {% endif %}
 
   <ul class="hidden space-x-2 text-base text-white md:space-x-4 lg:space-x-6 xl:space-x-10 md:text-lg lg:text-xl xl:text-2xl md:flex whitespace-nowrap">
-    <li class="relative tooltip tooltip-bottom" data-tip="發表嗎？">
+    <li class="relative tooltip tooltip-bottom" data-tip="發佈文章">
       <button
         type="button"
         @click="articleOpen = !articleOpen"
@@ -59,7 +59,7 @@
         </li>
       </ul>
     </li>
-    <li class="relative tooltip tooltip-bottom" data-tip="問看看？">
+    <li class="relative tooltip tooltip-bottom" data-tip="提出問題">
 
       <button
         type="button"
@@ -89,12 +89,12 @@
         </li>
       </ul>
     </li>
-    <li class="relative tooltip tooltip-bottom" data-tip="找專家？">
+    <li class="relative tooltip tooltip-bottom" data-tip="技術學習">
       <button
         type="button"
         @click="expertOpen = !expertOpen"
         class="transition duration-300 ease-in-out hover:text-green-3"
-        >專家
+        >學習區
       </button>
       <ul
         x-show="expertOpen"
@@ -111,38 +111,23 @@
         </li>
         <li>
           <a
+            href="{% url 'reservations:teacher_available' %}"
+            class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4 hover:text-white"
+            >專家時間
+          </a>
+        </li>
+        <li>
+          <a
             href="{% url 'teachers:mentor' %}"
             class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4 hover:text-white"
-            >當專家
+            >成為專家
           </a>
         </li>
         <li>
           <a
             href="{% url 'payments:index' %}"
             class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4 hover:text-white"
-            >問專家
-          </a>
-        </li>
-      </ul>
-    </li>
-    <li class="relative tooltip tooltip-bottom" data-tip="想預約？">
-      <button
-        type="button"
-        @click="teacherOpen = !teacherOpen"
-        class="transition duration-300 ease-in-out hover:text-green-3"
-        >預約
-      </button>
-      <ul
-        x-show="teacherOpen"
-        @click.away="teacherOpen = false"
-        class="absolute left-0 z-20 mt-9 text-green-3 w-60 bg-vanilla-7"
-        style="display: none"
-      >
-        <li>
-          <a
-            href="{% url 'reservations:teacher_available' %}"
-            class="block px-4 py-2 transition duration-300 ease-in-out hover:bg-green-4 hover:text-white"
-            >專家時間
+            >成為學生
           </a>
         </li>
       </ul>
@@ -263,7 +248,7 @@
   <button
     type="button"
     class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
-  >專家
+  >學習區
   </button>
   <ul x-show="expertOpen" class="mt-2 ml-4">
     <li>
@@ -275,44 +260,41 @@
     </li>
     <li>
       <a
-        href="{% url 'teachers:new' %}"
+        href="{% url 'reservations:teacher_available' %}"
         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
-      >當專家
+        >專家時間
       </a>
     </li>
     <li>
       <a
+        href="{% url 'teachers:new' %}"
+        class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
+      >成為專家
+    </a>
+  </li>
+    <li>
+      <a
         href="{% url 'teachers:index' %}"
         class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
-      >問專家
+      >成為學生
       </a>
     </li>
   </ul>
 </li>
 
-<li>
-  <button
-    type="button"
-    class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
-  >預約
-  </button>
-</li>
-
-
-
 {% if user.is_authenticated %}
-<li class="flex items-center justify-center mt-4">
+<li class="flex items-center justify-center mt-1">
   <a
     href="{% url 'users:profile' %}"
-    class="block w-1/2 px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
+    class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
   >
   {{ user }}
   {{ user|teacher_icon }}
   {{ user|student_icon }}
-  的個人檔案</a>
+  </a>
   <a
     href="{% url 'users:logout' %}"
-    class="block w-1/2 px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
+    class="block px-4 py-2 transition duration-300 ease-in-out text-green-3 hover:bg-green-4 hover:text-white"
   >登出</a>
 </li>
 {% else %}

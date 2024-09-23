@@ -27,7 +27,7 @@
     <p class="mb-2 text-lg font-bold">{{ user }} 老師 {{ user|teacher_icon }}</p>
     <button
         class="px-4 py-2 mb-2 text-white transition rounded-full bg-green-4 hover:bg-green-3"
-        @click="window.location.href='{% url 'reservations:teacher_available' %}'"
+        @click="window.location.href='{% url 'teachers:show' user.teacher.id %}'"
     >
         前往 {{ user }} 預約時間
     </button>
