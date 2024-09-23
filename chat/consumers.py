@@ -14,6 +14,7 @@ class ChatroomConsumer(WebsocketConsumer):
         chatroom_id = self.scope["url_route"]["kwargs"]["chatroom_id"]
         self.chat_group = get_object_or_404(ChatGroup, id=chatroom_id)
         self.group_name = f"chatroom_{chatroom_id}"
+        self.is_public = self.chat_group.is_public
         async_to_sync(self.channel_layer.group_add)(self.group_name, self.channel_name)
 
         if not self.chat_group.members_online.filter(pk=self.user.id).exists():
@@ -53,18 +54,32 @@ class ChatroomConsumer(WebsocketConsumer):
 
     def update_online_count(self):
         online_count = self.chat_group.members_online.count()
-        event = {
-            "type": "online_count_handler",
-            "online_count": online_count,
-        }
+        if self.is_public:
+            event = {"type": "online_count_handler", "online_count": online_count}
+        else:
+            event = {
+                "type": "online_status_handler",
+                "online_count": online_count,
+            }
+
         async_to_sync(self.channel_layer.group_send)(self.group_name, event)
 
-    def online_count_handler(self, event):
+    def online_status_handler(self, event):
         text = render_to_string(
             "chat/partials/_online_status.html",
             {
                 "online_count": event["online_count"],
                 "other_user": self.chat_group.get_other_user(self.user),
+            },
+        )
+
+        self.send(text_data=text)
+
+    def online_count_handler(self, event):
+        text = render_to_string(
+            "chat/partials/_online_count.html",
+            {
+                "online_count": event["online_count"],
             },
         )
 

@@ -8,7 +8,7 @@ from django.views.decorators.http import require_GET, require_POST
 
 from answers.forms import AnswerForm
 from answers.utils.answers_sort import get_ordered_answers
-from lib.utils.labels import parse_labels
+from lib.utils.labels import parse_form_labels, parse_labels
 from lib.utils.pagination import paginate
 
 from .forms import QuestionForm
@@ -22,7 +22,7 @@ from .utils.sort import order_is_valid
 
 def index(request):
     # partial rendering only
-    if request.htmx:
+    if request.htmx and request.htmx.request.method == "GET":
         order = request.GET.get("order")
         questions = Question.objects.order_by(order if order_is_valid(order) else "-id")
         questions = paginate(request, questions)
@@ -36,19 +36,12 @@ def index(request):
             return redirect("users:login")
 
         form = QuestionForm(request.POST)
-        labels = parse_labels(request.POST)
 
-        if not labels:
-            messages.error(request, "標籤至少要一個，且是認可的程式語言")
-            return render(request, "questions/new.html", {"form": form})
-
-        if form.is_valid():
-            # commit=False is not applicable here because instance.labels.set(labels) requires a pk
-            # and since our pk is defined by the ORM not by us, it will only exist once we save it to the DB
-            instance = form.save()
-            instance.labels.set(labels)
+        if form.is_valid() and parse_form_labels(form):
+            instance = form.save(commit=False)
             instance.user = request.user
             instance.save()
+            form.save_m2m()
 
             messages.success(request, "成功提問")
             return redirect("questions:index")
@@ -86,11 +79,7 @@ def show(request, id):
         form = QuestionForm(request.POST, instance=question)
         labels = parse_labels(request.POST)
 
-        if not labels:
-            messages.error(request, "標籤至少要一個，且是認可的程式語言")
-            return render(request, "questions/new.html", {"form": form})
-
-        if form.is_valid():
+        if form.is_valid() and parse_form_labels(form):
             instance = form.save(commit=False)
             instance.labels.set(labels)
             instance.save()
@@ -126,12 +115,14 @@ def show(request, id):
 @login_required
 @require_GET
 def edit(request, id):
-    question = get_object_or_404(Question, pk=id, user=request.user)
+    question = get_object_or_404(
+        Question.objects.prefetch_related("labels"), pk=id, user=request.user
+    )
     form = QuestionForm(instance=question)
     return render(
         request,
         "questions/edit.html",
-        {"form": form, "question": question, "labels": question.labels.all()},
+        {"form": form, "question": question},
     )
 
 
@@ -208,4 +199,23 @@ def follows(request, id):
         request,
         "questions/partials/_follows.html",
         {"question": question, "followed": question.followed_by(request.user)},
+    )
+
+
+@login_required
+@require_POST
+def preview(request):
+    form = QuestionForm(request.POST)
+    if form.is_valid():
+        preview_content = form.cleaned_data.get("details", None)
+        return render(
+            request,
+            "questions/partials/_preview.html",
+            {"preview_content": preview_content},
+        )
+
+    return render(
+        request,
+        "questions/partials/_preview.html",
+        {"preview_content": "請先依照規定填好標題、內容、標籤，才能預覽。"},
     )

@@ -9,7 +9,7 @@ from lib.models import SoftDeleteModel
 class Question(SoftDeleteModel):
     title = models.CharField(max_length=50)
     details = models.TextField(
-        validators=[MinLengthValidator(20, "問題描述至少要二十個字")]
+        validators=[MinLengthValidator(20, "問題內容至少要二十個字")]
     )
 
     votes_count = models.IntegerField(default=0)

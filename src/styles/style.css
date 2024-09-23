@@ -90,6 +90,32 @@
   @apply bg-gray-500;
 }
 
-.graylight-dot {
-  @apply bg-green-300;
+.markdown {
+  @apply prose dark:prose-invert max-w-full break-words;
+}
+
+.prose pre {
+  overflow: visible;
+  white-space: pre-wrap;
+}
+
+.remote-cursor {
+  border-left: 2px solid orange;
+  height: 100%;
+}
+
+.remote-cursor-label {
+  background: orange;
+  color: white;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.btn-techecho {
+  @apply bg-vanilla-5 hover:bg-blue-2 hover:text-white;
+}
+
+html {
+  scroll-behavior: smooth;
 }
