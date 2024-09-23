@@ -35,7 +35,7 @@
 
   <button
     class="px-4 py-2 mt-2 text-white transition rounded-full bg-blue-2 hover:bg-blue-1"
-    @click="window.location.href='{% url 'users:profile' %}'"
+    @click="window.location.href='{% url 'users:public_profile' user.id %}'"
   >
     前往 {{ user }} 個人頁面
   </button>

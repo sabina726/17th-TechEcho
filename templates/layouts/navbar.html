@@ -133,15 +133,15 @@
       </ul>
     </li>
 
-    {% if user.is_authenticated %}
+    {% if request.user.is_authenticated %}
     <div
       class="relative inline-flex items-center cursor-pointer"
       @click="userMenuOpen = !userMenuOpen"
     >
       <div class="flex items-center gap-3 no-underline transition duration-300 ease-in-out hover:text-green-3 hover:underline">
-        {{ user }}
-        {{ user|teacher_icon }}
-        {{ user|student_icon }}
+        {{ request.user }}
+        {{ request.user|teacher_icon }}
+        {{ request.user|student_icon }}
         {% include "users/partials/_picture.html" with user=user size="7" margin="0" %}
       </div>
       <ul

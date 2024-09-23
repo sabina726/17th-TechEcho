@@ -6,38 +6,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0003_user_profile_picture'),
+        ("users", "0003_user_profile_picture"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='about',
+            model_name="user",
+            name="about",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='github_link',
+            model_name="user",
+            name="github_link",
             field=models.URLField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='introduce',
+            model_name="user",
+            name="introduce",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='skill',
+            model_name="user",
+            name="skill",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='time',
+            model_name="user",
+            name="time",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='title',
+            model_name="user",
+            name="title",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
     ]
