@@ -18,8 +18,16 @@
             </div>
 
             <div class="mb-4">
-                {{ form.labels.label_tag }}
-                {{ form.labels }}
+                <label class="label">標籤：</label>
+                <input
+                    required
+                    x-data="tags_input"
+                    type="text"
+                    name="labels"
+                    class="input-bordered border-blue-2 rounded-lg bg-white w-full p-1 tagify--custom-dropdown"
+                    placeholder="至少要填一個標籤，例如：Javascript、Python、C++、Ruby 或 Java"
+                    value="{% for label in blog.labels.all %}{{label}},{% endfor %}"
+                />
             </div>
 
             <div class="mb-4">

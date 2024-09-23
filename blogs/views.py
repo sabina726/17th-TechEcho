@@ -9,6 +9,8 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from lib.utils.labels import parse_form_labels
+
 from .forms import BlogForm
 from .models import Blog
 
@@ -38,7 +40,11 @@ def image_upload(request):
 
 
 def index(request):
-    blog_list = Blog.objects.filter(is_draft=False).order_by("-created_at")
+    blog_list = (
+        Blog.objects.filter(is_draft=False)
+        .prefetch_related("labels")
+        .order_by("-created_at")
+    )
     paginator = Paginator(blog_list, 5)
 
     page_number = request.GET.get("page")
@@ -59,7 +65,7 @@ def user_drafts(request):
 def new(request):
     if request.method == "POST":
         form = BlogForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and parse_form_labels(form):
             blog = form.save(commit=False)
             blog.author = request.user
 
@@ -129,7 +135,7 @@ def edit(request, pk):
 
     if request.method == "POST":
         form = BlogForm(request.POST, instance=blog)
-        if form.is_valid():
+        if form.is_valid() and parse_form_labels(form):
             action = request.POST.get("action")
 
             if action == "preview":
