@@ -28,7 +28,7 @@ const fontSizeSelect = document.getElementById('font-size-select');
 const editorId = document.getElementById("editor-id").value;
 const resultArea = document.getElementById("result");
 const languageSelect = document.getElementById('language-select');
-const otherUserName = document.getElementById('other-user-name').value
+const otherUser = document.getElementById('other-user-name')
 
 themeSelect.addEventListener('change', (event) => {
 	const theme = event.target.value;
@@ -48,7 +48,7 @@ function debounce(func, delay) {
 	};
 }
 
-if (editorId === "-1") {
+if (!otherUser) {
 	// individual editor
 	languageSelect.addEventListener('change', (event) => {
 		const currentLanguage = event.target.value;
@@ -143,7 +143,7 @@ if (editorId === "-1") {
 						options: {
 							className: 'remote-cursor',
 							after: {
-								content: '⟵ ' + otherUserName,
+								content: '⟵ ' + otherUser.value,
 								inlineClassName: 'remote-cursor-label'
 							}
 						}

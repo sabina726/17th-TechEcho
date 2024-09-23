@@ -91,7 +91,7 @@
 }
 
 .markdown {
-  @apply prose dark:prose-invert;
+  @apply prose dark:prose-invert max-w-full break-words;
 }
 
 .prose pre {

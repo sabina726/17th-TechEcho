@@ -171,15 +171,8 @@
         class="bg-white shadow rounded-lg p-6"
         >
         <h1 class="text-2xl font-bold mb-2">通知總覽</h1>
-        <span
-          x-show="notificationNumber > 0"
-          class="ml-2 bg-red-500 text-white text-xs rounded-full px-2 py-1"
-        >
-          {{ notificationNumber }}
-        </span>
         <div
           class="mt-4"
-          x-data="notifications"
           hx-ext="ws"
           ws-connect="ws/notifications/"
           >
