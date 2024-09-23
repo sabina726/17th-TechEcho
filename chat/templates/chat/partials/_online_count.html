@@ -1,0 +1,9 @@
+<div id="banner" hx-swap-oob="outerHTML" class="animate-fadeIn flex text-green-3 justify-center items-center text-xl">
+    {{ online_count|add:'-1' }}人在線
+</div>
+
+<span id="online-dot" class="dot absolute top-1 left-1 {{online_count|add:"-1"|yesno:"green-dot animate-pulse,gray-dot"}}"></span>
+
+<style>
+
+</style>

@@ -11,24 +11,13 @@
     </div>
     {% endif %}
 
-    <li class="message chat
-        {% if message|check_author:user %}
-            chat-end
-        {% else %}
-            chat-start
-        {% endif %}"
-    >
+    <li class="message chat {{ message|check_author:user|yesno:"chat-end, chat-start" }}">
+
         <div class="chat-header">
             {{ message.author }}
             <time class="text-xs opacity-50">{{message.created_at|standard_date}}</time>
         </div>
-        <article class="chat-bubble text-white break-all
-            {% if message|check_author:user %}
-                chat-bubble-success
-            {% else %}
-                bg-blue-1
-            {% endif %}"
-        >
+        <article class="chat-bubble text-white break-all {{ message|check_author:user|yesno:'chat-bubble-success, bg-blue-1' }}">
             {{ message.content|linebreaksbr }}
         </article>
         <div class="chat-footer opacity-50">Delivered</div>

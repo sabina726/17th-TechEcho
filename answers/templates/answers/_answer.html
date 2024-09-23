@@ -1,7 +1,8 @@
 {% load home users %}
 <section
+  id="{{answer.id}}"
   x-data="{ edit: false }"
-  class="container mx-auto border px-6 py-4 my-4 rounded-lg"
+  class="container mx-auto border px-6 py-4 my-4 rounded-lg border-2 border-blue-2"
 >
   <div class="flex justify-between">
     <div class="flex items-center mb-4">
@@ -40,8 +41,8 @@
     {% endif %}
   </div>
 
-  <div x-show="!edit" id="answer-content" class="text-lg leading-relaxed mb-4">
-    {{ answer.content|linebreaksbr }}
+  <div x-show="!edit" id="answer-content" class="text-lg leading-relaxed mb-4 markdown">
+    {{ answer.content|strip_markdown_safe }}
   </div>
 
   <div x-show="edit" id="edit-form">

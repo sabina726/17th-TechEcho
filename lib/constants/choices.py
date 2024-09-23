@@ -1,4 +1,4 @@
-programming_languages = (
+label_tuple = (
     "vue",
     "react",
     "css",
@@ -50,3 +50,5 @@ programming_languages = (
     "smalltalk",
     "vala",
 )
+
+label_choices = set(label_tuple)

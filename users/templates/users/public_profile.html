@@ -1,0 +1,105 @@
+{% extends "layouts/base.html" %} {% block content %} {% csrf_token %}
+<div>
+  <div class="container py-8 mx-auto">
+    <div class="grid grid-cols-4 gap-6 px-4 sm:grid-cols-12">
+      <div class="col-span-4 sm:col-span-3">
+        <div class="p-6 rounded-lg shadow">
+          <div class="flex flex-col items-center">
+            {% include "users/partials/_picture.html" with user=user size="32" margin="4" %}
+            <h1 class="text-xl font-bold">{{user}}</h1>
+            <div class="flex items-center justify-center">
+              <a
+                class="text-gray-700 hover:text-orange-600"
+                aria-label="Visit LinkedIn"
+                href=""
+                target="_blank"
+              >
+                <img
+                  class="w-6 h-6"
+                  src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg"
+                  alt="GitHub"
+                />
+              </a>
+            </div>
+            <a
+              class="text-gray-700 hover:text-orange-600"
+              aria-label="Visit TrendyMinds LinkedIn"
+              href=""
+              target="_blank"
+            >
+            </a>
+          </div>
+          <hr class="my-6 border-t border-gray-300" />
+          <div class="flex flex-col">
+            <span class="mb-2 font-bold tracking-wider text-gray-700 uppercase"
+              >技能</span
+            >
+           {{ user.skill|default:'尚未填寫' }}
+          </div>
+        </div>
+
+        <div class="w-full max-w-5xl p-2 mx-auto mt-6 bg-teal-100 rounded-lg">
+          <div class="p-2">
+            <h3 class="p-1 text-2xl font-semibold text-center">可預約時間</h3>
+            <ul class="mt-4">
+              {% for schedule in schedules %}
+              <li class="flex justify-between p-2 rounded-lg">
+                <div class="flex items-center gap-1">
+                  <p>
+                    {{ schedule.start_time|date:'Y/m/d H:i' }} -
+                    {{schedule.end_time|date:'Y/m/d H:i' }}
+                  </p>
+                </div>
+                {% if request.user != teacher.user %}
+                <div class="flex items-center gap-1">
+                  <a
+                    href="{% url 'reservations:student_new' schedule.id %}"
+                    class="text-white bg-blue-600 btn btn-sm"
+                    >預約</a
+                  >
+                </div>
+                {% endif %}
+              </li>
+              {% empty %}
+              <li class="text-block">目前沒有可預約的時段</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-span-4 sm:col-span-9">
+        <div class="p-6 rounded-lg shadow">
+          <h2 class="mb-4 text-xl font-bold">關於{{user}}</h2>
+          {% if user.about %}
+          <span class="text-block-700">{{ user.about }}</span>
+          {% else %}
+          <p>尚未填寫</p>
+          {% endif %}
+
+          <h2 class="mt-6 mb-4 text-xl font-bold">經驗</h2>
+          <div class="mb-6">
+            <div class="flex flex-wrap justify-between w-full gap-2">
+              <span class="font-bold text-gray-700">
+                {{ user.title |default:'尚未填寫'}}
+              </span>
+              <span class="mr-2 text-gray-700">
+               {{ user.time |default:'尚未填寫' }}
+
+              </span>
+            </div>
+            <p class="mt-2">{{ user.introduce|default:"尚未填寫" }}</p>
+            <hr class="my-4 border-t border-gray-300" />
+          </div>
+          {% if request.user == user %}
+          <a
+            href="{% url 'users:public_profile_edit' user.id %}"
+            class="px-4 py-2 pt-3 text-white bg-blue-500 rounded"
+            >編輯</a
+          >
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

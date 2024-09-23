@@ -5,6 +5,7 @@
     currentView: localStorage.getItem('currentView') || 'profile',
     showSubMenu: false,
     showSubMenu1: false,
+    showSubMenu2: false,
     setView(view) {
     this.currentView = view;
     localStorage.setItem('currentView', view);
@@ -26,11 +27,30 @@
         <ul class="space-y-2">
           <li>
             <a
-              href="#"
-              class="flex items-center"
-              @click.prevent="setView('profile')">
-            <i class="fa-solid fa-user mr-2"></i>我的個人資料
+            href="#"
+            class="flex items-center"
+            @click.prevent="showSubMenu2 = !showSubMenu2"
+            >
+              <i class="fa-solid fa-user mr-2"></i>
+              我的個人資料
             </a>
+            <ul x-show="showSubMenu2" class="pl-6 mt-2 space-y-2">
+              <li>
+                <a
+                href="#"
+                class="flex items-center text-gray-700"
+                @click.prevent="setView('profile')">
+                  基本資料
+                </a>
+              </li>
+                <li>
+                  <a
+                  href="{% url 'users:public_profile' user.id %}"
+                  class="flex items-center text-gray-700">
+                    我公開的個人資料
+                  </a>
+                </li>
+            </ul>
           </li>
           <li>
             <a
@@ -171,15 +191,8 @@
         class="bg-white shadow rounded-lg p-6"
         >
         <h1 class="text-2xl font-bold mb-2">通知總覽</h1>
-        <span
-          x-show="notificationNumber > 0"
-          class="ml-2 bg-red-500 text-white text-xs rounded-full px-2 py-1"
-        >
-          {{ notificationNumber }}
-        </span>
         <div
           class="mt-4"
-          x-data="notifications"
           hx-ext="ws"
           ws-connect="ws/notifications/"
           >
@@ -209,7 +222,7 @@
         >
         <section class="container mx-auto border px-6 py-4 my-4 rounded-lg">
           <div class="flex justify-between items-center p-1">
-              <a href="{% url 'reservations:teacher_new' %}" class="btn">新增時間</a>
+            <a href="{% url 'reservations:teacher_new' %}" class="btn btn-techecho">新增時間</a>
           </div>
           <ul>
               {% for schedule in schedules %}
@@ -256,6 +269,7 @@
       class="bg-white shadow rounded-lg p-6"
       >
       <section class="container mx-auto border px-6 py-4 my-4 rounded-lg">
+        <a class="btn bg-vanilla-5 hover:bg-blue-2 hover:text-white" href="{% url "editors:index" %}">上課前練習寫點程式吧</a>
         <ul>
             {% for reservation in reservations %}
                 <li class="p-2 rounded-lg flex justify-between">
