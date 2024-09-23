@@ -151,6 +151,11 @@ def edit(request, pk):
                 blog = form.save()
                 return redirect("blogs:show", pk=blog.pk)
 
+            elif action == "publish":
+                blog = form.save()
+                blog.publish()
+                return redirect("blogs:show", pk=blog.pk)
+
             elif action == "save_draft":
                 blog = form.save(commit=False)
                 blog.is_draft = True
