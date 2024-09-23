@@ -101,11 +101,6 @@ def student_index(request):
     reservations = StudentReservation.objects.filter(
         student=request.user
     ).select_related("schedule__teacher")
-    # 距離開始時間三小時以上，才能編輯或刪除
-    for reservation in reservations:
-        reservation.can_edit = (
-            reservation.schedule.start_time - timezone.now() > timedelta(hours=3)
-        )
     return render(
         request,
         "reservations/student/student_index.html",
@@ -165,9 +160,11 @@ def student_delete(request, id):
 
 
 def teacher_available(request):
-    schedules = TeacherSchedule.objects.filter(
-        studentreservation__isnull=True
-    ).select_related("teacher")
+    schedules = (
+        TeacherSchedule.objects.exclude(teacher=request.user)
+        .filter(studentreservation__isnull=True)
+        .select_related("teacher")
+    )
     return render(
         request, "reservations/teacher/teacher_available.html", {"schedules": schedules}
     )
