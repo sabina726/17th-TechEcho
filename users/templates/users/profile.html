@@ -209,7 +209,7 @@
         >
         <section class="container mx-auto border px-6 py-4 my-4 rounded-lg">
           <div class="flex justify-between items-center p-1">
-              <a href="{% url 'reservations:teacher_new' %}" class="btn">新增時間</a>
+            <a href="{% url 'reservations:teacher_new' %}" class="btn btn-techecho">新增時間</a>
           </div>
           <ul>
               {% for schedule in schedules %}
@@ -256,6 +256,7 @@
       class="bg-white shadow rounded-lg p-6"
       >
       <section class="container mx-auto border px-6 py-4 my-4 rounded-lg">
+        <a class="btn bg-vanilla-5 hover:bg-blue-2 hover:text-white" href="{% url "editors:index" %}">上課前練習寫點程式吧</a>
         <ul>
             {% for reservation in reservations %}
                 <li class="p-2 rounded-lg flex justify-between">

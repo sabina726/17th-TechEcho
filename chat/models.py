@@ -19,6 +19,7 @@ class ChatGroup(models.Model):
         default=None,
         null=True,
     )
+    is_public = models.BooleanField(default=False)
 
     def get_other_user(self, user):
         return self.members.exclude(pk=user.id).first()

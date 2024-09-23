@@ -1,5 +1,9 @@
+import markdown
 from django import template
 from django.template.defaultfilters import date as date_filter
+from django.template.defaultfilters import stringfilter
+from django.utils.html import strip_tags
+from django.utils.safestring import mark_safe
 from django.utils.timezone import localtime
 
 register = template.Library()
@@ -9,3 +13,11 @@ register = template.Library()
 def standard_date(value):
     value = localtime(value)
     return date_filter(value, "Y/m/d H:i")
+
+
+@register.filter(name="strip_markdown_safe")
+@stringfilter
+def strip_markdown_safe(value):
+    value = strip_tags(value)
+    value = markdown.markdown(value, extensions=["markdown.extensions.fenced_code"])
+    return mark_safe(value)

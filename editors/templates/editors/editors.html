@@ -1,16 +1,17 @@
 {% load static %}
-<link href="{% static 'editors/editors.css' %}" rel="stylesheet" />
+
+<link href="{% static 'editors/editors.css' %}" rel="stylesheet"/>
 <script src="{% static 'editors/editors.js' %}" type="module"></script>
 
-<div class="flex flex-col justify-between pt-5 pb-1">
-    <div class="relative mb-1">
+<div class="flex flex-col gap-1 h-full">
+    <div>
         <label for="language-select">選擇程式語言：</label>
-        <select id="language-select">
-            <option value="javascript" selected>JavaScript</option>
+        <select id="language-select" class="md:mr-2">
+            <option value="javascript" selected>Javascript</option>
             <option value="python">Python</option>
         </select>
         <label for="theme-select">選擇背景顏色：</label>
-        <select id="theme-select">
+        <select id="theme-select" class="md:mr-2">
             <option value="vs-light" selected>亮色系</option>
             <option value="vs-dark">暗色系</option>
             <option value="hc-black">高對比</option>
@@ -22,21 +23,27 @@
                 <option value="{{ forloop.counter|add:12 }}">{{ forloop.counter|add:12 }}</option>
             {% endfor %}
         </select>
+    </div>
 
-        <div id="editor" class="h-[50vh] border-0"></div>
+    <div class="border-2">
+        <div id="editor" class="w-full h-[40vh] md:h-[55vh]"></div>
     </div>
 
 
-    <div class="relative w-full bg-white h-[15vh] border-10 rounded-b-lg shadow-lg overflow-auto p-2">
+    <div class="h-[13vh] border-2 relative w-full bg-white rounded-b-lg shadow-lg overflow-auto p-2">
         <article id="result"></article>
         <button id="eval" class="btn btn-sm text-white bg-green-3 absolute right-1 bottom-1 z-20">執行程式</button>
     </div>
 </div>
 
+{% csrf_token %}
 <input type="hidden" id="typescript" value={% static 'editors/vs/language/typescript/ts.worker.js' %}>
 <input type="hidden" id="editor-worker" value="{% static 'editors/vs/editor/editor.worker.js' %}">
 <input type="hidden" id="editor-id" value="{{id}}">
-
+<input type="hidden" id="eval-url" value="{% url "editors:index" %}">
+{% if other_user %}
+<input type="hidden" id="other-user-name" value="{{other_user}}">
+{% endif %}
 
 
 

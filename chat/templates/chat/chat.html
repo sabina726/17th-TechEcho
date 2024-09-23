@@ -1,42 +1,28 @@
-{% extends 'layouts/base.html' %}
+<div x-data="scroll" class="border-4 border-vanilla-5 rounded-lg bg-white">
+    <div class="relative bg-vanilla-5 py-2">
+        <span id="online-dot"></span>
+        <div id="banner"></div>
+    </div>
 
-{% comment %} chat-start chat-end {% endcomment %}
-{% load chat %}
-{% block content %}
+    <ul x-ref="list" id="message_list" class="w-11/12 mx-auto mb-2 h-[60vh] overflow-auto">
+        {% include "chat/partials/_message_list.html" with chat_messages=chat_messages user=user chat_group_id=chat_group.id only %}
+    </ul>
 
-<div class="flex gap-2 my-8 mx-auto max-w-5xl min-w-xs">
-    <div x-data="scroll" class="w-2/5 border-10 shadow-lg rounded-lg">
-        <div class="relative bg-vanilla-5 py-2 rounded-t-lg">
-            <span id="online-dot"></span>
-            <div id="banner"></div>
+    <form class="mx-auto p-2 flex flex-row gap-2"
+        hx-ext="ws"
+        ws-connect="/ws/chatroom/{{ chat_group_id }}/"
+        ws-send
+        hx-on="htmx:wsAfterSend: this.reset()">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="form-control w-full">
+            {{ field }}
+            {% if field.errors %}
+            <span class="text-red-500">{{ field.errors }}</span>
+            {% endif %}
         </div>
-
-        <ul x-ref="list" id="message_list" class="w-11/12 mx-auto mb-2 h-[55vh] overflow-auto">
-            {% include "chat/partials/_message_list.html" with chat_messages=chat_messages user=user chat_group_id=chat_group.id only %}
-        </ul>
-
-        <form class="mx-auto p-2 flex flex-row gap-2"
-            hx-ext="ws"
-            ws-connect="/ws/chatroom/{{ chat_group.id }}/"
-            ws-send
-            hx-on="htmx:wsAfterSend: this.reset()">
-            {% csrf_token %}
-
-            {% for field in form %}
-            <div class="form-control w-full">
-                {{ field }}
-                {% if field.errors %}
-                <span class="text-red-500">{{ field.errors }}</span>
-                {% endif %}
-            </div>
-            {% endfor%}
-            <button class="btn btn-md bg-green-3 text-white">發送</button>
-        </form>
-    </div>
-
-    <div class="w-3/5 border-10 shadow-lg rounded-lg px-2 bg-vanilla-5">
-        {% include "editors/editors.html" with id=chat_group.id %}
-    </div>
+        {% endfor%}
+        <button class="btn btn-md bg-green-3 text-white">發送</button>
+    </form>
 </div>
-
-{% endblock %}
