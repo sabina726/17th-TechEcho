@@ -100,8 +100,16 @@
 }
 
 .remote-cursor {
-  border-left: 2px solid red;
+  border-left: 2px solid orange;
   height: 100%;
+}
+
+.remote-cursor-label {
+  background: orange;
+  color: white;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
 .btn-techecho {

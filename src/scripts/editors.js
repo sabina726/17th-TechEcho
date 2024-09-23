@@ -28,6 +28,7 @@ const fontSizeSelect = document.getElementById('font-size-select');
 const editorId = document.getElementById("editor-id").value;
 const resultArea = document.getElementById("result");
 const languageSelect = document.getElementById('language-select');
+const otherUserName = document.getElementById('other-user-name').value
 
 themeSelect.addEventListener('change', (event) => {
 	const theme = event.target.value;
@@ -141,7 +142,10 @@ if (editorId === "-1") {
 						range: new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
 						options: {
 							className: 'remote-cursor',
-							stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges
+							after: {
+								content: '⟵ ' + otherUserName,
+								inlineClassName: 'remote-cursor-label'
+							}
 						}
 					});
 
@@ -157,23 +161,43 @@ if (editorId === "-1") {
 		})
 	});
 
-	const resultWebSocket = new WebSocket(`/ws/editor/result/${editorId}/`)
-	evalBtn.addEventListener('click', () => {
-		const code = editor.getValue().trim();
-		if (code === "") {
-			resultArea.innerText = "請先輸入程式代碼";
-		} else {
-			const params = {
-				code: code,
-				language: languageSelect.value
-			}
-			resultWebSocket.send(JSON.stringify(params));
-			resultArea.innerText = "執行程式中......";
-		}
-	})
+	const connectWebsocket = () => {
+		const resultWebSocket = new WebSocket(`/ws/editor/result/${editorId}/`)
 
-	resultWebSocket.onmessage = event => {
-		resultArea.innerText = JSON.parse(event.data);
-	};
+		resultWebSocket.onopen = _ => {
+			resultArea.innerText = "Happy Coding!"
+		}
+
+		evalBtn.addEventListener('click', () => {
+			const code = editor.getValue().trim();
+			if (code === "") {
+				resultArea.innerText = "請先輸入程式代碼";
+			} else {
+				const params = {
+					code: code,
+					language: languageSelect.value
+				}
+				resultWebSocket.send(JSON.stringify(params));
+				resultArea.innerText = "執行程式中......";
+			}
+		})
+
+		resultWebSocket.onmessage = event => {
+			resultArea.innerText = JSON.parse(event.data);
+		};
+
+		resultWebSocket.onclose = _ => {
+			resultArea.innerText = "目前連線中斷中，請稍後";
+			setTimeout(() => {
+				connectWebsocket()
+			}, 5000)
+		}
+
+		resultWebSocket.onerror = _ => {
+			resultWebSocket.close();
+		}
+	}
+
+	connectWebsocket();
 }
 

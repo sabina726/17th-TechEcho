@@ -37,5 +37,6 @@ def room(request, id):
             "chat_messages": chat_messages,
             "form": ChatMessageForm(),
             "chat_group": chat_group,
+            "other_user": chat_group.get_other_user(request.user),
         },
     )
