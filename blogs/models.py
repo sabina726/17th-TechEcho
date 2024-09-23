@@ -27,3 +27,8 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
+
+    def publish(self):
+        self.is_draft = False
+        self.save()
+        return self
