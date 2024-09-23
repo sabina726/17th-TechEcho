@@ -14,7 +14,7 @@ import {
     faPen,
     faCamera,
     faBars,
-    faTimes
+    faTimes,
 } from "@fortawesome/free-solid-svg-icons"
 
 import {
@@ -35,7 +35,7 @@ library.add(
     faPen,
     faCamera,
     faBars,
-    faTimes
+    faTimes,
 )
 
 dom.i2svg()
