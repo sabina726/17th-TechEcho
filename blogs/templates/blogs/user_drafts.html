@@ -1,33 +1,39 @@
 {% extends 'layouts/base.html' %}
 {% load home %}
 {% block content %}
-<div class="max-w-4xl mx-auto mt-8 p-6">
-    <h1 class="text-3xl mb-6">我的草稿</h1>
+<div class="p-6 max-w-4xl mx-auto">
+    <div class="flex justify-between items-center p-1">
+        <h1 class="text-4xl">我的草稿</h1>
+
+    </div>
+
     <ul>
         {% for draft in drafts %}
-            <li class="p-4 border-b border-gray-200">
+            <li class="p-4 border-b border-gray-200 hover:bg-gray-100 transition">
                 <div class="flex justify-between items-center">
                     <div>
-                        <a href="{% url 'blogs:edit' draft.pk %}" class="text-xl font-bold">{{ draft.title }}</a>
+                        <a href="{% url 'blogs:edit' draft.pk %}" class="text-2xl font-bold underline">{{ draft.title }}</a>
                         <p class="text-sm text-gray-600">標籤:
-                            {% for label in blog.labels.all %}
+                            {% for label in draft.labels.all %}
                                 {{label}}
                             {% endfor %}
                         </p>
-                        <p> 最新更新: {{ draft.updated_at|date:"Y/m/d H:i" }}</p>
+                        <p class="text-sm text-gray-600">最新更新: {{ draft.updated_at|date:"Y-m-d H:i" }}</p>
+                        <p class="text-sm text-gray-600">作者: {{ draft.author.get_display_name }}</p>
                     </div>
-                    <div>
-                        <a href="{% url 'blogs:edit' draft.pk %}" class="text-blue-500">編輯</a>
-                        <form method="post" action="{% url 'blogs:delete' draft.pk %}" class="inline">
-                            {% csrf_token %}
-                            <button type="submit" class="text-red-500">刪除</button>
-                        </form>
-                    </div>
+
                 </div>
             </li>
         {% empty %}
             <li>目前沒有草稿。</li>
         {% endfor %}
     </ul>
+
+
+    <div class="mt-6">
+        <a href="{% url 'users:profile' %}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md">
+            返回個人資料
+        </a>
+    </div>
 </div>
 {% endblock %}
