@@ -1,6 +1,6 @@
 import uuid
 
-import markdown
+import markdown2
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
@@ -13,6 +13,18 @@ from lib.utils.labels import parse_form_labels
 
 from .forms import BlogForm
 from .models import Blog
+
+MARKDOWN2_EXTRAS = [
+    "fenced-code-blocks",
+    "tables",
+    "footnotes",
+    "toc",
+    "strike",
+    "task_list",
+    "wiki-tables",
+    "header-ids",
+    # Add more extras if needed
+]
 
 
 @login_required
@@ -72,7 +84,10 @@ def new(request):
             action = request.POST.get("action")
 
             if action == "preview":
-                content_html = markdown.markdown(form.cleaned_data["content"])
+                content_html = markdown2.markdown(
+                    form.cleaned_data["content"],
+                    extras=MARKDOWN2_EXTRAS,
+                )
                 return render(
                     request,
                     "blogs/new.html",
@@ -100,14 +115,9 @@ def new(request):
 def show(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
 
-    content_html = markdown.markdown(
+    content_html = markdown2.markdown(
         blog.content,
-        extensions=[
-            "markdown.extensions.extra",
-            "markdown.extensions.codehilite",
-            "markdown.extensions.toc",
-            "markdown.extensions.sane_lists",
-        ],
+        extras=MARKDOWN2_EXTRAS,
     )
 
     blog.views += 1
@@ -139,13 +149,9 @@ def edit(request, pk):
             action = request.POST.get("action")
 
             if action == "preview":
-                content_html = markdown.markdown(
+                content_html = markdown2.markdown(
                     form.cleaned_data["content"],
-                    extensions=[
-                        "markdown.extensions.extra",
-                        "markdown.extensions.codehilite",
-                        "markdown.extensions.toc",
-                    ],
+                    extras=MARKDOWN2_EXTRAS,
                 )
                 return render(
                     request,
