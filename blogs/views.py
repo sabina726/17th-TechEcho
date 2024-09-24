@@ -1,6 +1,6 @@
 import uuid
 
-import markdown
+import markdown2
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
@@ -9,8 +9,22 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from lib.utils.labels import parse_form_labels
+
 from .forms import BlogForm
 from .models import Blog
+
+MARKDOWN2_EXTRAS = [
+    "fenced-code-blocks",
+    "tables",
+    "footnotes",
+    "toc",
+    "strike",
+    "task_list",
+    "wiki-tables",
+    "header-ids",
+    # Add more extras if needed
+]
 
 
 @login_required
@@ -38,7 +52,11 @@ def image_upload(request):
 
 
 def index(request):
-    blog_list = Blog.objects.filter(is_draft=False).order_by("-created_at")
+    blog_list = (
+        Blog.objects.filter(is_draft=False)
+        .prefetch_related("labels")
+        .order_by("-created_at")
+    )
     paginator = Paginator(blog_list, 5)
 
     page_number = request.GET.get("page")
@@ -59,14 +77,17 @@ def user_drafts(request):
 def new(request):
     if request.method == "POST":
         form = BlogForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and parse_form_labels(form):
             blog = form.save(commit=False)
             blog.author = request.user
 
             action = request.POST.get("action")
 
             if action == "preview":
-                content_html = markdown.markdown(form.cleaned_data["content"])
+                content_html = markdown2.markdown(
+                    form.cleaned_data["content"],
+                    extras=MARKDOWN2_EXTRAS,
+                )
                 return render(
                     request,
                     "blogs/new.html",
@@ -94,14 +115,9 @@ def new(request):
 def show(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
 
-    content_html = markdown.markdown(
+    content_html = markdown2.markdown(
         blog.content,
-        extensions=[
-            "markdown.extensions.extra",
-            "markdown.extensions.codehilite",
-            "markdown.extensions.toc",
-            "markdown.extensions.sane_lists",
-        ],
+        extras=MARKDOWN2_EXTRAS,
     )
 
     blog.views += 1
@@ -129,17 +145,13 @@ def edit(request, pk):
 
     if request.method == "POST":
         form = BlogForm(request.POST, instance=blog)
-        if form.is_valid():
+        if form.is_valid() and parse_form_labels(form):
             action = request.POST.get("action")
 
             if action == "preview":
-                content_html = markdown.markdown(
+                content_html = markdown2.markdown(
                     form.cleaned_data["content"],
-                    extensions=[
-                        "markdown.extensions.extra",
-                        "markdown.extensions.codehilite",
-                        "markdown.extensions.toc",
-                    ],
+                    extras=MARKDOWN2_EXTRAS,
                 )
                 return render(
                     request,

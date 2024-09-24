@@ -13,7 +13,11 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <a href="{% url 'blogs:show' blog.pk %}" class="text-2xl font-bold underline">{{ blog.title }}</a>
-                        <p class="text-sm text-gray-600">標籤: {{ blog.labels.name }}</p>
+                        <p class="text-sm text-gray-600">標籤:
+                            {% for label in blog.labels.all %}
+                                {{label}}
+                            {% endfor %}
+                        </p>
                         <p class="text-sm text-gray-600">發佈時間: {{ blog.created_at|date:"Y-m-d H:i" }}</p>
                         <p class="text-sm text-gray-600">作者: {{ blog.author.get_display_name }}</p>
                     </div>

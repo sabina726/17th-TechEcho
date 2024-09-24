@@ -111,7 +111,10 @@ def student_index(request):
 @login_required
 @student_required
 def student_new(request, id):
-    schedule = get_object_or_404(TeacherSchedule, id=id)
+    schedule = get_object_or_404(
+        TeacherSchedule.objects.exclude(teacher=request.user), id=id
+    )
+
     if request.method == "POST":
         if StudentReservation.objects.filter(schedule=schedule).exists():
             messages.error(request, "不能預約重複時間")
@@ -160,11 +163,17 @@ def student_delete(request, id):
 
 
 def teacher_available(request):
-    schedules = (
-        TeacherSchedule.objects.exclude(teacher=request.user)
-        .filter(studentreservation__isnull=True)
-        .select_related("teacher")
-    )
+    if request.user.is_authenticated:
+        schedules = (
+            TeacherSchedule.objects.exclude(teacher=request.user)
+            .filter(studentreservation__isnull=True)
+            .select_related("teacher")
+        )
+    else:
+        schedules = TeacherSchedule.objects.filter(
+            studentreservation__isnull=True
+        ).select_related("teacher")
+
     return render(
         request, "reservations/teacher/teacher_available.html", {"schedules": schedules}
     )
