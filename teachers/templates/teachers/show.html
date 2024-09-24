@@ -28,7 +28,7 @@
                 <div class="text-xl overflow-y-auto">
                     {% if teacher.labels.all %}
                         {% for label in teacher.labels.all %}
-                            <span class="p-1 m-2 inline-block bg-vanilla-5 text-blue-1 text-center text-lg rounded-lg">
+                            <span class="px-2 py-1 m-2 inline-block bg-blue-1 text-white text-center text-lg rounded-lg">
                                 {{ label.name }}
                             </span>
                             {% if not forloop.last %}{% endif %}
