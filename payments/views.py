@@ -39,7 +39,7 @@ def index(request):
     if request.user.is_authenticated:
         if check_premium_status(request.user):
             messages.success(request, "Premium用戶歡迎回來")
-            return render(request, "teachers/index.html")
+            return redirect("teachers:index")
         else:
             messages.warning(request, "您尚未升級Premium")
             return render(request, "payments/index.html")
@@ -143,9 +143,7 @@ def ecpay_after_pay(request):
     print(request.user)
     if request.method == "POST":
         messages.success(request, "付款成功")
-        return redirect("payments:ecpay_after_pay")
-    else:
-        return render(request, "teachers/index.html")
+        return redirect("teachers:index")
 
 
 ###  Line-pay use only
@@ -291,7 +289,7 @@ def linepay_confirm_payment(request):
 
         messages.error(request, "付款失敗，請稍後再試！")
 
-    return render(request, "teachers/index.html")
+    return redirect("teachers:index")
 
 
 def linepay_cancel_payment(request):

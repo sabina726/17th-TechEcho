@@ -7,7 +7,7 @@
 <div class="p-6 m-6 max-w-full mx-auto mt-8 rounded-md">
 
 
-    <form action="{% url 'teachers:show' teacher.id %}" method="POST" autocomplete="off" class="space-y-4 border border-gray-900 rounded-lg p-3 max-w-full">
+    <form action="{% url 'teachers:show' teacher.id %}" method="POST" autocomplete="off" class="space-y-4 border border-blue-2 bg-vanilla-5 rounded-lg p-3 max-w-full">
         {% csrf_token %}
         <div class="grid gap-4">
             <p class="text-xl text-lg">使用者:</p>
