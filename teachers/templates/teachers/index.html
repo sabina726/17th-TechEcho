@@ -6,9 +6,9 @@
 
     <div class="flex-1 max-w-4xl m-3 mx-auto">
         <div class="flex flex-wrap justify-between w-full m-2">
-            <h2 class="ml-5 text-3xl font-bold sm:text-5xl text-blue-2">專家列表</h2>
+            <h2 class="mx-4 text-3xl font-bold sm:text-5xl text-blue-2">專家列表</h2>
             {% if user.is_authenticated and not user.is_student %}
-                <a href="{% url 'payments:index' %}" class="ml-4 btn btn-neutral">
+                <a href="{% url 'payments:index' %}" class="mx-4 text-white btn bg-orange-8 hover:bg-orange-9 ">
                 升級Premium與專家交談
                 </a>
             {% endif %}
@@ -22,34 +22,36 @@
                 {% else %}
                     {% for teacher in teachers %}
                     <a href="{% url 'teachers:show' teacher.id %}"
-                        class="block w-full max-w-full p-4 mb-4 duration-300 rounded-lg shadow-md hover:bg-gray-300">
-                        <div class="flex justify-around w-full max-w-full p-4 mb-4 border-2 rounded-lg shadow-md border-orange-8">
-                            <div class="flex items-center justify-center w-1/3 max-w-full">
-                                {% if teacher.user.profile_picture %}
-                                    <img src="{{ teacher.user.profile_picture.url }}" alt="Profile Picture" class="object-center w-1/2 h-32 rounded-full">
-                                {% else %}
-                                    <img src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar" alt="User Avatar" class="object-center w-1/2 h-32 rounded-full">
-                                {% endif %}
-                            </div>
-                            <div class="flex flex-col justify-around w-2/3 max-w-full ml-4">
-                                <h3 class="text-2xl font-semibold leading-normal text-center text-blue-2">{{ teacher.user.get_display_name }}</h3>
-                                <p class="m-2 text-xl leading-normal text-center">
-                                專業能力:
-                                {% if teacher.labels.all.exists %}
-                                    {% for label in teacher.labels.all %}
-                                    <span>{{ label.name }}</span>
-                                    {% endfor %}
-                                {% endif %}
-                                </p>
-                            </div>
+                    class="block w-full max-w-full p-4 mb-4 duration-300 border-2 rounded-lg shadow-md border-orange-8 hover:bg-gray-200">
+                    <div class="flex justify-around w-full max-w-full p-4 mb-4 border-2 rounded-lg shadow-md border-orange-9">
+                        <div class="flex items-center justify-center w-1/3 max-w-full">
+                            {% if teacher.user.profile_picture %}
+                                <img src="{{ teacher.user.profile_picture.url }}" alt="Profile Picture"
+                                     class="object-cover w-32 h-32 rounded-full aspect-square">
+                            {% else %}
+                                <img src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar" alt="User Avatar"
+                                     class="object-cover w-32 h-32 rounded-full aspect-square">
+                            {% endif %}
                         </div>
-                        <div>
-                            <p class="mt-1 text-xl leading-relaxed text-gray-600"
-                                style="word-break: break-all; overflow-wrap: break-word;">
-                                {{ teacher.introduce|truncatechars:100 }}
+                        <div class="flex flex-col justify-around w-2/3 max-w-full ml-4">
+                            <h3 class="text-2xl font-semibold leading-normal text-center text-orange-8">{{ teacher.user.get_display_name }}</h3>
+                            <p class="m-2 text-xl leading-normal text-center">
+                            專業能力:
+                            {% if teacher.labels.all.exists %}
+                                {% for label in teacher.labels.all %}
+                                    <span>{{ label.name }}</span>
+                                {% endfor %}
+                            {% endif %}
                             </p>
                         </div>
-                    </a>
+                    </div>
+                    <div>
+                        <p class="mt-1 text-xl leading-relaxed text-gray-600"
+                           style="word-break: break-all; overflow-wrap: break-word;">
+                           介紹：{{ teacher.introduce|truncatechars:30 }}
+                        </p>
+                    </div>
+                </a>
                     {% endfor %}
                 {% endif %}
             </section>
