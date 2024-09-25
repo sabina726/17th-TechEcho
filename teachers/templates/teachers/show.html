@@ -105,13 +105,13 @@
         <h3 class="p-2 m-2 text-2xl font-semibold text-center text-white rounded-lg bg-orange-8">可預約時間</h3>
         <ul class="mt-4">
             {% for schedule in schedules %}
-                <li class="flex justify-between p-2 bg-white rounded-lg shadow-md">
-                    <div class="flex items-center gap-1">
+                <li class="flex justify-between p-2 m-2 bg-white border rounded-lg">
+                    <div class="flex items-center">
                         <p class="text-lg">{{ schedule.start_time|date:'Y/m/d H:i' }} - {{ schedule.end_time|date:'Y/m/d H:i' }}</p>
                     </div>
                     {% if request.user != teacher.user %}
-                        <div class="flex items-center gap-1">
-                            <a href="{% url 'reservations:student_new' schedule.id %}" class="px-4 py-2 text-white bg-blue-600 rounded-md shadow hover:bg-blue-700">預約</a>
+                        <div class="flex items-center">
+                            <a href="{% url 'reservations:student_new' schedule.id %}" class="px-4 py-2 text-white rounded-md shadow bg-blue-2 hover:bg-blue-1">預約</a>
                         </div>
                     {% endif %}
                 </li>
