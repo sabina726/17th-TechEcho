@@ -54,7 +54,7 @@ def image_upload(request):
 def index(request):
     blog_list = (
         Blog.objects.filter(is_draft=False)
-        .prefetch_related("elslab")
+        .prefetch_related("labels")
         .order_by("-created_at")
     )
     paginator = Paginator(blog_list, 5)
