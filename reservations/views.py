@@ -1,9 +1,11 @@
+import json
 from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils import timezone
 
 from chat.models import ChatGroup
@@ -187,7 +189,8 @@ def calendar_events(request):
             "title": f"{schedule.teacher.get_display_name()}",
             "start": schedule.start_time.isoformat(),
             "end": schedule.end_time.isoformat(),
-            "url": f"/reservations/teacher/{schedule.id}/delete/",
+            # "url": f"/reservations/teacher/{schedule.id}/delete/",
+            "url": reverse("reservations:teacher_delete", args=[schedule.id]),
         }
         for schedule in schedules
     ]

@@ -65,16 +65,40 @@
                 initialView: 'dayGridMonth',
                 locale: 'zh-tw',
                 selectable: true,
+                editable: true,
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
                 events: '{% url "reservations:calendar_events" %}',
-                eventClick: function(info) {
-                    var eventUrl = info.event.extendedProps.url;
-                    console.log(confirm('確定要刪除這個時間嗎？'))
-                }
+                eventClick: async function(info) {
+                    info.jsEvent.preventDefault();
+                    if (!confirm('確定要刪除這個時間嗎？')) return;
+
+                    const eventUrl = info.event.url;
+                    try {
+                        const response = await fetch(eventUrl, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: 'id=' + info.event.id
+                        });
+
+                        if (response.ok) {
+                            calendar.refetchEvents();
+                            alert('刪除成功！');
+                        } else {
+                            alert('刪除失敗！');
+                        }
+                    } catch (error) {
+                        console.error('刪除過程中發生錯誤:', error);
+                        alert('操作無法完成，請稍後再試。');
+                    }
+                },
+
             });
             calendar.render();
         });
@@ -84,7 +108,5 @@
             return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
         }
     </script>
-
-
 
 {% endblock %}
