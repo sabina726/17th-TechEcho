@@ -51,6 +51,11 @@
             max-width: 1000px;
             margin: 0 auto;
         }
+
+        .event-disabled {
+            opacity: 0.5; /* Make disabled events look faded */
+            pointer-events: none; /* Prevent any mouse events */
+        }
     </style>
 
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar/main.css' rel='stylesheet' />
@@ -95,7 +100,7 @@
                         }
                     } catch (error) {
                         console.error('刪除過程中發生錯誤:', error);
-                        alert('操作無法完成，請稍後再試。');
+                        alert('操作無法完成，請稍後再試');
                     }
                 },
 
@@ -105,7 +110,7 @@
 
                     // Check if the new start date is before today
                     if (newStart < today) {
-                        alert('您不能將事件拖動到今天之前的日期。');
+                        alert('您不能將事件拖動到今天之前的日期');
                         info.revert(); // Revert the event back to its original position
                         return;
                     }
@@ -174,6 +179,16 @@
                         console.error('更新過程中發生錯誤:', error);
                         alert('操作無法完成，請稍後再試。');
                         info.revert(); // Revert the event back to its original size
+                    }
+                },
+                eventDidMount: function(info) {
+                    const today = new Date();
+                    const eventStart = info.event.start;
+
+                    // Prevent dragging if the event starts before today
+                    if (eventStart < today) {
+                        info.el.setAttribute('draggable', 'false'); // Disable dragging
+                        info.el.classList.add('event-disabled'); // Optionally add a class for styling
                     }
                 },
             });
