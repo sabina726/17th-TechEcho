@@ -4,10 +4,12 @@
 >
   <h1 class="text-2xl font-bold mb-2">我回答過的</h1>
   {% for answer in answers %}
-  <div class="border-4 mb-2">
+  <div
+    class="p-4 border solid mb-6 border-gray-200 hover:bg-gray-100 transition"
+  >
     <a
       href="{% url 'questions:show' answer.question.id %}"
-      class="text-black hover:text-blue-700"
+      class="text-black hover:text-blue-700 font-mono font-bold"
     >
       {{ answer.question.title}}
     </a>
