@@ -11,12 +11,14 @@ class BlogForm(forms.ModelForm):
             "content",
             "labels",
             "is_draft",
+            "image",
         ]
         labels = {
             "title": "標題",
             "content": "內容",
             "labels": "標籤",
             "is_draft": "儲存為草稿",
+            "image": "封面圖片",
         }
         widgets = {
             "title": forms.TextInput(

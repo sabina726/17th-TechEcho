@@ -1,4 +1,5 @@
-import { library, dom } from "@fortawesome/fontawesome-svg-core"
+
+import { library, dom } from "@fortawesome/fontawesome-svg-core";
 import Alpine from 'alpinejs';
 
 import {
@@ -15,12 +16,14 @@ import {
     faCamera,
     faBars,
     faTimes,
-} from "@fortawesome/free-solid-svg-icons"
+    faThumbsUp, // Solid heart icon with alias
+} from "@fortawesome/free-solid-svg-icons";
 
 import {
-    faCalendar
-} from "@fortawesome/free-regular-svg-icons"
+    faCalendar,
+} from "@fortawesome/free-regular-svg-icons";
 
+// Add icons to the library
 library.add(
     faMagnifyingGlass,
     faGraduationCap,
@@ -36,13 +39,12 @@ library.add(
     faCamera,
     faBars,
     faTimes,
-)
+    faThumbsUp,
+);
 
-dom.i2svg()
+// Initialize Font Awesome
+dom.watch(); // Watches for changes in the DOM and renders icons accordingly
 
-Alpine.data("convert_to_svg", () => ({
-    init() {
-        dom.i2svg();
-    },
-}))
-
+// Initialize Alpine.js
+window.Alpine = Alpine;
+Alpine.start();
