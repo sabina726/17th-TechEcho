@@ -1,9 +1,9 @@
-<section class="container max-w-4xl mx-auto px-6 py-4 my-4 rounded-lg">
-    <div class="text-xl bold my-4">
+<section class="container max-w-4xl px-6 py-4 mx-auto my-4 rounded-lg">
+    <div class="my-4 text-xl bold">
         <h2><span id="total-answers">{{ answers.paginator.count }}</span> 個答案</h2>
     </div>
 
-    <div class="flex justify-between items-center">
+    <div class="flex items-center justify-between">
         <div class="flex gap-2 p-1">
             <p>排序依據：</p>
             <a class="link" href="{% url 'questions:show' question.id %}?order=id">最新</a>
@@ -16,15 +16,17 @@
     {% for answer in answers %}
         {% include "answers/_answer.html" with answer=answer user=user %}
     {% empty %}
-        <div class="text-xl bold my-4">目前無答案</div>
+        <div class="my-4 text-xl bold">目前無答案</div>
     {% endfor %}
 
     {% if user.is_authenticated %}
         <form method="POST" action="{% url 'answers:index' question.id %}">
             {% csrf_token %}
-            <div class="flex flex-col gap-2 px-6 py-4 my-4 rounded-lg border-2 border-blue-2">
+
+            <div class="flex flex-col gap-2 px-6 py-4 my-4 border-2 rounded-lg border-blue-2">
                 {% for field in form %}
-                <div class="form-control rounded-lg">
+                <div class="bg-white border-2 rounded-lg form-control">
+
                     {{ field }}
                     <span class="text-red-500">{{ field.errors }}</span>
                 </div>
