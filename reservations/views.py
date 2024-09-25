@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 from chat.models import ChatGroup
 from lib.utils.student_required import student_required
@@ -195,3 +196,24 @@ def calendar_events(request):
         for schedule in schedules
     ]
     return JsonResponse(events, safe=False)
+
+
+@csrf_exempt
+@login_required
+@teacher_required
+def update_event(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        event_id = data.get("id")
+        start_time = data.get("start")
+        end_time = data.get("end")
+
+        schedule = get_object_or_404(TeacherSchedule, id=event_id, teacher=request.user)
+        schedule.start_time = timezone.datetime.fromisoformat(start_time)
+        schedule.end_time = timezone.datetime.fromisoformat(end_time)
+        schedule.save()
+
+        return JsonResponse(
+            {"status": "success", "message": "Event updated successfully"}
+        )
+    return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)

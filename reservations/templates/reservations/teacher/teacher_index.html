@@ -99,6 +99,74 @@
                     }
                 },
 
+                eventDrop: async function(info) {
+                    // Update the event time on drag and drop
+                    const eventId = info.event.id;
+                    const newStart = info.event.start.toISOString();
+                    const newEnd = info.event.end.toISOString();
+
+                    // Send the updated event to the server
+                    try {
+                        const response = await fetch('{% url "reservations:update_event" %}', { // Adjust the URL to your endpoint
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                id: eventId,
+                                start: newStart,
+                                end: newEnd
+                            })
+                        });
+
+                        if (response.ok) {
+                            alert('時間更新成功！');
+                        } else {
+                            alert('更新失敗！');
+                            // Revert the event back to its original position
+                            info.revert();
+                        }
+                    } catch (error) {
+                        console.error('更新過程中發生錯誤:', error);
+                        alert('操作無法完成，請稍後再試。');
+                        info.revert(); // Revert the event back to its original position
+                    }
+                },
+                eventResize: async function(info) {
+                    // Update the event time on resize
+                    const eventId = info.event.id;
+                    const newStart = info.event.start.toISOString();
+                    const newEnd = info.event.end.toISOString();
+
+                    // Send the updated event to the server
+                    try {
+                        const response = await fetch('{% url "reservations:update_event" %}', { // Adjust the URL to your endpoint
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                id: eventId,
+                                start: newStart,
+                                end: newEnd
+                            })
+                        });
+
+                        if (response.ok) {
+                            alert('時間更新成功！');
+                        } else {
+                            alert('更新失敗！');
+                            // Revert the event back to its original size
+                            info.revert();
+                        }
+                    } catch (error) {
+                        console.error('更新過程中發生錯誤:', error);
+                        alert('操作無法完成，請稍後再試。');
+                        info.revert(); // Revert the event back to its original size
+                    }
+                },
             });
             calendar.render();
         });
