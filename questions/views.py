@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_GET, require_POST
 
 from answers.forms import AnswerForm
-from answers.utils.answers_sort import get_ordered_answers
+from answers.utils.answers import parse_answers
 from lib.utils.labels import parse_form_labels
 from lib.utils.pagination import paginate
 
@@ -91,11 +91,9 @@ def show(request, id):
 
     question = get_object_or_404(Question, pk=id)
     vote = upvoted_or_downvoted_or_neither(request, question)
-    order_type = request.GET.get("order")
 
-    answers, _ = get_ordered_answers(question, order_type)
+    answers = parse_answers(request, question, request.GET.get("order"))
     answers = paginate(request, answers, items_count=6)
-    # if the answer if voted any how by the user
     form = AnswerForm()
     return render(
         request,

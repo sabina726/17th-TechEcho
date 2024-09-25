@@ -7,7 +7,7 @@
 >
     {% csrf_token %}
     <button type="submit">
-        <i class="fa-solid fa-thumbs-up text-lg font-bold"></i>
+        <i class="fa-{{answer.voted|check_vote:"upvote"}} fa-thumbs-up text-lg font-bold"></i>
     </button>
 </form>
 
@@ -20,7 +20,7 @@
 >
     {% csrf_token %}
     <button>
-        <i class="fa-solid fa-thumbs-down text-lg font-bold"></i>
+        <i class="fa-{{answer.voted|check_vote:"downvote"}} fa-thumbs-down text-lg font-bold"></i>
     </button>
 </form>
 {% else %}

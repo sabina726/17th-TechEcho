@@ -46,3 +46,6 @@ class Votes(models.Model):
 
     def __str__(self) -> str:
         return f"question:{self.question.title} was voted {self.vote_status} by user:{self.user}"
+
+    class Meta:
+        unique_together = ("user", "question")
