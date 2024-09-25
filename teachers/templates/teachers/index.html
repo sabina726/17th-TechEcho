@@ -3,24 +3,27 @@
 {% block content %}
 
 
-<div class="flex flex-wrap max-w-full mx-auto">
+<div class="flex flex-wrap w-full max-w-full h-full mx-auto">
     <section class="flex items-center flex-col w-full sm:w-1/5 m-2" x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
-        <form method="get" action="{% url 'teachers:index' %}">
-            <input type="text" name="search" placeholder="搜尋暱稱或專家名" class="input border border-blue-400">
+        <form method="get" class="flex" action="{% url 'teachers:index' %}">
+            <input id="search-input" type="text" name="search"
+                placeholder="搜尋暱稱或專家名"
+                class="input border border-blue-1"
+            >
             <button type="submit"
-                    class="btn btn-primary"
-                    @click="selectedLabel = ''; localStorage.removeItem('selectedLabel')"
+                    class="ml-2 btn bg-vanilla-5 border border-blue-1"
+                    @click="trimInput()"
                     >搜尋
             </button>
         </form>
         <div class="m-2 flex flex-wrap justify-center max-w-full">
             <a href="{% url 'teachers:index' %}"
-            class="btn btn-outline m-2 flex items-center justify-center w-full max-w-full sm:w-auto"
+            class="btn btn-outline border border-blue-1 m-2 flex items-center justify-center w-full max-w-full sm:w-auto bg-vanilla-5"
             @click="selectedLabel = ''; localStorage.removeItem('selectedLabel')">尋找所有語言</a>
             {% for label in all_labels %}
                 <a href="?label={{ label|lower|urlencode }}"
-                    class="btn btn-outline m-2 flex items-center justify-center w-full sm:w-1/3"
-                    :class="{ 'bg-blue-500 text-white': selectedLabel === '{{ label|lower }}' }"
+                    class="btn btn-outline border border-blue-1 m-2 flex items-center justify-center w-full sm:w-1/3 bg-vanilla-5"
+                    :class="{ 'bg-vanilla-7': selectedLabel === '{{ label|lower }}' }"
                     @click="selectedLabel = '{{ label|lower }}'; localStorage.setItem('selectedLabel', '{{ label|lower }}')">
                     {{ label }}
                 </a>
@@ -39,37 +42,43 @@
         </div>
         <div class="max-w-4xl m-auto p-2">
             <section>
-                {% for teacher in teachers %}
-                <a href="{% url 'teachers:show' teacher.id %}"
-                    class="w-full max-w-full block mb-4 p-4 shadow-md hover:bg-gray-100">
-                    <div class="flex justify-around w-full max-w-full">
-                        <div class="flex justify-center items-center max-w-full w-1/3">
-                            {% if teacher.user.profile_picture %}
-                                <img src="{{ teacher.user.profile_picture.url }}" alt="Profile Picture" class="w-1/2 h-32 object-center rounded-full">
-                            {% else %}
-                                <img src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar" alt="User Avatar" class="w-1/2 h-32 object-center rounded-full">
-                            {% endif %}
+                {% if no_results %}
+                    <div class="text-xl mt-4">
+                        未找到任何結果，目前僅支持暱稱或使用者名稱的搜尋。
+                    </div>
+                {% else %}
+                    {% for teacher in teachers %}
+                    <a href="{% url 'teachers:show' teacher.id %}"
+                        class="w-full max-w-full block mb-4 p-4 shadow-md rounded-lg duration-300 hover:bg-gray-300">
+                        <div class="flex justify-around w-full max-w-full">
+                            <div class="flex justify-center items-center max-w-full w-1/3">
+                                {% if teacher.user.profile_picture %}
+                                    <img src="{{ teacher.user.profile_picture.url }}" alt="Profile Picture" class="w-1/2 h-32 object-center rounded-full">
+                                {% else %}
+                                    <img src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar" alt="User Avatar" class="w-1/2 h-32 object-center rounded-full">
+                                {% endif %}
+                            </div>
+                            <div class="flex flex-col justify-around ml-4 w-2/3 max-w-full">
+                                <h3 class="text-2xl text-center font-semibold leading-normal text-blue-2">{{ teacher.user.get_display_name }}</h3>
+                                <p class="m-2 text-xl text-center leading-normal">
+                                專業能力:
+                                {% if teacher.labels.all.exists %}
+                                    {% for label in teacher.labels.all %}
+                                    <span>{{ label.name }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                                </p>
+                            </div>
                         </div>
-                        <div class="flex flex-col justify-around ml-4 w-2/3 max-w-full">
-                            <h3 class="text-2xl text-center font-semibold leading-normal text-blue-2">{{ teacher.user.get_display_name }}</h3>
-                            <p class="m-2 text-xl text-center leading-normal">
-                            專業能力:
-                            {% if teacher.labels.all.exists %}
-                                {% for label in teacher.labels.all %}
-                                <span>{{ label.name }}</span>
-                                {% endfor %}
-                            {% endif %}
+                        <div>
+                            <p class="text-gray-600 mt-1 text-xl leading-relaxed"
+                                style="word-break: break-all; overflow-wrap: break-word;">
+                                {{ teacher.introduce|truncatechars:100 }}
                             </p>
                         </div>
-                    </div>
-                    <div>
-                        <p class="text-gray-600 mt-1 text-xl leading-relaxed"
-                            style="word-break: break-all; overflow-wrap: break-word;">
-                            {{ teacher.introduce|truncatechars:100 }}
-                        </p>
-                    </div>
-                </a>
-                {% endfor %}
+                    </a>
+                    {% endfor %}
+                {% endif %}
             </section>
         </div>
         <div>

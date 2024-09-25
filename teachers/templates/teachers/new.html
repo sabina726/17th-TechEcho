@@ -12,7 +12,7 @@
             <p class="text-lg">使用者:</p>
             <p class="text-gray-700 text-lg">{{ request.user.username }}</p>
             <label for="nickname" class="text-red-600">可以自訂暱稱(隨時可以調整)</label>
-            <input class="p-2 border input-bordered w-full rounded-lg indent-2" required type="text" name="nickname" value="{{ user.get_display_name }}">
+            <input class="p-2 border border-blue-2 input-bordered w-full rounded-lg indent-2" required type="text" name="nickname" value="{{ user.get_display_name }}">
             {{ form.user.errors }}
             {% include "teachers/partials/_labels.html" with teacher=teacher only %}
             <p class="text-lg">自我介紹:</p>
