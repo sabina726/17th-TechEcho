@@ -7,13 +7,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('questions', '0003_rename_questionuservotes_votes_alter_question_voters'),
+        ("questions", "0003_rename_questionuservotes_votes_alter_question_voters"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='votes',
-            unique_together={('user', 'question')},
+            name="votes",
+            unique_together={("user", "question")},
         ),
     ]

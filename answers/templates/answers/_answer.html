@@ -67,7 +67,7 @@
     </form>
   </div>
 
-  <div class="p-2 flex gap-2">
-  {% include "answers/partials/_votes.html" with user=user answer=answer only %}
+  <div>
+  {% include "answers/partials/_votes.html" with user=user answer=answer voted=answer.voted only %}
   </div>
 </section>
