@@ -8,7 +8,7 @@
         <div class="flex flex-wrap justify-between w-full m-2">
             <h2 class="mx-4 text-3xl font-bold sm:text-5xl text-blue-2">專家列表</h2>
             {% if user.is_authenticated and not user.is_student %}
-                <a href="{% url 'payments:index' %}" class="mx-4 text-white btn bg-orange-8 hover:bg-orange-9 ">
+                <a href="{% url 'payments:index' %}" class="mx-4 text-black btn bg-orange-9 hover:bg-orange-8 hover:text-white ">
                 升級Premium與專家交談
                 </a>
             {% endif %}
