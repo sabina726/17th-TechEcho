@@ -5,7 +5,7 @@
       <div class="col-span-4 sm:col-span-3">
         <div class="p-6 rounded-lg shadow">
           <div class="flex flex-col items-center">
-            {% include "users/partials/_picture.html" with user=user size="32" margin="4" %}
+            {% include "users/partials/_picture.html" with user=user size="32" %}
             <h1 class="text-xl font-bold">{{user}}</h1>
             <div class="flex items-center justify-center">
               <a href="{{ user.github_link|default:'#' }}" target="_blank">
@@ -16,13 +16,6 @@
                 />
               </a>
             </div>
-            <a
-              class="text-gray-700 hover:text-orange-600"
-              aria-label="Visit TrendyMinds LinkedIn"
-              href=""
-              target="_blank"
-            >
-            </a>
           </div>
           <hr class="my-6 border-t border-gray-300" />
           <div class="flex flex-col">

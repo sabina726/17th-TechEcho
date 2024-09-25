@@ -2,15 +2,16 @@
 <div
   class="container mx-auto px-4"
   x-data="{
-    currentView: localStorage.getItem('currentView') || 'profile',
-    showSubMenu: false,
-    showSubMenu1: false,
-    showSubMenu2: false,
-    setView(view) {
+  currentView: 'profile',
+  showSubMenu: false,
+  showSubMenu1: false,
+  showSubMenu2: false,
+  setView(view) {
     this.currentView = view;
     localStorage.setItem('currentView', view);
-}
-    }"
+  }
+}"
+
 >
   <div class="flex items-start">
     <aside class="w-64 flex-shrink-0">

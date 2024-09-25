@@ -4,10 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from django.core.paginator import Paginator
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render, reverse
-from django.template.loader import render_to_string
 from django.utils.http import url_has_allowed_host_and_scheme
 
 from answers.models import Answer
