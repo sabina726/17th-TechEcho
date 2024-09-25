@@ -1,37 +1,77 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-<div class="relative max-w-4xl p-6 mx-auto">
-    <div class="flex items-center gap-2 mb-4">
+<div class="relative max-w-4xl p-6 mx-auto" x-data="{ tab: 'questions' }">
+    <div class="flex items-center gap-4 mb-4">
+        <h1 class="ml-5 text-3xl font-bold sm:text-5xl text-blue-2">搜尋結果</h1>
+        <button @click="tab = 'questions'" :class="{'bg-blue-1 text-white': tab === 'questions', 'bg-gray-200 text-black': tab !== 'questions'}" class="px-4 py-2 rounded-md">問題列表</button>
+        <button @click="tab = 'blogs'" :class="{'bg-blue-1 text-white': tab === 'blogs', 'bg-gray-200 text-black': tab !== 'blogs'}" class="px-4 py-2 rounded-md">部落格文章</button>
     </div>
 
-    <div id="loading-indicator" class="mt-2 text-gray-500" style="display:none;">Loading...</div>
+    <div id="loading-indicator" class="mt-2 text-gray-500" style="display:none;">載入中...</div>
 
     <div id="search">
-        {% if questions %}
-            <ul>
-                {% for question in questions %}
-                    <li class="p-4 mb-4 border border-gray-300 rounded-lg shadow-sm">
+        <div x-show="tab === 'questions'">
+            {% if questions %}
+                <ul>
+                    {% for question in questions %}
+                        <li class="p-4 mb-4 border-2 border-blue-200 rounded-lg shadow-md">
+                            <div class="flex items-center justify-between mb-2">
+                                <h1 class="text-xl font-semibold">
+                                   <a href="{% url 'questions:show' id=question.id %}" class="text-black border-b-2 border-black hover:underline">標題：{{ question.title }}</a>
+                                </h1>
+                            </div>
+                            <div class="p-2 mb-2 border-b border-gray-300">
+                                <p>標籤：
 
-                        <div class="flex items-center justify-between mb-2">
-                            <h1 class="text-xl font-semibold">
-                               <a href="{% url 'questions:show' id=question.id %}" class="text-black border-b-2 border-black hover:underline">標題：{{  question.title }}</a>
-                            </h1>
-                        </div>
-                        <div class="p-2 mb-2 border-b border-gray-300">
-                            <p>標籤：
-                                {% for label in question.labels.all %}
-                                    <span class="text-sm">{{ label }}</span>
-                                {% endfor %}
-                            </p>
-                        </div>
-                        <div>
-                            <p>內文: {{ question.details|striptags|truncatewords:10 }}</p>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+                                    {% for label in question.labels.all %}
+                                        <span class="text-sm">{{ label }}</span>
+                                    {% endfor %}
+                                </p>
+                            </div>
+                            <div>
+                                <p>內文: {{ question.details|striptags|truncatewords:10 }}</p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="p-4 mb-4 text-gray-500">
+                    <p>沒有找到與「<span class="font-bold text-red-6">{{ query }}</span>」相關的問題搜尋結果</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div x-show="tab === 'blogs'" style="display: none;">
+            {% if blogs %}
+                <ul>
+                    {% for blog in blogs %}
+                        <li class="p-4 mb-4 border-2 border-green-200 rounded-lg shadow-md">
+                            <div class="flex items-center justify-between mb-2">
+                                <h1 class="text-xl font-semibold">
+                                   <a href="{% url 'blogs:show' pk=blog.id %}" class="text-black border-b-2 border-black hover:underline">標題：{{ blog.title }}</a>
+                                </h1>
+                            </div>
+                            <div class="p-2 mb-2 border-b border-gray-300">
+                                <p>標籤：
+
+                                    {% for label in blog.labels.all %}
+                                        <span class="text-sm">{{ label }}</span>
+                                    {% endfor %}
+                                </p>
+                            </div>
+                            <div>
+                                <p>內文: {{ blog.content|striptags|truncatewords:10 }}</p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="p-4 mb-4 text-gray-500">
+                    <p>沒有找到與「<span class="font-bold text-red-6">{{ query }}</span>」相關的部落格搜尋結果</p>
+                </div>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock content %}

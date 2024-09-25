@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import redirect, render
 
+from blogs.models import Blog
 from questions.models import Question
 
 
@@ -26,6 +27,16 @@ def search(request):
             )
 
         questions = Question.objects.filter(q_objects).distinct()
+
+        blog_q_objects = Q()
+        for term in search_terms:
+            blog_q_objects |= (
+                Q(title__icontains=term)
+                | Q(content__icontains=term)
+                | Q(labels__name__icontains=term)
+            )
+
+        blogs = Blog.objects.filter(blog_q_objects).distinct()
     else:
         messages.info(request, "請輸入搜尋內容")
 
@@ -34,6 +45,7 @@ def search(request):
         "home/search.html",
         {
             "questions": questions,
+            "blogs": blogs,
             "query": query,
         },
     )
