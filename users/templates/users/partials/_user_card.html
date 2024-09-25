@@ -13,13 +13,13 @@
   <img
     src="{{ user.profile_picture.url }}"
     alt="Profile Picture"
-    class="w-24 h-24 mx-auto mb-4 transition-transform border-4 rounded-full shadow-lg hover:scale-125"
+    class="w-24 h-24 mx-auto mb-4 transition-transform border-4 object-cover rounded-full shadow-lg hover:scale-125"
   />
   {% else %}
   <img
     src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar"
     alt="User Avatar"
-    class="w-24 h-24 mx-auto mb-4 transition-transform border-4 border-gray-300 rounded-full shadow-lg hover:scale-125"
+    class="w-24 h-24 mx-auto mb-4 transition-transform border-4 border-gray-300 rounded-full object-cover shadow-lg hover:scale-125"
   />
   {% endif %} {% if user.is_teacher %}
   <p class="mb-2 text-lg font-bold">{{ user }} 老師 {{ user|teacher_icon }}</p>
