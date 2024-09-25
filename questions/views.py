@@ -213,8 +213,11 @@ def preview(request):
             {"preview_content": preview_content},
         )
 
+    warning = "請依以下規定改正後再預覽：" + " / ".join(
+        map(lambda x: " / ".join(x), form.errors.values())
+    )
     return render(
         request,
         "questions/partials/_preview.html",
-        {"preview_content": "請先依照規定填好標題、內容、標籤，才能預覽。"},
+        {"warning": warning},
     )

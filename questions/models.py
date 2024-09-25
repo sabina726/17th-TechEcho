@@ -7,7 +7,9 @@ from lib.models import SoftDeleteModel
 
 
 class Question(SoftDeleteModel):
-    title = models.CharField(max_length=50)
+    title = models.CharField(
+        max_length=50, error_messages={"max_length": "問題標題不能超過五十個字"}
+    )
     details = models.TextField(
         validators=[MinLengthValidator(20, "問題內容至少要二十個字")]
     )
