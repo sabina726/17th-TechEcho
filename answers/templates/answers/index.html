@@ -10,7 +10,7 @@
             <a class="link" href="{% url 'questions:show' question.id %}?order=votes_count">讚數</a>
         </div>
 
-        <a href="#add-answer" class="btn btn-techecho">新增答案</a>
+        <a href="#add-answer" class="btn btn-techecho">前往回答</a>
     </div>
 
     {% for answer in answers %}
@@ -31,7 +31,7 @@
                 {% endfor %}
             </div>
             <div class="flex justify-end">
-                <button id="add-answer" class="btn btn-sm btn-techecho">新增答案</button>
+                <button id="add-answer" class="btn btn-techecho">送出答案</button>
             </div>
         </form>
     {% else %}

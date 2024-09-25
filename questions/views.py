@@ -8,11 +8,11 @@ from django.views.decorators.http import require_GET, require_POST
 
 from answers.forms import AnswerForm
 from answers.utils.answers_sort import get_ordered_answers
-from lib.utils.labels import parse_form_labels, parse_labels
+from lib.utils.labels import parse_form_labels
 from lib.utils.pagination import paginate
 
 from .forms import QuestionForm
-from .models import Question, QuestionUserVotes
+from .models import Question, Votes
 from .utils.question_user_votes import (
     upvoted_or_downvoted_or_neither,
     validate_votes_input,
@@ -77,13 +77,9 @@ def show(request, id):
 
         question = get_object_or_404(Question, pk=id, user=request.user)
         form = QuestionForm(request.POST, instance=question)
-        labels = parse_labels(request.POST)
 
         if form.is_valid() and parse_form_labels(form):
-            instance = form.save(commit=False)
-            instance.labels.set(labels)
-            instance.save()
-            form.save_m2m()
+            form.save()
 
             messages.success(request, "編輯成功")
             return redirect("questions:show", id=id)
@@ -96,8 +92,10 @@ def show(request, id):
     question = get_object_or_404(Question, pk=id)
     vote = upvoted_or_downvoted_or_neither(request, question)
     order_type = request.GET.get("order")
+
     answers, _ = get_ordered_answers(question, order_type)
     answers = paginate(request, answers, items_count=6)
+    # if the answer if voted any how by the user
     form = AnswerForm()
     return render(
         request,
@@ -140,9 +138,9 @@ def votes(request, id):
     question = get_object_or_404(Question, pk=id)
 
     if not question.voted_by(request.user):
-        record = QuestionUserVotes.objects.create(question=question, user=request.user)
+        record = Votes.objects.create(question=question, user=request.user)
     else:
-        record = question.questionuservotes_set.get(user=request.user)
+        record = question.votes_set.get(user=request.user)
 
     vote_change = request.POST.get("vote_change")
     vote_status, actual_change = validate_votes_input(record.vote_status, vote_change)
