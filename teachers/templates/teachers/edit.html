@@ -2,30 +2,29 @@
 
 {% block content %}
 
+<h1 class="p-6 text-5xl font-bold text-center text-blue-2">專家檔案</h1>
 
-<h1 class="text-center text-5xl font-bold text-blue-2 p-3">專家檔案</h1>
-
-<div class="p-6 m-6 max-w-full mx-auto mt-8 rounded-md">
-    <form action="{% url 'teachers:show' teacher.id %}" method="POST" autocomplete="off" class="space-y-4 border border-blue-2 bg-vanilla-5 rounded-lg p-3 max-w-full">
+<div class="max-w-full p-6 m-6 mx-auto rounded-md">
+    <form action="{% url 'teachers:show' teacher.id %}" method="POST" autocomplete="off" class="flex flex-col w-full max-w-5xl p-6 mx-auto mb-6 space-y-4 border rounded-lg shadow-lg bg-gray-50">
         {% csrf_token %}
         <div class="grid gap-4">
-            <p class="text-xl text-lg">使用者:</p>
+            <p class="text-lg">使用者：</p>
             <p class="text-lg">{{ request.user.username }}</p>
-            <label for="nickname" class="text-red-600">可以自訂暱稱(隨時可以調整)</label>
-            <input class="p-2 border border-blue-2 input-bordered w-full rounded-lg indent-2" required type="text" name="nickname" value="{{ user.get_display_name }}">
+            <label for="nickname" class="font-bold text-red-6">可以自訂暱稱：
+            </label>
+            <input class="w-full p-2 border rounded-lg border-blue-2 input-bordered indent-2" required type="text" name="nickname" value="{{ user.get_display_name }}">
             {{ form.user.errors }}
             {% include "teachers/partials/_labels.html" with teacher=teacher only %}
-            <p class="text-xl text-lg">自我介紹:</p>
+            <p class="text-lg">自我介紹：</p>
             {{ form.introduce }}
             {% if form.introduce.errors %}
-            <span class="text-red-600 text-sm mt-1">
+            <span class="mt-1 text-sm text-red-6">
                 {{ form.introduce.errors }}
             </span>
             {% endif %}
         </div>
-        <button class="btn btn-block text-lg bg-cyan-500 hover:bg-amber-700">更新</button>
+        <button class="w-full py-2 text-lg text-white transition duration-200 rounded-lg bg-orange-9 hover:bg-orange-8">更新</button>
     </form>
-
 </div>
 
 {% endblock %}
