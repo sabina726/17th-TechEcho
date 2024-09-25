@@ -48,14 +48,20 @@
 
     <style>
         #calendar {
-            max-width: 1000px;
+            max-width: 1500px;
             margin: 0 auto;
         }
 
         .event-disabled {
-            opacity: 0.5; /* Make disabled events look faded */
-            pointer-events: none; /* Prevent any mouse events */
+            opacity: 0.5;
+            pointer-events: none;
         }
+
+        .reserved-event {
+            opacity: 1;
+            background-color: #ccfbf1;
+        }
+
     </style>
 
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar/main.css' rel='stylesheet' />
@@ -65,18 +71,21 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 locale: 'zh-tw',
                 selectable: true,
                 editable: true,
+                dayMaxEvents: true,
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
                 },
                 events: '{% url "reservations:calendar_events" %}',
+
+                // 是否刪除事件
                 eventClick: async function(info) {
                     info.jsEvent.preventDefault();
                     if (!confirm('確定要刪除這個時間嗎？')) return;
@@ -91,75 +100,31 @@
                             },
                             body: 'id=' + info.event.id
                         });
-
+                        const result = await response.json();
                         if (response.ok) {
                             calendar.refetchEvents();
-                            alert('刪除成功！');
+                            alert(result.message);
                         } else {
-                            alert('刪除失敗！');
+                            alert(result.message);
                         }
                     } catch (error) {
                         console.error('刪除過程中發生錯誤:', error);
-                        alert('操作無法完成，請稍後再試');
+                        alert('刪除失敗，請稍後再試');
                     }
                 },
 
+                // 拖動事件
                 eventDrop: async function(info) {
-                    const today = new Date();
-                    const newStart = info.event.start;
-
-                    // Check if the new start date is before today
-                    if (newStart < today) {
-                        alert('您不能將事件拖動到今天之前的日期');
-                        info.revert(); // Revert the event back to its original position
-                        return;
-                    }
-
-                    // Update the event time on drag and drop
-                    const eventId = info.event.id;
-                    const newEnd = info.event.end.toISOString();
-
-                    // Send the updated event to the server
-                    try {
-                        const response = await fetch('{% url "reservations:update_event" %}', { // Adjust the URL to your endpoint
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': getCookie('csrftoken'),
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                id: eventId,
-                                start: newStart,
-                                end: newEnd
-                            })
-                        });
-
-                        if (response.ok) {
-                            alert('時間更新成功！');
-                        } else {
-                            alert('更新失敗！');
-                            // Revert the event back to its original position
-                            info.revert();
-                        }
-                    } catch (error) {
-                        console.error('更新過程中發生錯誤:', error);
-                        alert('操作無法完成，請稍後再試。');
-                        info.revert(); // Revert the event back to its original position
-                    }
-                },
-                eventResize: async function(info) {
-                    // Update the event time on resize
                     const eventId = info.event.id;
                     const newStart = info.event.start.toISOString();
                     const newEnd = info.event.end.toISOString();
-
-                    // Send the updated event to the server
                     try {
-                        const response = await fetch('{% url "reservations:update_event" %}', { // Adjust the URL to your endpoint
+                        const response = await fetch('{% url "reservations:update_event" %}', {
                             method: 'POST',
                             headers: {
                                 'X-CSRFToken': getCookie('csrftoken'),
                                 'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest',
                             },
                             body: JSON.stringify({
                                 id: eventId,
@@ -167,28 +132,59 @@
                                 end: newEnd
                             })
                         });
-
+                        const result = await response.json();
                         if (response.ok) {
-                            alert('時間更新成功！');
+                            alert(result.message);
                         } else {
-                            alert('更新失敗！');
-                            // Revert the event back to its original size
+                            alert(result.message);
                             info.revert();
                         }
                     } catch (error) {
                         console.error('更新過程中發生錯誤:', error);
-                        alert('操作無法完成，請稍後再試。');
-                        info.revert(); // Revert the event back to its original size
+                        alert('更新失敗，請稍後再試');
+                        info.revert();
+                    }
+                },
+                eventResize: async function(info) {
+                    const eventId = info.event.id;
+                    const newStart = info.event.start.toISOString();
+                    const newEnd = info.event.end.toISOString();
+                    try {
+                        const response = await fetch(`/reservations/teacher/${eventId}/edit/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest',
+                            },
+                            body: JSON.stringify({
+                                start: newStart,
+                                end: newEnd
+                            })
+                        });
+                        const result = await response.json();
+                        if (response.ok) {
+                            alert(result.message);
+                        } else {
+                            alert(result.message);
+                            info.revert();
+                        }
+                    } catch (error) {
+                        console.error('更新過程中發生錯誤:', error);
+                        alert('更新失敗，請稍後再試');
+                        info.revert();
                     }
                 },
                 eventDidMount: function(info) {
                     const today = new Date();
                     const eventStart = info.event.start;
-
-                    // Prevent dragging if the event starts before today
+                    // 已經過去的時間，禁止拖動
                     if (eventStart < today) {
-                        info.el.setAttribute('draggable', 'false'); // Disable dragging
-                        info.el.classList.add('event-disabled'); // Optionally add a class for styling
+                        info.el.classList.add('event-disabled');
+                    }
+                    // 已經被預約的時間，禁止拖動
+                    if (info.event.extendedProps.reserved) {
+                        info.el.classList.add('reserved-event');
                     }
                 },
             });
