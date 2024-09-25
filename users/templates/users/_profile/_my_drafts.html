@@ -1,4 +1,7 @@
-<div x-show="currentView === 'mydrafts'" class="bg-white shadow rounded-lg p-6">
+<div
+  x-show="currentView === '_my_drafts'"
+  class="bg-white shadow rounded-lg p-6"
+>
   <h1 class="text-2xl font-bold mb-2">我的草稿</h1>
   <ul>
     {% for draft in drafts %}

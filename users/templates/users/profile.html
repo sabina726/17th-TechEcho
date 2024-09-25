@@ -112,7 +112,7 @@
                 <a
                   href="#"
                   class="flex items-center text-gray-700"
-                  @click.prevent="setView('myQuestions')"
+                  @click.prevent="setView('_my_questions')"
                 >
                   我的發問
                 </a>
@@ -121,7 +121,7 @@
                 <a
                   href="#"
                   class="flex items-center text-gray-700"
-                  @click.prevent="setView('answeredQuestions')"
+                  @click.prevent="setView('_answered_questions')"
                 >
                   我回答過的
                 </a>
@@ -130,7 +130,7 @@
                 <a
                   href="#"
                   class="flex items-center text-gray-700"
-                  @click.prevent="setView('Myblogs')"
+                  @click.prevent="setView('_my_blogs')"
                 >
                   我發過的文章
                 </a>
@@ -141,7 +141,7 @@
             <a
               href="#"
               class="flex items-center"
-              @click.prevent="setView('mydrafts')"
+              @click.prevent="setView('_my_drafts')"
               ><i class="fa-solid fa-pen mr-2"></i>
               我的草稿
             </a>
@@ -196,10 +196,10 @@
         {% include 'users/_profile/_notifications.html' %}
         {% include 'users/_profile/_reservations_teacher.html' %}
         {% include 'users/_profile/_reservations_student.html' %}
-        {% include 'users/_profile/_myQuestions.html' %}
-        {% include 'users/_profile/_answeredQuestions.html' %}
-        {% include 'users/_profile/_Myblogs.html' %}
-        {% include 'users/_profile/_mydrafts.html' %}
+        {% include 'users/_profile/_my_questions.html' %}
+        {% include 'users/_profile/_answered_questions.html' %}
+        {% include 'users/_profile/_my_blogs.html' %}
+        {% include 'users/_profile/_my_drafts.html' %}
     </div>
     <div class="flex-grow mt-8">
 
