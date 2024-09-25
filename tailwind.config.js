@@ -31,15 +31,6 @@ module.exports = {
   ],
   theme: {
     extend: {
-      keyframes: {
-        'fade-in-and-grow': {
-          '0%': { opacity: 0, transform: 'scale(0.9)' },
-          '100%': { opacity: 1, transform: 'scale(1)' },
-        },
-      },
-      animation: {
-        'fade-in-and-grow': 'fade-in-and-grow 1s ease-out forwards',
-      },
       colors: {
         'blue-1': '#04ADBF',
         'blue-2': '#04BFBF',
