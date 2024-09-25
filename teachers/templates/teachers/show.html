@@ -6,24 +6,40 @@
         <h1 class="p-6 text-5xl font-bold text-center text-blue-2">專家檔案</h1>
     </div>
 
-    <div class="w-full max-w-5xl flex flex-col mb-6 p-6 mx-auto shadow rounded-lg bg-vanilla-5">
+    <div class="relative w-full max-w-5xl flex flex-col mb-6 p-6 mx-auto shadow rounded-lg bg-vanilla-5">
         <div class="m-2 p-1 w-full max-w-full flex items-center">
             <div class="max-w-full w-1/3 flex justify-center">
                 {% if teacher.user.profile_picture %}
-                    <img src="{{ teacher.user.profile_picture.url }}" alt="Profile Picture" class="rounded-full object-cover w-36 h-36">
+                    <img src="{{ teacher.user.profile_picture.url }}" alt="Profile Picture" class="rounded-full object-fit: cover w-40 h-40">
                 {% else %}
-                    <img src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar" alt="User Avatar" class="rounded-full object-cover w-36 h-36" />
+                    <img src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar" alt="User Avatar" class="rounded-full object-fit: cover w-40 h-40" />
                 {% endif %}
             </div>
             <div class="w-2/3 flex flex-col justify-around h-44">
-                <p class="p-1 m-2 flex justify-center bg-vanilla-7 text-blue-1 text-2xl rounded-lg font-semibold">專家名稱</p>
                 <div class="p-1 m-2 text-4xl font-semibold text-center text-blue-1">
                     {{ teacher.user.get_display_name }}
                 </div>
             </div>
+            {% if request.user == teacher.user %}
+            <div class="absolute top-0 right-0" x-data="{ open: false }">
+                <button @click="open = !open" class="m-2 btn bg-cyan-500 text-white hover:bg-blue-2">
+                    編輯資料
+                </button>
+                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg">
+                    <form action="{% url 'teachers:edit' teacher.id %}" method="POST" autocomplete="off">
+                        {% csrf_token %}
+                        <button class="w-full text-left px-4 py-2 font-semibold text-xl text-center hover:text-blue-2">修改專家檔案</button>
+                    </form>
+                    <form action="{% url 'teachers:delete' teacher.id %}" method="POST" autocomplete="off">
+                        {% csrf_token %}
+                        <button class="w-full text-left px-4 py-2 font-semibold text-xl text-center hover:text-red-600" onclick="return confirm('確定刪除?')">刪除資訊</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
         </div>
-        <div class="m-2 p-1 w-full max-w-full flex">
-            <div class="w-1/3 m-2 p-1">
+        <div class="m-2 p-1 w-full max-w-full flex flex-col lg:flex-row">
+            <div class="w-full lg:m-2 p-1">
                 <p class="p-1 m-2 flex justify-center bg-vanilla-7 text-blue-1 text-2xl rounded-lg font-semibold">專業技能</p>
                 <div class="text-xl overflow-y-auto">
                     {% if teacher.labels.all %}
@@ -38,37 +54,18 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="w-2/3 m-2 p-1">
-                <p class="p-1 m-2 flex justify-center bg-vanilla-7 text-blue-1 text-2xl rounded-lg font-semibold">自我介紹</p>
-                <article class="break-words text-xl text-green-3 leading-loose rounded-lg tracking-wide p-4">
-                    {{ teacher.introduce }}
-                </article>
-            </div>
         </div>
-        <div class="flex items-center justify-between">
-            <div class="mb-6">
-            {% if request.user == teacher.user %}
-            <form action="{% url 'teachers:edit' teacher.id %}" method="POST" autocomplete="off">
-                {% csrf_token %}
-                <button class="m-2 btn bg-cyan-500 text-white hover:bg-amber-700">修改專家檔案</button>
-            </form>
-            {% endif %}
-            </div>
-
-            <div class="mb-6">
-            {% if request.user == teacher.user %}
-            <form action="{% url 'teachers:delete' teacher.id %}" method="POST" autocomplete="off">
-                {% csrf_token %}
-                <button class="m-2 btn btn-error hover:text-white" onclick="return confirm('確定刪除?')">刪除資訊</button>
-            </form>
-            {% endif %}
-            </div>
+        <div class="w-full lg:m-2 p-1">
+            <p class="p-1 m-2 flex justify-center bg-vanilla-7 text-blue-1 text-2xl rounded-lg font-semibold">自我介紹</p>
+            <article class="break-words text-xl text-green-3 leading-loose rounded-lg tracking-wide p-4">
+                {{ teacher.introduce }}
+            </article>
         </div>
     </div>
 
-    <div class="w-full max-w-5xl mb-6 p-2 mx-auto shadow rounded-lg bg-vanilla-5">
-        <div class="flex w-full max-w-full">
-            <div class="w-1/2">
+    <div class="w-full max-w-5xl mb-6 p-2 mx-auto shadow rounded-lg bg-vanilla-5 flex-col lg:flex-row">
+        <div class="flex flex-col lg:flex-row w-full max-w-full">
+            <div class="w-full lg:w-1/2">
                 <h3 class="font-semibold p-1 m-2 bg-vanilla-7 text-blue-1 text-2xl text-center rounded-lg">提過的問題</h3>
                 <ul class="mt-4">
                     {% for question in questions %}
@@ -82,7 +79,7 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="w-1/2">
+            <div class="w-full lg:w-1/2">
                 <h3 class="font-semibold p-1 m-2 bg-vanilla-7 text-blue-1 text-2xl text-center rounded-lg">回答過的問題</h3>
                 <ul class="mt-4">
                     {% for answer in answers %}
