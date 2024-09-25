@@ -1,4 +1,4 @@
-def upvoted_or_downvoted_or_neither(request, question) -> str:
+def question_vote(request, question) -> str:
     # to avoid DoesNotExist exception if not found
     if not request.user.is_authenticated:
         return "neither"

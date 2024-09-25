@@ -3,6 +3,7 @@ from channels.layers import get_channel_layer
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_GET, require_POST
 
@@ -13,10 +14,7 @@ from lib.utils.pagination import paginate
 
 from .forms import QuestionForm
 from .models import Question, Votes
-from .utils.question_user_votes import (
-    upvoted_or_downvoted_or_neither,
-    validate_votes_input,
-)
+from .utils.question_user_votes import question_vote, validate_votes_input
 from .utils.sort import order_is_valid
 
 
@@ -89,21 +87,26 @@ def show(request, id):
             request, "questions/edit.html", {"form": form, "question": question}
         )
 
-    question = get_object_or_404(Question, pk=id)
-    vote = upvoted_or_downvoted_or_neither(request, question)
+    if not Question.all_objects.filter(pk=id).exists():
+        raise Http404("沒有這個問題")
+
+    question = Question.all_objects.get(pk=id)
+    question_deleted = question.is_soft_deleted()
 
     answers = parse_answers(request, question, request.GET.get("order"))
     answers = paginate(request, answers, items_count=6)
-    form = AnswerForm()
     return render(
         request,
         "questions/show.html",
         {
             "question": question,
+            "question_deleted": question_deleted,
             "answers": answers,
-            "vote": vote,
-            "form": form,
-            "followed": question.followed_by(request.user),
+            "vote": None if question_deleted else question_vote(request, question),
+            "form": None if question_deleted else AnswerForm(),
+            "followed": (
+                None if question_deleted else question.followed_by(request.user)
+            ),
         },
     )
 
