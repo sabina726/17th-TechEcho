@@ -100,9 +100,18 @@
                 },
 
                 eventDrop: async function(info) {
+                    const today = new Date();
+                    const newStart = info.event.start;
+
+                    // Check if the new start date is before today
+                    if (newStart < today) {
+                        alert('您不能將事件拖動到今天之前的日期。');
+                        info.revert(); // Revert the event back to its original position
+                        return;
+                    }
+
                     // Update the event time on drag and drop
                     const eventId = info.event.id;
-                    const newStart = info.event.start.toISOString();
                     const newEnd = info.event.end.toISOString();
 
                     // Send the updated event to the server
