@@ -11,6 +11,7 @@ url_teacher = [
     path("teacher/<int:id>/delete/", views.teacher_delete, name="teacher_delete"),
     path("teacher/available/", views.teacher_available, name="teacher_available"),
     path("teacher/calendar_events/", views.calendar_events, name="calendar_events"),
+    path("teacher/update_event/", views.update_event, name="update_event"),
 ]
 
 url_student = [

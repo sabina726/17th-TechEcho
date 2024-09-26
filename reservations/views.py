@@ -1,10 +1,13 @@
+import json
 from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 
 from chat.models import ChatGroup
 from lib.utils.student_required import student_required
@@ -63,7 +66,6 @@ def teacher_edit(request, id):
     if request.method == "POST":
         form = TeacherScheduleForm(request.POST, instance=schedule)
         if form.is_valid():
-            form.save()
             if TeacherSchedule.objects.filter(
                 teacher=schedule.teacher, start_time=schedule.start_time
             ).exists():
@@ -71,6 +73,7 @@ def teacher_edit(request, id):
                 return render(
                     request, "reservations/teacher/teacher_new.html", {"form": form}
                 )
+            form.save()
             messages.success(request, "編輯成功")
             return redirect("reservations:teacher_index")
         return render(request, "reservations/teacher/teacher_edit.html", {"form": form})
@@ -84,14 +87,13 @@ def teacher_edit(request, id):
 
 @login_required
 @teacher_required
+@require_POST
 def teacher_delete(request, id):
     schedule = get_object_or_404(TeacherSchedule, id=id)
     if schedule.studentreservation_set.exists():
-        messages.error(request, "此時間已被預約，無法刪除")
-        return redirect("reservations:teacher_index")
+        return JsonResponse({"status": "error", "message": "此時間已被預約，無法刪除"})
     schedule.delete()
-    messages.success(request, "刪除成功")
-    return redirect("reservations:teacher_index")
+    return JsonResponse({"status": "success", "message": "刪除成功"})
 
 
 # for student to make reservations
@@ -179,15 +181,56 @@ def teacher_available(request):
 
 
 def calendar_events(request):
-    schedules = TeacherSchedule.objects.filter(teacher=request.user)
+    schedules = TeacherSchedule.objects.filter(teacher=request.user).prefetch_related(
+        "studentreservation_set__student"
+    )
     events = [
         {
             "id": schedule.id,
-            "title": f"{schedule.teacher.get_display_name()}",
+            "title": (
+                f"{schedule.studentreservation_set.first().student.get_display_name()}已預約"
+                if schedule.studentreservation_set.exists()
+                else ""
+            ),
             "start": schedule.start_time.isoformat(),
             "end": schedule.end_time.isoformat(),
-            "url": f"/reservations/teacher/{schedule.id}/delete/",
+            "url": reverse("reservations:teacher_delete", args=[schedule.id]),
+            "reserved": schedule.studentreservation_set.exists(),
         }
         for schedule in schedules
     ]
     return JsonResponse(events, safe=False)
+
+
+@login_required
+@teacher_required
+def update_event(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        event_id = data.get("id")
+        start_time = data.get("start")
+        end_time = data.get("end")
+
+        schedule = get_object_or_404(TeacherSchedule, id=event_id, teacher=request.user)
+
+        # 檢查事件是否已被預約
+        if schedule.studentreservation_set.exists():
+            return JsonResponse(
+                {"status": "error", "message": "此時間已被預約，無法編輯"}, status=400
+            )
+
+        # 檢查事件是否更新到今天之前
+        new_start_time = timezone.datetime.fromisoformat(start_time)
+        if new_start_time < timezone.now():
+            return JsonResponse(
+                {"status": "error", "message": "無法移動到過去時間，請重新選擇"},
+                status=400,
+            )
+
+        schedule = get_object_or_404(TeacherSchedule, id=event_id, teacher=request.user)
+        schedule.start_time = timezone.datetime.fromisoformat(start_time)
+        schedule.end_time = timezone.datetime.fromisoformat(end_time)
+        schedule.save()
+
+        return JsonResponse({"status": "success", "message": "時間更新成功！"})
+    return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
