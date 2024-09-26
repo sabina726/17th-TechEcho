@@ -35,10 +35,6 @@
 
             <div class="mb-4">
                 {{ form.image.label_tag }}
-                {% if blog.image %}
-
-                    <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="mb-2 rounded-lg shadow">
-                {% endif %}
                 {{ form.image }}
             </div>
 
@@ -97,7 +93,6 @@
 </div>
 
 
-<!-- JavaScript for text and image preview -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
    document.addEventListener('DOMContentLoaded', function() {
@@ -141,21 +136,17 @@
                const reader = new FileReader();
                reader.onload = function(e) {
                    previewImage.src = e.target.result;
-                   previewImage.style.display = 'block'; // Show the image element when there's a file
+                   previewImage.style.display = 'block';
                }
                reader.readAsDataURL(file);
            } else {
                previewImage.src = "#";
-               previewImage.style.display = 'none'; // Hide the image element when there's no file
+               previewImage.style.display = 'none';
            }
        });
 
-
-       // Update the preview when the Preview button is clicked
        previewButton.addEventListener('click', updatePreview);
 
-
-       // Load initial values into the preview when the page is loaded
        loadInitialPreview();
    });
 </script>

@@ -40,7 +40,7 @@ class BlogForm(forms.ModelForm):
                     "required": True,
                     "class": "input-bordered w-full rounded-lg bg-white p-1 tagify--custom-dropdown",
                     "x-data": "tags_input",
-                    "placeholder": "請輸入標籤",
+                    "placeholder": "至少要填一個標籤，例如：Javascript、Python、C++、Ruby 或 Java",
                 }
             ),
             "is_draft": forms.CheckboxInput(

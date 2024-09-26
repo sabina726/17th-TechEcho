@@ -14,7 +14,7 @@
             <a
               href="{% url 'blogs:show' blog.pk %}"
               class="text-2xl font-bold underline"
-              >{{ blog.title }}</a
+              >{{ blog.title|striptags|truncatechars:30 }}</a
             >
             <p class="text-sm text-gray-600">
               發佈時間: {{ blog.created_at|date:"Y-m-d H:i" }}
