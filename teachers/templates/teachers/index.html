@@ -2,18 +2,27 @@
 
 {% block content %}
 
-<div class="flex flex-wrap w-full h-full max-w-full mx-auto">
-
+<div class="flex flex-wrap w-full h-full max-w-full mx-auto items-center">
     <div class="flex-1 max-w-4xl m-3 mx-auto">
-        <div class="flex flex-wrap justify-between w-full m-2">
-            <h2 class="mx-4 text-3xl font-bold sm:text-5xl text-blue-2">專家列表</h2>
+        <div class="flex flex-wrap justify-between p-2 w-full">
+            <h2 class="text-3xl font-bold sm:text-5xl text-blue-2">專家列表</h2>
+            <section class="flex gap-1 md:gap-2 md:flex-row " x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
+                <select class="select select-bordered border-blue-1 sm:text-lg" @change="selectedLabel = $event.target.value; localStorage.setItem('selectedLabel', $event.target.value); window.location.href = '?label=' + encodeURIComponent($event.target.value)">
+                    <option value="" :selected="selectedLabel === ''" selected="selected">選擇專業標籤</option>
+                    {% for label in all_labels %}
+                        <option value="{{ label|lower }}" :selected="selectedLabel === '{{ label|lower }}'">{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <a href="{% url 'teachers:index' %}" class="btn btn-outline border border-blue-1 sm:w-auto sm:text-lg" @click="selectedLabel = ''; localStorage.removeItem('selectedLabel')">重置標籤</a>
+            </section>
             {% if user.is_authenticated and not user.is_student %}
-                <a href="{% url 'payments:index' %}" class="mx-4 text-black btn bg-orange-9 hover:bg-orange-8 hover:text-white ">
+                <a href="{% url 'payments:index' %}" class="text-black btn bg-orange-9 hover:bg-orange-8 hover:text-white ">
                 升級Premium與專家交談
                 </a>
             {% endif %}
         </div>
-        <div class="max-w-4xl p-2 m-auto">
+
+        <div class="max-w-4xl p-2 m-auto ">
             <section>
                 {% if no_results %}
                     <div class="mt-4 text-xl">
@@ -56,6 +65,7 @@
                 {% endif %}
             </section>
         </div>
+
         <div>
             {% include "shared/pagination.html" with pages=teachers only %}
         </div>
