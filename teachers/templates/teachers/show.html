@@ -21,18 +21,18 @@
                 {{ teacher.user.get_display_name }}
             </div>
             {% if request.user == teacher.user %}
-            <div class="flex" x-data="{ open: false }">
-                <button @click="open = !open" class="w-40 h-12 m-4 text-white transition-all duration-150 rounded-md shadow-md bg-orange-9 hover:bg-orange-8 focus:outline-none">
+            <div class="flex w-full h-20 whitespace-nowrap" x-data="{ open: false }">
+                <button @click="open = !open" class="p-2 m-4 text-base text-white transition-all duration-150 rounded-md shadow-md bg-orange-9 hover:bg-orange-8 focus:outline-none">
                     編輯資料
                 </button>
-                <div x-show="open" @click.away="open = false" class="w-48 mt-2 bg-white rounded-md shadow-lg">
+                <div x-show="open" @click.away="open = false" class="h-full bg-white rounded-md shadow-lg w-30">
                     <form action="{% url 'teachers:edit' teacher.id %}" method="POST" autocomplete="off">
                         {% csrf_token %}
-                        <button class="w-full h-12 px-4 text-xl font-semibold text-left transition-all duration-150 text-blue-2 hover:text-blue-1 focus:outline-none">修改專家檔案</button>
+                        <button class="w-full p-2 text-base font-semibold text-left transition-all duration-150 text-blue-2 hover:text-blue-1 focus:outline-none">修改專家檔案</button>
                     </form>
                     <form action="{% url 'teachers:delete' teacher.id %}" method="POST" autocomplete="off">
                         {% csrf_token %}
-                        <button class="w-full h-12 px-4 text-xl font-semibold text-left transition-all duration-150 text-orange-8 hover:text-orange-9 focus:outline-none" onclick="return confirm('確定刪除?')">刪除資訊</button>
+                        <button class="w-full p-2 text-base font-semibold text-left transition-all duration-150 text-orange-8 hover:text-orange-9 focus:outline-none" onclick="return confirm('確定刪除?')">刪除資訊</button>
                     </form>
                 </div>
             </div>
