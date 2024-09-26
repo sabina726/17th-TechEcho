@@ -18,7 +18,7 @@ class BlogForm(forms.ModelForm):
             "content": "內容",
             "labels": "標籤",
             "is_draft": "儲存為草稿",
-            "image": "封面圖片",
+            "image": "圖片",
         }
         widgets = {
             "title": forms.TextInput(
@@ -38,7 +38,7 @@ class BlogForm(forms.ModelForm):
             "labels": forms.TextInput(
                 attrs={
                     "required": True,
-                    "class": "input-bordered w-full rounded-lg bg-white p-1 tagify--custom-dropdown",
+                    "class": "input-bordered w-full border-2 border-blue-500 rounded-lg bg-white p-1 tagify--custom-dropdown",
                     "x-data": "tags_input",
                     "placeholder": "至少要填一個標籤，例如：Javascript、Python、C++、Ruby 或 Java",
                 }
@@ -51,7 +51,7 @@ class BlogForm(forms.ModelForm):
             ),
             "image": forms.ClearableFileInput(
                 attrs={
-                    "class": "w-full p-2 border-2 border-blue-500 rounded-md focus:outline-none",
+                    "class": "w-full p-2 rounded-md focus:outline-none",
                     "id": "id_image",
                 }
             ),

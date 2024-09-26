@@ -1,10 +1,10 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
-<div class="flex flex-col md:flex-row max-w-6xl mx-auto bg-vanilla-5 p-6 my-4 rounded-md shadow-md text-black">
+<div class="relative flex flex-col max-w-6xl p-6 mx-auto my-4 text-black rounded-md shadow-md md:flex-row bg-vanilla-5">
     <!-- Left Side: Form -->
-    <div class="w-full md:w-1/2 pr-0 md:pr-4 mb-4 md:mb-0">
-        <h1 class="text-2xl font-bold mb-4 text-gray-800">新增文章</h1>
+    <div class="w-full pr-0 mb-4 md:w-1/2 md:pr-4 md:mb-0">
+        <h1 class="mb-4 text-2xl font-bold text-gray-800">新增文章</h1>
         <form method="post" enctype="multipart/form-data" class="space-y-4">
             {% csrf_token %}
 
@@ -28,26 +28,26 @@
                 {{ form.image }}
             </div>
 
-            <button type="button" id="preview-button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md">
+            <button type="button" id="preview-button" class="px-4 py-2 font-bold text-white bg-gray-500 rounded-md hover:bg-gray-600">
                 預覽文章
             </button>
 
-            <button type="submit" name="action" value="publish" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md">
+            <button type="submit" name="action" value="publish" class="px-4 py-2 font-bold text-white bg-green-500 rounded-md hover:bg-green-600">
                 發佈文章
             </button>
 
-            <button type="submit" name="action" value="save_draft" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-md">
+            <button type="submit" name="action" value="save_draft" class="px-4 py-2 font-bold text-white bg-yellow-500 rounded-md hover:bg-yellow-600">
                 儲存草稿
             </button>
         </form>
-        <a href="{% url 'blogs:index' %}" class="text-blue-500 hover:underline">取消</a>
+        <a href="{% url 'blogs:index' %}" class="absolute top-0 right-0 m-2 btn btn-techecho2">回到文章列表</a>
     </div>
 
-    <div class="w-full md:w-1/2 pl-0 md:pl-4">
-        <h2 class="text-xl font-bold mb-4 text-gray-800">預覽文章內容</h2>
-        <div class="card bg-base-100 w-full border-2 border-blue-2 shadow-xl">
+    <div class="w-full pl-0 md:w-1/2 md:pl-4">
+        <h2 class="mb-4 text-xl font-bold text-gray-800">預覽文章內容</h2>
+        <div class="w-full border-2 shadow-xl card bg-base-100 border-blue-2">
             <div class="card-body markdown h-[75vh] overflow-auto">
-                <div class="prose max-w-full break-words">
+                <div class="max-w-full prose break-words">
                     <div class="mb-6">
                         <img id="preview-image" src="#" alt="預覽圖片" class="rounded-lg shadow" style="display:none;">
                     </div>

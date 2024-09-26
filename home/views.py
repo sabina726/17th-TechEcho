@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.db.models import Q
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 
 from blogs.models import Blog
 from questions.models import Question
@@ -64,10 +64,3 @@ def search(request):
             "query": query,
         },
     )
-
-
-def custom_404(request, exception):
-    return redirect("http://10.8.8.93:5173/test_vue/404-page")
-
-
-handler404 = custom_404
