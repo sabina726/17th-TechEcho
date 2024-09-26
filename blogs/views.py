@@ -7,10 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.paginator import Paginator
-from django.http import HttpResponseForbidden, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.csrf import csrf_exempt
-from storages.backends.s3boto3 import S3Boto3Storage
 
 from lib.utils.labels import parse_form_labels
 
@@ -18,6 +16,7 @@ from .forms import BlogForm
 from .models import Blog
 
 User = get_user_model()
+
 
 MARKDOWN2_EXTRAS = [
     "fenced-code-blocks",
@@ -71,26 +70,6 @@ def index(request):
 
 
 @login_required
-def like(request, blog_id):
-    blog = get_object_or_404(Blog, id=blog_id)
-    user = request.user
-
-    if user in blog.likes.all():
-        blog.likes.remove(user)
-        liked = False
-    else:
-        blog.likes.add(user)
-        liked = True
-
-    likes_count = blog.likes.count()
-
-    if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        return JsonResponse({"liked": liked, "likes_count": likes_count})
-    else:
-        return HttpResponseRedirect(reverse("blogs:show", args=[blog_id]))
-
-
-@login_required
 def user_drafts(request):
     drafts = Blog.objects.filter(author=request.user, is_draft=True).order_by(
         "-created_at"
@@ -113,10 +92,15 @@ def new(request):
                     form.cleaned_data["content"],
                     extras=MARKDOWN2_EXTRAS,
                 )
+
                 return render(
                     request,
                     "blogs/new.html",
-                    {"form": form, "blog": blog, "content_html": content_html},
+                    {
+                        "form": form,
+                        "blog": blog,
+                        "content_html": content_html,
+                    },
                 )
 
             elif action == "publish":
@@ -125,6 +109,7 @@ def new(request):
                 form.save_m2m()
                 return redirect("blogs:index")
 
+            # Handle 'save_draft' action
             blog.is_draft = True
             blog.save()
             form.save_m2m()
@@ -184,10 +169,18 @@ def edit(request, pk):
                     form.cleaned_data["content"],
                     extras=MARKDOWN2_EXTRAS,
                 )
+
+                preview_image = form.cleaned_data.get("image", "???????????")
+
                 return render(
                     request,
                     "blogs/edit.html",
-                    {"form": form, "blog": blog, "content_html": content_html},
+                    {
+                        "form": form,
+                        "blog": blog,
+                        "content_html": content_html,
+                        "preview_image": preview_image,
+                    },
                 )
 
             elif action == "update":
@@ -208,7 +201,17 @@ def edit(request, pk):
     else:
         form = BlogForm(instance=blog)
 
-    return render(request, "blogs/edit.html", {"form": form, "blog": blog})
+    has_image = blog.image and blog.image.name
+
+    return render(
+        request,
+        "blogs/edit.html",
+        {
+            "form": form,
+            "blog": blog,
+            "has_image": has_image,
+        },
+    )
 
 
 @login_required

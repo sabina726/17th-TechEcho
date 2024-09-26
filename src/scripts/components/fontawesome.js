@@ -16,7 +16,7 @@ import {
     faCamera,
     faBars,
     faTimes,
-    faThumbsUp, // Solid heart icon with alias
+    faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -42,9 +42,9 @@ library.add(
     faThumbsUp,
 );
 
-// Initialize Font Awesome
-dom.watch(); // Watches for changes in the DOM and renders icons accordingly
 
-// Initialize Alpine.js
+dom.watch();
+
+
 window.Alpine = Alpine;
 Alpine.start();
