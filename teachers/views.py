@@ -124,7 +124,6 @@ def show(request, id):
     schedules = TeacherSchedule.objects.filter(teacher=teacher.user).order_by(
         "start_time"
     )
-    print(schedules)
     context = {
         "teacher": teacher,
         "questions": questions,

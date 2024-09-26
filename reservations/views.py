@@ -121,7 +121,6 @@ def student_new(request, id):
             return redirect("reservations:student_new", id=id)
 
         s = StudentReservation.objects.create(schedule=schedule, student=request.user)
-        print("created: ", s)
         messages.success(request, "預約成功")
         return redirect("reservations:student_index")
     return render(

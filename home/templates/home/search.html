@@ -32,12 +32,12 @@
                             <div class="flex flex-col items-start justify-between mb-2 sm:flex-row sm:items-center">
                                 <h1 class="text-lg font-semibold sm:text-xl">
                                    <a href="{% url 'questions:show' id=question.id %}"
-                                      class="text-black border-b-2 border-black hover:underline">
+                                      class="text-black">
                                       標題：{{ question.title }}
                                    </a>
                                 </h1>
                             </div>
-                            <div class="p-2 mb-2 border-b border-gray-300">
+                            <div class="p-2 mb-2 border-b border-blue-2">
                                 <p>標籤：
                                     {% for label in question.labels.all %}
                                         <span class="text-sm">{{ label }}</span>
@@ -45,7 +45,7 @@
                                 </p>
                             </div>
                             <div>
-                                <p class="truncate">{{ question.details|striptags|truncatechars:30 }}</p>
+                                <p class="truncate">內文：{{ question.details|striptags|truncatechars:30 }}</p>
                             </div>
                         </li>
                     {% endfor %}
@@ -63,17 +63,21 @@
                     {% for teacher in teachers %}
                         <li class="p-4 mb-4 border-2 rounded-lg shadow-md border-orange-8">
                             <h2 class="text-lg font-semibold sm:text-xl">
-                                {% if teacher.user.nickname %}
-                                    {{ teacher.user.nickname }}
-                                {% else %}
-                                    {{ teacher.user.username }}
-                                {% endif %}
+                                <a href="{% url 'teachers:show' id=teacher.id %}">
+                                    {% if teacher.user.nickname %}
+                                        {{ teacher.user.nickname }}
+                                    {% else %}
+                                        {{ teacher.user.username }}
+                                    {% endif %}
+                                </a>
                             </h2>
-                            <p>標籤：
-                                {% for label in teacher.labels.all %}
-                                    <span class="text-sm">{{ label }}</span>
-                                {% endfor %}
-                            </p>
+                            <div class="p-2 mb-2 border-b border-orange-8">
+                                <p>專業能力：
+                                    {% for label in teacher.labels.all %}
+                                        <span class="text-sm">{{ label }}</span>
+                                    {% endfor %}
+                                </p>
+                            </div>
                             <div>
                                 <p class="truncate">介紹: {{ teacher.introduce|striptags|truncatewords:30 }}</p>
                             </div>
@@ -95,12 +99,12 @@
                             <div class="flex flex-col items-start justify-between mb-2 sm:flex-row sm:items-center">
                                 <h1 class="text-lg font-semibold sm:text-xl">
                                    <a href="{% url 'blogs:show' pk=blog.id %}"
-                                      class="text-black border-b-2 border-black hover:underline">
+                                      class="text-black">
                                       標題：{{ blog.title }}
                                    </a>
                                 </h1>
                             </div>
-                            <div class="p-2 mb-2 border-b border-gray-300">
+                            <div class="p-2 mb-2 border-b border-green-4">
                                 <p>標籤：
                                     {% for label in blog.labels.all %}
                                         <span class="text-sm">{{ label }}</span>
