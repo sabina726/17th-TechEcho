@@ -65,7 +65,7 @@ def index(request):
         )
     no_results = not teachers.exists()
 
-    all_labels = set(teachers.values_list("labels__name", flat=True))
+    all_labels = sorted(set(teachers.values_list("labels__name", flat=True)))
     teachers = paginate(request, teachers, items_count=8)
     return render(
         request,
@@ -124,7 +124,6 @@ def show(request, id):
     schedules = TeacherSchedule.objects.filter(teacher=teacher.user).order_by(
         "start_time"
     )
-    print(schedules)
     context = {
         "teacher": teacher,
         "questions": questions,

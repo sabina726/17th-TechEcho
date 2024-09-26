@@ -18,7 +18,7 @@
             {{schedule.end_time|date:'Y/m/d H:i' }}
           </div>
           <ul>
-            {% if schedule.studentreservation_set.exists %} 
+            {% if schedule.studentreservation_set.exists %}
             {% for reservation in schedule.studentreservation_set.all %}
             <li class="font-bold flex gap-2 items-center w-full">
               <div>
