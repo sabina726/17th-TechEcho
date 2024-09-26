@@ -1,6 +1,10 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
+from storages.backends.s3boto3 import S3Boto3Storage
 from taggit.managers import TaggableManager
+
+User = get_user_model()
 
 
 class BlogQuerySet(models.QuerySet):
@@ -21,6 +25,14 @@ class Blog(models.Model):
     )
     views = models.IntegerField(default=0)
     is_draft = models.BooleanField(default=True)
+    likes = models.ManyToManyField(User, related_name="liked_blogs", blank=True)
+
+    image = models.ImageField(
+        upload_to="article_pictures/",
+        null=True,
+        blank=True,
+        storage=S3Boto3Storage,
+    )
 
     objects = BlogQuerySet.as_manager()
     labels = TaggableManager()

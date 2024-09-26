@@ -2,17 +2,22 @@ import uuid
 
 import markdown2
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.paginator import Paginator
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.csrf import csrf_exempt
+from storages.backends.s3boto3 import S3Boto3Storage
 
 from lib.utils.labels import parse_form_labels
 
 from .forms import BlogForm
 from .models import Blog
+
+User = get_user_model()
 
 MARKDOWN2_EXTRAS = [
     "fenced-code-blocks",
@@ -66,6 +71,26 @@ def index(request):
 
 
 @login_required
+def like(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    user = request.user
+
+    if user in blog.likes.all():
+        blog.likes.remove(user)
+        liked = False
+    else:
+        blog.likes.add(user)
+        liked = True
+
+    likes_count = blog.likes.count()
+
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({"liked": liked, "likes_count": likes_count})
+    else:
+        return HttpResponseRedirect(reverse("blogs:show", args=[blog_id]))
+
+
+@login_required
 def user_drafts(request):
     drafts = Blog.objects.filter(author=request.user, is_draft=True).order_by(
         "-created_at"
@@ -76,7 +101,7 @@ def user_drafts(request):
 @login_required
 def new(request):
     if request.method == "POST":
-        form = BlogForm(request.POST)
+        form = BlogForm(request.POST, request.FILES)
         if form.is_valid() and parse_form_labels(form):
             blog = form.save(commit=False)
             blog.author = request.user
@@ -125,6 +150,11 @@ def show(request, pk):
 
     author_display_name = blog.author.get_display_name()
 
+    # Check if the user is authenticated and has liked the blog
+    user_liked = False
+    if request.user.is_authenticated:
+        user_liked = request.user in blog.likes.all()
+
     return render(
         request,
         "blogs/show.html",
@@ -132,6 +162,7 @@ def show(request, pk):
             "blog": blog,
             "content_html": content_html,
             "author_display_name": author_display_name,
+            "user_liked": user_liked,
         },
     )
 
@@ -144,7 +175,7 @@ def edit(request, pk):
         return HttpResponseForbidden("你不被允許編輯此部落格文章。")
 
     if request.method == "POST":
-        form = BlogForm(request.POST, instance=blog)
+        form = BlogForm(request.POST, request.FILES, instance=blog)
         if form.is_valid() and parse_form_labels(form):
             action = request.POST.get("action")
 
