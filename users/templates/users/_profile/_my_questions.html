@@ -12,7 +12,7 @@
         href="{% url 'questions:show' question.id %}"
         class="text-black hover:text-blue-700"
       >
-        {{ question.title}}
+        {{ question.title|striptags|truncatechars:30}}
       </a>
     </div>
     {% empty %}

@@ -1,5 +1,13 @@
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import include, path
+
+
+def custom_404(request, exception):
+    return redirect("http://tech-echo.dev/vue/404")
+
+
+handler404 = custom_404
 
 urlpatterns = [
     path("admin/", admin.site.urls),

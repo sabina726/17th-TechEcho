@@ -53,4 +53,3 @@ Alpine.data("convert_to_svg", () => ({
         dom.i2svg();
     },
 }))
-
