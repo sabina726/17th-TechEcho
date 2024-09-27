@@ -164,7 +164,7 @@
             editable: false,
             dayMaxEvents: true,
             headerToolbar: headerToolbar,
-            events: '{% url "reservations:calendar_events" teacher.id %}',
+            events: '{% url "reservations:calendar_events" teacher.user.id %}',
             eventClick: function(info) {
                 info.jsEvent.preventDefault();
             },
