@@ -6,13 +6,13 @@
         <ul>
             {% regroup schedules by teacher as teacher_list %}
             {% for teacher in teacher_list %}
-                <li class="flex justify-between p-2 rounded-lg">
+                <li class="flex justify-between p-2 rounded-lg text-lg md:text-lg">
                     <div class="flex items-center gap-1">
                         <p class="font-bold"><span class="px-2 py-1 text-blue-600">{{ teacher.grouper.get_display_name }}</span>專家可預約時間：</p>
                     </div>
                 </li>
                 {% for schedule in teacher.list %}
-                    <li class="flex justify-between p-2 rounded-lg">
+                    <li class="flex justify-between p-2 rounded-lg text-sm md:text-md">
                         <div class="flex items-center gap-1">
                             <p>{{ schedule.start_time|standard_date }} - {{ schedule.end_time|standard_date }}</p>
                         </div>
