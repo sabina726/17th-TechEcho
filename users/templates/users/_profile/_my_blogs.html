@@ -6,23 +6,19 @@
   <div
     class="p-4 border solid mb-6 border-gray-200 hover:bg-gray-100 transition"
   >
-    <ul>
-      {% for blog in blogs %}
-      <div
-        class="p-4 border solid mb-6 border-gray-200 hover:bg-gray-100 transition"
-      >
-        <a
-          href="{% url 'blogs:show' blog.pk %}"
-          class="text-black hover:text-blue-700 font-mono"
-          >{{ blog.title|striptags|truncatechars:30 }}
-        </a>
-        <p class="text-sm text-gray-600 font-mono">
-          發佈時間: {{ blog.created_at|date:"Y-m-d H:i" }}
-        </p>
-      </div>
-      {% empty %}
-      <p class="text-black">無文章</p>
-      {% endfor %}
-    </ul>
+    {% for blog in blogs %}
+
+    <a
+      href="{% url 'blogs:show' blog.pk %}"
+      class="text-black hover:text-blue-700 font-mono"
+      >{{ blog.title|striptags|truncatechars:30 }}
+    </a>
+    <p class="text-sm text-gray-600 font-mono">
+      發佈時間: {{ blog.created_at|date:"Y-m-d H:i" }}
+    </p>
+
+    {% empty %}
+    <p class="text-black">無文章</p>
+    {% endfor %}
   </div>
 </div>

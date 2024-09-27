@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %} {% block content %}{% load home %}
 <div
-  class="container px-4 mx-auto items-center "
+  class="container px-4 mx-auto"
   x-data="{
   currentView: 'profile',
   showSubMenu: false,
@@ -13,12 +13,19 @@
 }"
 
 >
-  <div class="flex flex-wrap md:flex-nowrap mt-10 ">
-    <aside class="flex-shrink-0 ">
-          <div class="flex flex-col items-center mb-4">
-            {% include "users/partials/_picture.html" with user=user size="32" %}
-            <h1 class="text-xl font-bold">{{user}}</h1>
-          </div>
+  <div class="flex items-start flex-wrap md:flex-nowrap">
+    <aside class="flex-shrink-0 w-64">
+      <div class="mb-6">
+        <div class="relative w-32 h-32 mt-4 mb-4">
+          {% include "users/partials/_picture.html" with user=user size="32" margin="4" %}
+          <a href="{% url 'users:profile_edit' %}">
+            <i
+              class="absolute bottom-0 right-0 p-1 text-gray-700 bg-gray-100 rounded-full fa-solid fa-camera"
+            ></i>
+          </a>
+        </div>
+        <h2 class="pl-8 text-lg font-semibold">{{ user }}</h2>
+      </div>
       <nav>
         <ul class="space-y-2">
           <li>
@@ -143,7 +150,7 @@
       </nav>
     </aside>
 
-    <div class="flex-grow w-full mt-8 md:w-1/2">
+    <div class="flex-grow w-full mt-8">
       <form
         x-show="currentView === 'profile'"
         class="w-3/5 p-6 ml-4 bg-white rounded-lg shadow"
@@ -196,5 +203,4 @@
     </div>
   </div>
 </div>
-
 {% endblock %}
