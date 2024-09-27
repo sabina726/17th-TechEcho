@@ -15,13 +15,21 @@ import {
     faCamera,
     faBars,
     faTimes,
+    faThumbsUp as fasThumbsUp,
+    faThumbsDown as fasThumbsDown
 } from "@fortawesome/free-solid-svg-icons"
 
 import {
-    faCalendar
+    faCalendar,
+    faThumbsUp as farThumbsUp,
+    faThumbsDown as farThumbsDown
 } from "@fortawesome/free-regular-svg-icons"
 
 library.add(
+    fasThumbsUp,
+    fasThumbsDown,
+    farThumbsUp,
+    farThumbsDown,
     faMagnifyingGlass,
     faGraduationCap,
     faArrowUp,
@@ -45,4 +53,3 @@ Alpine.data("convert_to_svg", () => ({
         dom.i2svg();
     },
 }))
-

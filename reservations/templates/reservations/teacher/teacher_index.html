@@ -48,9 +48,20 @@
 
     <style>
         #calendar {
-            max-width: 1000px;
+            max-width: 1500px;
             margin: 0 auto;
         }
+
+        .event-disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .reserved-event {
+            opacity: 1;
+            background-color: #ccfbf1;
+        }
+
     </style>
 
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar/main.css' rel='stylesheet' />
@@ -60,21 +71,122 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 locale: 'zh-tw',
                 selectable: true,
+                editable: true,
+                dayMaxEvents: true,
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
                 },
                 events: '{% url "reservations:calendar_events" %}',
-                eventClick: function(info) {
-                    var eventUrl = info.event.extendedProps.url;
-                    console.log(confirm('確定要刪除這個時間嗎？'))
-                }
+
+                // 是否刪除事件
+                eventClick: async function(info) {
+                    info.jsEvent.preventDefault();
+                    if (!confirm('確定要刪除這個時間嗎？')) return;
+
+                    const eventUrl = info.event.url;
+                    try {
+                        const response = await fetch(eventUrl, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: 'id=' + info.event.id
+                        });
+                        const result = await response.json();
+                        if (response.ok) {
+                            calendar.refetchEvents();
+                            alert(result.message);
+                        } else {
+                            alert(result.message);
+                        }
+                    } catch (error) {
+                        console.error('刪除過程中發生錯誤:', error);
+                        alert('刪除失敗，請稍後再試');
+                    }
+                },
+
+                // 拖動事件
+                eventDrop: async function(info) {
+                    const eventId = info.event.id;
+                    const newStart = info.event.start.toISOString();
+                    const newEnd = info.event.end.toISOString();
+                    try {
+                        const response = await fetch('{% url "reservations:update_event" %}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest',
+                            },
+                            body: JSON.stringify({
+                                id: eventId,
+                                start: newStart,
+                                end: newEnd
+                            })
+                        });
+                        const result = await response.json();
+                        if (response.ok) {
+                            alert(result.message);
+                        } else {
+                            alert(result.message);
+                            info.revert();
+                        }
+                    } catch (error) {
+                        console.error('更新過程中發生錯誤:', error);
+                        alert('更新失敗，請稍後再試');
+                        info.revert();
+                    }
+                },
+                eventResize: async function(info) {
+                    const eventId = info.event.id;
+                    const newStart = info.event.start.toISOString();
+                    const newEnd = info.event.end.toISOString();
+                    try {
+                        const response = await fetch(`/reservations/teacher/${eventId}/edit/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest',
+                            },
+                            body: JSON.stringify({
+                                start: newStart,
+                                end: newEnd
+                            })
+                        });
+                        const result = await response.json();
+                        if (response.ok) {
+                            alert(result.message);
+                        } else {
+                            alert(result.message);
+                            info.revert();
+                        }
+                    } catch (error) {
+                        console.error('更新過程中發生錯誤:', error);
+                        alert('更新失敗，請稍後再試');
+                        info.revert();
+                    }
+                },
+                eventDidMount: function(info) {
+                    const today = new Date();
+                    const eventStart = info.event.start;
+                    // 已經過去的時間，禁止拖動
+                    if (eventStart < today) {
+                        info.el.classList.add('event-disabled');
+                    }
+                    // 已經被預約的時間，禁止拖動
+                    if (info.event.extendedProps.reserved) {
+                        info.el.classList.add('reserved-event');
+                    }
+                },
             });
             calendar.render();
         });
@@ -84,7 +196,5 @@
             return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
         }
     </script>
-
-
 
 {% endblock %}

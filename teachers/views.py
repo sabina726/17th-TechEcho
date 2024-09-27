@@ -27,6 +27,8 @@ def mentor(request):
 def index(request):
     label_filter = request.GET.get("label", None)
     search_query = request.GET.get("search", None)
+    if search_query:
+        search_query = search_query.strip()
 
     if request.method == "POST":
         # 檢查是否該使用者已經是專家
@@ -61,7 +63,9 @@ def index(request):
             Q(user__nickname__icontains=search_query)
             | Q(user__username__icontains=search_query)
         )
-    all_labels = set(teachers.values_list("labels__name", flat=True))
+    no_results = not teachers.exists()
+
+    all_labels = sorted(set(teachers.values_list("labels__name", flat=True)))
     teachers = paginate(request, teachers, items_count=8)
     return render(
         request,
@@ -69,6 +73,7 @@ def index(request):
         {
             "teachers": teachers,
             "all_labels": all_labels,
+            "no_results": no_results,
         },
     )
 
@@ -119,7 +124,6 @@ def show(request, id):
     schedules = TeacherSchedule.objects.filter(teacher=teacher.user).order_by(
         "start_time"
     )
-    print(schedules)
     context = {
         "teacher": teacher,
         "questions": questions,

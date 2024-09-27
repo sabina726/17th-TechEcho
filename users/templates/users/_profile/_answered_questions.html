@@ -9,12 +9,12 @@
   >
     <a
       href="{% url 'questions:show' answer.question.id %}"
-      class="text-black hover:text-blue-700 font-mono font-bold"
+      class="text-black hover:text-blue-700 font-mono"
     >
-      {{ answer.question.title}}
+      {{ answer.question.title|striptags|truncatechars:30}}
     </a>
   </div>
   {% empty %}
-  <p class="text-black">無回答記錄</p>
+  <p class="text-black font-mono">無回答記錄</p>
   {% endfor %}
 </div>

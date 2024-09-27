@@ -11,12 +11,14 @@ class BlogForm(forms.ModelForm):
             "content",
             "labels",
             "is_draft",
+            "image",
         ]
         labels = {
             "title": "標題",
             "content": "內容",
             "labels": "標籤",
             "is_draft": "儲存為草稿",
+            "image": "圖片",
         }
         widgets = {
             "title": forms.TextInput(
@@ -36,15 +38,21 @@ class BlogForm(forms.ModelForm):
             "labels": forms.TextInput(
                 attrs={
                     "required": True,
-                    "class": "input-bordered w-full rounded-lg bg-white p-1 tagify--custom-dropdown",
+                    "class": "input-bordered w-full border-2 border-blue-500 rounded-lg bg-white p-1 tagify--custom-dropdown",
                     "x-data": "tags_input",
-                    "placeholder": "請輸入標籤",
+                    "placeholder": "至少要填一個標籤，例如：Javascript、Python、C++、Ruby 或 Java",
                 }
             ),
             "is_draft": forms.CheckboxInput(
                 attrs={
-                    "class": "w-6 h-6 text-blue-500 rounded focus:outline-none focus:ring-2 focus:ring-blue-500",
+                    "class": "w-6 h-6 text-blue-500 rounded focus:outline-none",
                     "id": "id_is_draft",
+                }
+            ),
+            "image": forms.ClearableFileInput(
+                attrs={
+                    "class": "w-full p-2 rounded-md focus:outline-none",
+                    "id": "id_image",
                 }
             ),
         }

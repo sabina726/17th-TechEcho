@@ -1,7 +1,8 @@
 import uuid
 
-import markdown
+import markdown2
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
@@ -13,6 +14,21 @@ from lib.utils.labels import parse_form_labels
 
 from .forms import BlogForm
 from .models import Blog
+
+User = get_user_model()
+
+
+MARKDOWN2_EXTRAS = [
+    "fenced-code-blocks",
+    "tables",
+    "footnotes",
+    "toc",
+    "strike",
+    "task_list",
+    "wiki-tables",
+    "header-ids",
+    # Add more extras if needed
+]
 
 
 @login_required
@@ -64,7 +80,7 @@ def user_drafts(request):
 @login_required
 def new(request):
     if request.method == "POST":
-        form = BlogForm(request.POST)
+        form = BlogForm(request.POST, request.FILES)
         if form.is_valid() and parse_form_labels(form):
             blog = form.save(commit=False)
             blog.author = request.user
@@ -72,11 +88,19 @@ def new(request):
             action = request.POST.get("action")
 
             if action == "preview":
-                content_html = markdown.markdown(form.cleaned_data["content"])
+                content_html = markdown2.markdown(
+                    form.cleaned_data["content"],
+                    extras=MARKDOWN2_EXTRAS,
+                )
+
                 return render(
                     request,
                     "blogs/new.html",
-                    {"form": form, "blog": blog, "content_html": content_html},
+                    {
+                        "form": form,
+                        "blog": blog,
+                        "content_html": content_html,
+                    },
                 )
 
             elif action == "publish":
@@ -85,6 +109,7 @@ def new(request):
                 form.save_m2m()
                 return redirect("blogs:index")
 
+            # Handle 'save_draft' action
             blog.is_draft = True
             blog.save()
             form.save_m2m()
@@ -100,20 +125,20 @@ def new(request):
 def show(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
 
-    content_html = markdown.markdown(
+    content_html = markdown2.markdown(
         blog.content,
-        extensions=[
-            "markdown.extensions.extra",
-            "markdown.extensions.codehilite",
-            "markdown.extensions.toc",
-            "markdown.extensions.sane_lists",
-        ],
+        extras=MARKDOWN2_EXTRAS,
     )
 
     blog.views += 1
     blog.save(update_fields=["views"])
 
     author_display_name = blog.author.get_display_name()
+
+    # Check if the user is authenticated and has liked the blog
+    user_liked = False
+    if request.user.is_authenticated:
+        user_liked = request.user in blog.likes.all()
 
     return render(
         request,
@@ -122,6 +147,7 @@ def show(request, pk):
             "blog": blog,
             "content_html": content_html,
             "author_display_name": author_display_name,
+            "user_liked": user_liked,
         },
     )
 
@@ -134,23 +160,27 @@ def edit(request, pk):
         return HttpResponseForbidden("你不被允許編輯此部落格文章。")
 
     if request.method == "POST":
-        form = BlogForm(request.POST, instance=blog)
+        form = BlogForm(request.POST, request.FILES, instance=blog)
         if form.is_valid() and parse_form_labels(form):
             action = request.POST.get("action")
 
             if action == "preview":
-                content_html = markdown.markdown(
+                content_html = markdown2.markdown(
                     form.cleaned_data["content"],
-                    extensions=[
-                        "markdown.extensions.extra",
-                        "markdown.extensions.codehilite",
-                        "markdown.extensions.toc",
-                    ],
+                    extras=MARKDOWN2_EXTRAS,
                 )
+
+                preview_image = form.cleaned_data.get("image", "???????????")
+
                 return render(
                     request,
                     "blogs/edit.html",
-                    {"form": form, "blog": blog, "content_html": content_html},
+                    {
+                        "form": form,
+                        "blog": blog,
+                        "content_html": content_html,
+                        "preview_image": preview_image,
+                    },
                 )
 
             elif action == "update":
@@ -171,7 +201,17 @@ def edit(request, pk):
     else:
         form = BlogForm(instance=blog)
 
-    return render(request, "blogs/edit.html", {"form": form, "blog": blog})
+    has_image = blog.image and blog.image.name
+
+    return render(
+        request,
+        "blogs/edit.html",
+        {
+            "form": form,
+            "blog": blog,
+            "has_image": has_image,
+        },
+    )
 
 
 @login_required

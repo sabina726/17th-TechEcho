@@ -2,76 +2,70 @@
 
 {% block content %}
 
-
-<div class="flex flex-wrap max-w-full mx-auto">
-    <section class="flex items-center flex-col w-full sm:w-1/5 m-2" x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
-        <form method="get" action="{% url 'teachers:index' %}">
-            <input type="text" name="search" placeholder="搜尋暱稱或專家名" class="input border border-blue-400">
-            <button type="submit"
-                    class="btn btn-primary"
-                    @click="selectedLabel = ''; localStorage.removeItem('selectedLabel')"
-                    >搜尋
-            </button>
-        </form>
-        <div class="m-2 flex flex-wrap justify-center max-w-full">
-            <a href="{% url 'teachers:index' %}"
-            class="btn btn-outline m-2 flex items-center justify-center w-full max-w-full sm:w-auto"
-            @click="selectedLabel = ''; localStorage.removeItem('selectedLabel')">尋找所有語言</a>
-            {% for label in all_labels %}
-                <a href="?label={{ label|lower|urlencode }}"
-                    class="btn btn-outline m-2 flex items-center justify-center w-full sm:w-1/3"
-                    :class="{ 'bg-blue-500 text-white': selectedLabel === '{{ label|lower }}' }"
-                    @click="selectedLabel = '{{ label|lower }}'; localStorage.setItem('selectedLabel', '{{ label|lower }}')">
-                    {{ label }}
-                </a>
-            {% endfor %}
-        </div>
-    </section>
-
-    <div class="flex-1 max-w-4xl mx-auto m-3">
-        <div class="flex flex-wrap justify-between w-full m-2">
-            <h2 class="text-3xl sm:text-5xl font-bold text-blue-2 ml-5">專家列表</h2>
+<div class="flex flex-wrap w-full h-full max-w-full mx-auto items-center">
+    <div class="flex-1 max-w-4xl m-3 mx-auto">
+        <div class="flex flex-wrap justify-between p-2 w-full">
+            <h2 class="text-3xl font-bold sm:text-5xl text-blue-2">專家列表</h2>
+            <section class="flex gap-1 md:gap-2 md:flex-row " x-data="{ selectedLabel: localStorage.getItem('selectedLabel') || '' }">
+                <select class="select select-bordered border-blue-1 sm:text-lg" @change="selectedLabel = $event.target.value; localStorage.setItem('selectedLabel', $event.target.value); window.location.href = '?label=' + encodeURIComponent($event.target.value)">
+                    <option value="" :selected="selectedLabel === ''" selected="selected">選擇專業標籤</option>
+                    {% for label in all_labels %}
+                        <option value="{{ label|lower }}" :selected="selectedLabel === '{{ label|lower }}'">{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <a href="{% url 'teachers:index' %}" class="btn btn-outline border border-blue-1 sm:w-auto sm:text-lg" @click="selectedLabel = ''; localStorage.removeItem('selectedLabel')">重置標籤</a>
+            </section>
             {% if user.is_authenticated and not user.is_student %}
-                <a href="{% url 'payments:index' %}" class="btn btn-neutral ml-4">
-                升級成為TechEcho Premium用戶以發起線上指導
+                <a href="{% url 'payments:index' %}" class="text-black btn bg-orange-9 hover:bg-orange-8 hover:text-white ">
+                升級Premium與專家交談
                 </a>
             {% endif %}
         </div>
-        <div class="max-w-4xl m-auto p-2">
+
+        <div class="max-w-4xl p-2 m-auto ">
             <section>
-                {% for teacher in teachers %}
-                <a href="{% url 'teachers:show' teacher.id %}"
-                    class="w-full max-w-full block mb-4 p-4 shadow-md hover:bg-gray-100">
-                    <div class="flex justify-around w-full max-w-full">
-                        <div class="flex justify-center items-center max-w-full w-1/3">
+                {% if no_results %}
+                    <div class="mt-4 text-xl">
+                        未找到任何結果，目前僅支持暱稱或使用者名稱的搜尋。
+                    </div>
+                {% else %}
+                    {% for teacher in teachers %}
+                    <a href="{% url 'teachers:show' teacher.id %}"
+                    class="block w-full max-w-full p-4 mb-4 duration-300 border-2 rounded-lg shadow-md border-orange-8 hover:bg-gray-200">
+                    <div class="flex justify-around w-full max-w-full p-4 mb-4 border-2 rounded-lg shadow-md border-orange-9">
+                        <div class="flex items-center justify-center w-1/3 max-w-full">
                             {% if teacher.user.profile_picture %}
-                                <img src="{{ teacher.user.profile_picture.url }}" alt="Profile Picture" class="w-1/2 h-32 object-center rounded-full">
+                                <img src="{{ teacher.user.profile_picture.url }}" alt="Profile Picture"
+                                     class="object-cover w-32 h-32 rounded-full aspect-square">
                             {% else %}
-                                <img src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar" alt="User Avatar" class="w-1/2 h-32 object-center rounded-full">
+                                <img src="https://fakeimg.pl/240x240/282828/eae0d0/?text=User+Avatar" alt="User Avatar"
+                                     class="object-cover w-32 h-32 rounded-full aspect-square">
                             {% endif %}
                         </div>
-                        <div class="flex flex-col justify-around ml-4 w-2/3 max-w-full">
-                            <h3 class="text-2xl text-center font-semibold leading-normal text-blue-2">{{ teacher.user.get_display_name }}</h3>
-                            <p class="m-2 text-xl text-center leading-normal">
+                        <div class="flex flex-col justify-around w-2/3 max-w-full ml-4">
+                            <h3 class="text-2xl font-semibold leading-normal text-center text-orange-8">{{ teacher.user.get_display_name }}</h3>
+                            <p class="m-2 text-xl leading-normal text-center">
                             專業能力:
                             {% if teacher.labels.all.exists %}
                                 {% for label in teacher.labels.all %}
-                                <span>{{ label.name }}</span>
+                                    <span>{{ label.name }}</span>
                                 {% endfor %}
                             {% endif %}
                             </p>
                         </div>
                     </div>
                     <div>
-                        <p class="text-gray-600 mt-1 text-xl leading-relaxed"
-                            style="word-break: break-all; overflow-wrap: break-word;">
-                            {{ teacher.introduce|truncatechars:100 }}
+                        <p class="mt-1 text-xl leading-relaxed text-gray-600"
+                           style="word-break: break-all; overflow-wrap: break-word;">
+                           介紹：{{ teacher.introduce|truncatechars:30 }}
                         </p>
                     </div>
                 </a>
-                {% endfor %}
+                    {% endfor %}
+                {% endif %}
             </section>
         </div>
+
         <div>
             {% include "shared/pagination.html" with pages=teachers only %}
         </div>
