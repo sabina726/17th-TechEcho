@@ -7,10 +7,6 @@
 
 ## 使用技術
 
-1. CSS: tailwind, daisyUI
-2. JS: alpine
-3. Python: django, channels
-
 - 前端：daisyUI, TailwindCSS, Alpinejs, HTMX, Vue()
 - 後端：Python, Django
 - 資料庫：PostgreSQL

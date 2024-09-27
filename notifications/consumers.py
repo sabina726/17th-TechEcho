@@ -62,7 +62,6 @@ class NotificationConsumer(WebsocketConsumer):
             "notifications/_notification.html",
             {
                 "message": event["message"],
-                "created_at": event["created_at"],
                 "url_name": event["url_name"],
                 "question_id": event["question_id"],
                 "answer_id": event["answer_id"],
