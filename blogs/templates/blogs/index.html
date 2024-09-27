@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% load home %}
+{% load home static %}
 {% block content %}
 <div class="max-w-4xl p-6 mx-auto">
     <div class="flex items-center justify-between p-1">
@@ -13,9 +13,7 @@
                 {% if blog.image and blog.image.name %}  <!-- Check if image has a file -->
                     <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="w-32 h-32 object-cover rounded-lg mr-4">
                 {% else %}
-                    <div class="w-32 h-32 bg-gray-300 rounded-lg mr-4 flex items-center justify-center text-gray-500">
-                        No Image
-                    </div>
+                    <img src="{% static 'images/techecho.png' %}" alt="techecho-logo" class="w-32 h-32 object-cover rounded-lg mr-4">
                 {% endif %}
                 <div class="flex-1">
                     <div class="flex items-center justify-between">
