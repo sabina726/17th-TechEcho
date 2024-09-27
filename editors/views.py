@@ -26,6 +26,9 @@ def index(request):
         ChatGroup.objects.create(group_name="public_chat", is_public=True)
     chat_group = ChatGroup.objects.get(group_name="public_chat")
 
+    if not chat_group.has_member(request.user):
+        chat_group.members.add(request.user)
+
     chat_messages = chat_group.messages.select_related("author")
     chat_messages = paginate(request, chat_messages, items_count=30, default_page=-1)
     return render(

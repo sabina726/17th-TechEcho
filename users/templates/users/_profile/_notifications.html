@@ -16,10 +16,7 @@
           href="{% url notification.url_name notification.question_id %}"
           @click.stop
         >
-          <p class="text-sm">
-            {{notification.message|striptags|truncatechars:30}}
-          </p>
-          <p class="text-xs">{{notification.created_at|standard_date}}</p>
+          <p class="text-sm">{{notification.message|striptags|truncatechars:30}}</p>
         </a>
       </li>
       {% endfor %}
