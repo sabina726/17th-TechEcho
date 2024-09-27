@@ -21,7 +21,6 @@
                 <li class="flex items-center justify-between gap-1 px-4 py-3 text-blue-700 bg-blue-100 border-t border-b border-blue-500" role="alert">
                     <a class="truncate text-wrap" href="{% url notification.url_name notification.question_id %}#{{notification.answer_id}}">
                         <p class="text-sm">{{notification.message}}</p>
-                        <p class="text-xs">{{notification.created_at}}</p>
                     </a>
                     <button name="answer_id"
                         value="{{notification.answer_id}}"

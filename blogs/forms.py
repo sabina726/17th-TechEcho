@@ -53,6 +53,20 @@ class BlogForm(forms.ModelForm):
                 attrs={
                     "class": "w-full p-2 rounded-md focus:outline-none",
                     "id": "id_image",
+                    "accept": "image/jpeg, image/png, image/webp, image/gif",
                 }
             ),
         }
+
+
+def clean_image(self):
+    image = self.cleaned_data.get("image")
+    if image:
+        allowed_formats = ["image/jpeg", "image/png", "image/webp", "image/gif"]
+
+        # Correct way to access content_type
+        if image.file.content_type not in allowed_formats:
+            raise forms.ValidationError(
+                "Unsupported file format. Please upload an image in JPG, PNG, WEBP, or GIF format."
+            )
+    return image

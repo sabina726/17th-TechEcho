@@ -19,7 +19,7 @@ def update_answers_count(sender, instance, created, **kwargs):
         url_name = "questions:show"
         question_id = question.id
         answer_id = instance.id
-        # save the notifications in db
+
         notifications = [
             Notification(
                 user=user,
@@ -51,7 +51,6 @@ def update_answers_count(sender, instance, created, **kwargs):
         event = {
             "type": "send_notification",
             "message": message,
-            "created_at": notifications[0].created_at,
             "url_name": url_name,
             "question_id": question_id,
             "answer_id": answer_id,
