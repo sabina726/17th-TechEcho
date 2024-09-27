@@ -101,12 +101,14 @@
 </div>
 
 <div class="w-full max-w-5xl p-2 mx-auto mb-6 rounded-lg shadow-lg bg-gray-50">
+
     <div class="p-2">
         <h3 class="p-2 m-2 text-2xl font-semibold text-center text-white rounded-lg bg-orange-8">可預約時間</h3>
+        <div id='calendar' class="max-w-screen-xl my-6 mx-auto"></div>
         {% if request.user == teacher.user %}
             <a class="p-2 m-2 my-6 text-base text-white transition-all duration-150 rounded-md shadow-md bg-orange-9 hover:bg-orange-8 focus:outline-none" href="{% url "reservations:teacher_index" %}">管理授課時間</a>
         {% else %}
-            <ul class="mt-4 hide-on-small-screen">
+            <ul class="mt-4">
                 {% for schedule in schedules %}
                         <li class="flex justify-between p-2 m-2 bg-white border rounded-lg">
                             <div class="flex items-center">
@@ -123,7 +125,7 @@
                 {% endfor %}
             </ul>
         {% endif %}
-        <div id='calendar' class="max-w-screen-xl my-6 mx-auto"></div>
+
     </div>
 </div>
 

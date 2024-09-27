@@ -92,9 +92,17 @@ def teacher_edit(request, id):
 def teacher_delete(request, id):
     schedule = get_object_or_404(TeacherSchedule, id=id)
     if schedule.studentreservation_set.exists():
-        return JsonResponse({"status": "error", "message": "此時間已被預約，無法刪除"})
-    schedule.delete()
-    return JsonResponse({"status": "success", "message": "刪除成功"})
+        message = "此時間已被預約，無法刪除"
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({"status": "error", "message": message})
+        messages.error(request, message)
+    else:
+        schedule.delete()
+        message = "刪除成功"
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({"status": "success", "message": message})
+        messages.success(request, message)
+    return redirect("reservations:teacher_index")
 
 
 # for student to make reservations
