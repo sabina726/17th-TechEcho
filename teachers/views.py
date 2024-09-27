@@ -17,7 +17,7 @@ from .models import Teacher
 
 
 def mentor(request):
-    if request.user.is_authenticated and request.user.is_teacher:
+    if request.user.is_authenticated and request.user.teacher:
         teacher_name = request.user.nickname
         messages.success(request, f"歡迎 {teacher_name}")
         return redirect("teachers:show", request.user.teacher.id)
@@ -80,7 +80,7 @@ def index(request):
 
 @login_required
 def new(request):
-    if request.user.is_teacher:
+    if request.user.teacher:
         messages.error(request, "你已經註冊為專家，無法重複註冊")
         return redirect("teachers:show", request.user.teacher.id)
     form = TeacherForm()
