@@ -4,6 +4,12 @@
 >
   <h1 class="text-2xl font-bold mb-2">我的課程</h1>
   <section class="container mx-auto border px-6 py-4 my-4 rounded-lg">
+    <div class="flex items-center p-1 gap-4">
+      <a href="{% url 'reservations:teacher_available' %}" class="btn btn-techecho">
+        新增預約
+      </a>
+      <a class="btn btn-teacher" href="{% url 'reservations:student_index' %}">管理我的預約時間</a>
+    </div>
     <ul>
       {% for reservation in reservations %}
       <li class="p-2 rounded-lg flex justify-between">
