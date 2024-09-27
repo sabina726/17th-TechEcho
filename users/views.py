@@ -138,6 +138,7 @@ def profile(request):
     schedules = TeacherSchedule.objects.filter(teacher=request.user).prefetch_related(
         "studentreservation_set__student"
     )
+    student = request.user.studentreservation_set.first()
     context = {
         "user": request.user,
         "drafts": drafts,
@@ -146,6 +147,7 @@ def profile(request):
         "blogs": blogs,
         "reservations": reservations,
         "schedules": schedules,
+        "student": student,
     }
     return render(request, "users/profile.html", context)
 

@@ -143,9 +143,11 @@ def student_new(request, id):
 @student_required
 def student_edit(request, id):
     reservation = get_object_or_404(StudentReservation, id=id)
-    teacher_available = TeacherSchedule.objects.filter(
-        studentreservation__isnull=True
-    ).exclude(id=reservation.schedule.id)
+    teacher_available = (
+        TeacherSchedule.objects.filter(studentreservation__isnull=True)
+        .exclude(id=reservation.schedule.id)
+        .exclude(teacher=request.user)
+    )
     if request.method == "POST":
         new_schedule_id = request.POST.get("schedule_id")
         new_schedule = get_object_or_404(TeacherSchedule, id=new_schedule_id)
