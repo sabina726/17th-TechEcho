@@ -7,7 +7,7 @@
 
 ## 使用技術
 
-- 前端：daisyUI, TailwindCSS, Alpinejs, HTMX, Vue()
+- 前端：daisyUI, TailwindCSS, Alpinejs, HTMX, Vue
 - 後端：Python, Django
 - 資料庫：PostgreSQL
 - 版本控制：Git

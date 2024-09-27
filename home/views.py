@@ -11,6 +11,14 @@ def index(request):
     return render(request, "home/index.html")
 
 
+def privacy(request):
+    return render(request, "home/privacy.html")
+
+
+def terms(request):
+    return render(request, "home/terms.html")
+
+
 def search(request):
     query = request.GET.get("q", "")
     search_terms = []
