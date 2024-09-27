@@ -45,6 +45,7 @@ def teacher_index(request):
         "reservations/teacher/teacher_index.html",
         {
             "schedules": schedules,
+            "teacher": request.user,
         },
     )
 
@@ -180,8 +181,8 @@ def teacher_available(request):
     )
 
 
-def calendar_events(request):
-    schedules = TeacherSchedule.objects.filter(teacher=request.user).prefetch_related(
+def calendar_events(request, teacher_id):
+    schedules = TeacherSchedule.objects.filter(teacher=teacher_id).prefetch_related(
         "studentreservation_set__student"
     )
     events = [
