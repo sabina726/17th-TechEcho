@@ -10,7 +10,7 @@
   }
 }"
 >
-  <div class="flex items-start gap-8">
+  <div class="flex items-start gap-8 flex-wrap md:flex-nowrap">
     <aside class="w-64 flex-shrink-0">
       <div class="mb-6 mt-4">
         {% include "users/partials/_picture.html" with user=user size="32" margin="4" %}
@@ -123,6 +123,7 @@
                 type="text"
                 name="nickname"
                 value="{{ user.get_display_name}}"
+                placeholder="請輸入您的暱稱，不超過30個字"
                 class="w-full p-2 border rounded"
               />
             </div>
