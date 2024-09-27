@@ -23,7 +23,7 @@
   />
   {% endif %}
 
-  {% if user.teacher %}
+  {% if user.is_teacher %}
   <p class="mb-2 text-lg font-bold">{{ user }} 老師 {{ user|teacher_icon }}</p>
   <button
     class="px-4 py-2 mb-2 text-white transition rounded-full bg-green-4 hover:bg-green-3"
