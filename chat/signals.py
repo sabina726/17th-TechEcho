@@ -6,7 +6,7 @@ from reservations.models import StudentReservation
 from .models import ChatGroup
 
 
-@receiver(post_save, sender=StudentReservation)
+@receiver(post_save, sender=StudentReservation, weak=False)
 def create_chat_group(sender, instance, created, **kwargs):
     if created:
         group_name = f"chat_group of reservation #{instance.id}"

@@ -8,7 +8,7 @@ from answers.models import Answer
 from .models import Notification
 
 
-@receiver(post_save, sender=Answer)
+@receiver(post_save, sender=Answer, weak=False)
 def update_answers_count(sender, instance, created, **kwargs):
     if created:
         question = instance.question
@@ -58,7 +58,7 @@ def update_answers_count(sender, instance, created, **kwargs):
         async_to_sync(channel_layer.group_send)(group_name, event)
 
 
-@receiver(post_delete, sender=Answer)
+@receiver(post_delete, sender=Answer, weak=False)
 def update_answers_count(sender, instance, **kwargs):
     question = instance.question
     question.answer_count = question.answer_set.count()
